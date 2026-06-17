@@ -199,9 +199,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
       <div class="price-pix" id="price-pix"></div>
     </div>
 
-    <a class="btn-comprar" id="btn-comprar" href="#">🛒 COMPRAR AGORA</a>
-    <a class="btn-wpp" href="https://wa.me/5500000000000?text=Olá! Tenho interesse no produto." target="_blank">💬 Tirar dúvidas pelo WhatsApp</a>
-    <p class="checkout-note">🔒 Pagamento seguro via PIX, Boleto ou Cartão</p>
+    <a class="btn-comprar" id="btn-comprar" href="#">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;vertical-align:middle;margin-right:6px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      COMPRAR AGORA
+    </a>
+    <a class="btn-wpp" href="https://wa.me/5500000000000?text=Olá! Tenho interesse no produto." target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;vertical-align:middle;margin-right:6px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.1 1.508 5.834L0 24l6.335-1.484A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.651-.502-5.178-1.381l-.372-.22-3.762.882.936-3.648-.242-.374A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Tirar dúvidas pelo WhatsApp
+    </a>
+    <p class="checkout-note">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      Pagamento seguro via PIX, Boleto ou Cartão
+    </p>
   </div>
 </div>
 
@@ -257,7 +266,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
   <img id="zoom-img" src="" alt="">
 </div>
 
-<script src="js/produtos.js"></script>
+<script src="/js/produtos.js"></script>
 <script>
 // ─── Copy do produto (descrição específica por tipo) ─────────────────────────
 function gerarDescricao(p) {
@@ -273,11 +282,11 @@ function gerarDescricao(p) {
         Sem fórmulas sintéticas, sem estimulantes agressivos. Apenas o poder da natureza, concentrado em cada dose.
       </p>`,
       beneficios: [
-        '⚡ Aumenta a disposição e combate o cansaço crônico',
-        '💪 Apoia a produção hormonal natural do organismo masculino',
-        '🎯 Melhora o foco, clareza mental e desempenho',
-        '🌙 Contribui para um sono mais profundo e reparador',
-        '🌿 100% natural, sem conservantes artificiais',
+        'Aumenta a disposição e combate o cansaço crônico',
+        'Apoia a produção hormonal natural do organismo masculino',
+        'Melhora o foco, clareza mental e desempenho',
+        'Contribui para um sono mais profundo e reparador',
+        '100% natural, sem conservantes artificiais',
       ],
       como_usar: 'Tome conforme indicado no rótulo, preferencialmente pela manhã com um copo de água em jejum ou com refeição leve. Para resultados consistentes, use continuamente por pelo menos 30 dias.',
     },
@@ -289,11 +298,11 @@ function gerarDescricao(p) {
         Formulado com respeito ao ritmo feminino — sem agressões, sem artifícios. Natureza pura a serviço do seu bem-estar.
       </p>`,
       beneficios: [
-        '🌸 Apoia o equilíbrio hormonal e o ciclo natural feminino',
-        '✨ Promove cabelos mais fortes, pele mais saudável e unhas firmes',
-        '💚 Reduz o inchaço, o cansaço e a irritabilidade',
-        '☀️ Melhora o humor, a energia e a autoestima',
-        '🌿 Ingredientes naturais com alta absorção e segurança comprovada',
+        'Apoia o equilíbrio hormonal e o ciclo natural feminino',
+        'Promove cabelos mais fortes, pele mais saudável e unhas firmes',
+        'Reduz o inchaço, o cansaço e a irritabilidade',
+        'Melhora o humor, a energia e a autoestima',
+        'Ingredientes naturais com alta absorção e segurança comprovada',
       ],
       como_usar: 'Tome conforme indicado no rótulo, de preferência com a refeição principal. Para resultados expressivos e duradouros, utilize continuamente por no mínimo 30 dias.',
     },
@@ -305,11 +314,11 @@ function gerarDescricao(p) {
         Simples de tomar, fácil de sentir a diferença. Tecnologia natural a seu favor.
       </p>`,
       beneficios: [
-        '🌱 Contribui para o equilíbrio natural e bem-estar geral',
-        '⚡ Melhora a disposição e reduz o cansaço do dia a dia',
-        '🔬 Ingredientes de alta pureza e biodisponibilidade',
-        '🛡️ Sem conservantes artificiais ou substâncias nocivas',
-        '✅ Qualidade verificada, resultado sentido',
+        'Contribui para o equilíbrio natural e bem-estar geral',
+        'Melhora a disposição e reduz o cansaço do dia a dia',
+        'Ingredientes de alta pureza e biodisponibilidade',
+        'Sem conservantes artificiais ou substâncias nocivas',
+        'Qualidade verificada, resultado sentido',
       ],
       como_usar: 'Tome conforme indicado no rótulo, preferencialmente com água. Para melhores resultados, use de forma contínua por pelo menos 30 dias.',
     },
@@ -331,12 +340,12 @@ function gerarDescricao(p) {
     <ul style="list-style:none;padding:0;margin:0 0 28px;border-top:1px solid #f0f0f0">${bens}</ul>
 
     <div style="background:linear-gradient(135deg,#f0fbf3,#e8f5e9);border-left:4px solid #15a731;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:12px">
-      <div style="font-size:13px;font-weight:700;color:#356041;margin-bottom:6px;display:flex;align-items:center;gap:6px">📋 Modo de Usar</div>
+      <div style="font-size:13px;font-weight:700;color:#356041;margin-bottom:6px;display:flex;align-items:center;gap:6px">Modo de Usar</div>
       <p style="font-size:14px;color:#333;line-height:1.65;margin:0">${tpl.como_usar}</p>
     </div>
 
     <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:14px 16px;font-size:12px;color:#795548;line-height:1.6">
-      <strong>⚠️ Aviso:</strong> Suplemento alimentar. Não substitui alimentação equilibrada e hábitos de vida saudáveis. Mantenha fora do alcance de crianças. Consulte um médico se você tiver alguma condição de saúde.
+      <strong>Aviso:</strong> Suplemento alimentar. Não substitui alimentação equilibrada e hábitos de vida saudáveis. Mantenha fora do alcance de crianças. Consulte um médico se você tiver alguma condição de saúde.
     </div>
   `;
 }
@@ -453,7 +462,7 @@ prod.variantes.forEach((v, i) => {
   const el = document.createElement('div');
   el.className = 'vcard' + (i === selectedIdx ? ' on' : '');
   el.innerHTML = `
-    ${v.popular ? '<div class="vcard-pop">⭐ MAIS POPULAR</div>' : ''}
+    ${v.popular ? '<div class="vcard-pop">MAIS POPULAR</div>' : ''}
     <div class="vcard-title">${v.titulo}</div>
     <div class="vcard-price">${$$(v.preco)}</div>
     ${v.comparar ? `<div class="vcard-compare">${$$(v.comparar)}</div>` : ''}
@@ -481,7 +490,7 @@ function updatePrice() {
   qs('price-main').textContent = $$(v.preco);
   qs('price-old').textContent  = `De ${$$(v.comparar)}`;
   qs('price-inst').textContent = `ou 12x de ${$$( Math.ceil(v.preco / 12) )} no cartão`;
-  qs('price-pix').textContent  = `💚 No PIX: ${$$( Math.round(v.preco * 0.95) )} (5% OFF)`;
+  qs('price-pix').textContent  = `No PIX: ${$$( Math.round(v.preco * 0.95) )} (5% OFF)`;
 }
 
 function updateBtn() {
