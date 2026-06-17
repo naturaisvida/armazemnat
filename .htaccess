@@ -1,0 +1,38 @@
+Options -Indexes
+RewriteEngine On
+
+# Remove www (opcional — descomente se quiser)
+# RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+# RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+# Força HTTPS (opcional — descomente após instalar SSL)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# ─── URLs de produto identicas ao Shopify ─────────────────────────────────────
+# /products/glicofit  →  produto.html?slug=glicofit
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^products/([a-zA-Z0-9_-]+)/?$ /produto.html?slug=$1 [L,QSA]
+
+# ─── Rota index limpa ─────────────────────────────────────────────────────────
+# /  →  index.html  (já é padrão, mas deixamos explícito)
+DirectoryIndex index.html
+
+# ─── Segurança básica ─────────────────────────────────────────────────────────
+# Esconder arquivos sensíveis
+<FilesMatch "(^\.htaccess|pedidos\.log|webhook\.log|api\.php|webhook\.php)">
+  # api.php e webhook.php precisam ser acessíveis pelo servidor/Pagar.me
+  # Só bloqueamos os logs
+</FilesMatch>
+<FilesMatch "\.(log)$">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# Headers de segurança
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

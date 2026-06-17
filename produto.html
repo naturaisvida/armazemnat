@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pg-title">Produto — Armazém Natural</title>
+<meta name="description" id="pg-desc" content="">
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#15a731;--green-d:#0e8a28;--green-2:#356041;--green-3:#427751;
+  --bg:#f5f5f5;--white:#fff;--text:#212121;--muted:#777;
+  --border:#e0e0e0;--font:'Poppins',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px}
+
+/* HEADER */
+.hdr{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.hdr-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr-logo img{height:36px}
+.hdr-sec{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--green-2);text-transform:uppercase}
+.hdr-sec svg{width:18px;height:18px}
+
+/* BREADCRUMB */
+.bc{max-width:1200px;margin:0 auto;padding:12px 24px;font-size:12px;color:var(--muted)}
+.bc a{color:var(--green-2);text-decoration:none}
+.bc a:hover{text-decoration:underline}
+
+/* PRODUCT LAYOUT */
+.prod-wrap{max-width:1200px;margin:0 auto;padding:0 24px 48px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+
+/* GALLERY */
+.gallery{position:sticky;top:72px}
+.main-img{border-radius:12px;overflow:hidden;background:var(--white);aspect-ratio:1/1;border:1px solid var(--border)}
+.main-img img{width:100%;height:100%;object-fit:cover;cursor:zoom-in}
+.thumbs{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.thumb{width:68px;height:68px;border-radius:8px;overflow:hidden;border:2px solid transparent;cursor:pointer;transition:border-color .15s;background:var(--white)}
+.thumb.on{border-color:var(--green)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+
+/* PRODUCT INFO */
+.prod-info{}
+.prod-badge{display:inline-block;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.prod-title{font-size:clamp(20px,3vw,28px);font-weight:800;color:var(--text);line-height:1.25;margin-bottom:6px}
+.prod-sub{font-size:14px;color:var(--muted);margin-bottom:16px}
+
+/* STARS */
+.stars{display:flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13px;color:var(--muted)}
+.star-icons{color:#ffb627;font-size:15px;letter-spacing:1px}
+
+/* TRUST BADGES MINI */
+.trust-mini{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.tbadge{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--green-2);background:#f0fbf3;border:1px solid #c3e6cb;border-radius:100px;padding:6px 12px}
+.tbadge svg{width:14px;height:14px;flex-shrink:0}
+
+/* VARIANTS */
+.variants-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
+.variants-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:20px}
+.vcard{border:2px solid var(--border);border-radius:10px;padding:12px 10px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;text-align:center;background:var(--white);position:relative}
+.vcard:hover{border-color:var(--green);transform:translateY(-1px)}
+.vcard.on{border-color:var(--green);background:#f0fbf3}
+.vcard-pop{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:100px;white-space:nowrap}
+.vcard-title{font-size:12px;font-weight:700;color:var(--green-2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.vcard-price{font-size:18px;font-weight:800;color:var(--text);margin-bottom:2px}
+.vcard-compare{font-size:12px;color:#aaa;text-decoration:line-through;margin-bottom:4px}
+.vcard-disc{font-size:11px;font-weight:700;color:var(--green);background:#e8f5e9;border-radius:100px;padding:2px 8px;display:inline-block}
+
+/* SELECTED PRICE */
+.price-box{background:#f9f9f9;border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:20px}
+.price-main{font-size:32px;font-weight:800;color:var(--green);line-height:1}
+.price-old{font-size:14px;color:#aaa;text-decoration:line-through;margin-top:4px}
+.price-inst{font-size:13px;color:var(--muted);margin-top:6px}
+.price-pix{font-size:13px;font-weight:600;color:var(--green-2);margin-top:4px}
+
+/* CTA */
+.btn-comprar{display:block;width:100%;padding:18px;background:var(--green);color:#fff;border:none;border-radius:10px;font-family:var(--font);font-size:17px;font-weight:800;text-align:center;text-decoration:none;cursor:pointer;transition:background .15s,transform .1s;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.btn-comprar:hover{background:var(--green-d);transform:translateY(-1px)}
+.btn-comprar:active{transform:translateY(0)}
+.btn-wpp{display:block;width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;transition:background .15s;letter-spacing:.3px}
+.btn-wpp:hover{background:#1dae52}
+.checkout-note{text-align:center;font-size:12px;color:var(--muted);margin-top:10px}
+
+/* DESCRIPTION */
+.desc-section{max-width:1200px;margin:0 auto;padding:0 24px 64px}
+.desc-title{font-size:20px;font-weight:700;color:var(--green-2);margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.desc-body{line-height:1.8;color:#333}
+
+/* REVIEWS SECTION */
+.rev-section{max-width:1200px;margin:0 auto;padding:0 24px 64px}
+.rev-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--border)}
+.rev-summary{display:flex;align-items:center;gap:20px}
+.rev-score{font-size:56px;font-weight:800;color:var(--text);line-height:1}
+.rev-score-details{display:flex;flex-direction:column;gap:2px}
+.rev-stars-big{color:#ffb627;font-size:22px;letter-spacing:2px}
+.rev-count{font-size:13px;color:var(--muted);margin-top:2px}
+.rev-bars{display:flex;flex-direction:column;gap:5px}
+.rev-bar-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.rev-bar-track{width:120px;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.rev-bar-fill{height:100%;background:#ffb627;border-radius:3px}
+.rev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.rev-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative}
+.rev-card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.rev-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;flex-shrink:0}
+.rev-name{font-size:14px;font-weight:700;color:var(--text)}
+.rev-city{font-size:12px;color:var(--muted);margin-top:2px}
+.rev-verified{font-size:11px;font-weight:600;color:var(--green);display:flex;align-items:center;gap:3px;margin-top:3px}
+.rev-stars{color:#ffb627;font-size:14px;letter-spacing:1px;margin-bottom:8px}
+.rev-text{font-size:14px;color:#444;line-height:1.65}
+.rev-date{font-size:11px;color:#bbb;margin-top:10px}
+.rev-section-title{font-size:20px;font-weight:700;color:var(--green-2);margin-bottom:8px}
+.rev-section-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+
+/* MORE PRODUCTS */
+.more-section{background:var(--white);padding:48px 24px;border-top:1px solid var(--border)}
+.more-inner{max-width:1200px;margin:0 auto}
+.more-title{font-size:20px;font-weight:700;color:var(--green-2);margin-bottom:24px}
+.more-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.more-card{border-radius:10px;overflow:hidden;background:var(--white);border:1px solid var(--border);transition:transform .2s,box-shadow .2s;text-decoration:none;color:var(--text);display:block}
+.more-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.more-card img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.more-card-body{padding:12px}
+.more-card-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.3}
+.more-card-price{font-size:14px;font-weight:800;color:var(--green)}
+.more-card-cta{font-size:12px;color:var(--green-2);font-weight:600;margin-top:6px}
+
+/* FOOTER */
+.ftr{background:var(--green-3);color:#fff;padding:28px 24px;text-align:center;font-size:13px;color:rgba(255,255,255,.7)}
+.ftr a{color:rgba(255,255,255,.8);text-decoration:none;margin:0 10px}
+.ftr a:hover{color:#fff}
+
+/* MODAL ZOOM */
+.zoom-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center;cursor:zoom-out}
+.zoom-overlay.open{display:flex}
+.zoom-overlay img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px}
+
+@media(max-width:768px){
+  .prod-wrap{grid-template-columns:1fr;gap:24px}
+  .gallery{position:static}
+  .hdr-inner{padding:10px 16px}
+  .bc{padding:10px 16px}
+  .prod-wrap{padding:0 16px 32px}
+  .desc-section{padding:0 16px 40px}
+  .more-section{padding:32px 16px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="/"><img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural" style="height:36px"></a>
+    <div class="hdr-sec">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      </svg>
+      PAGAMENTO 100% SEGURO
+    </div>
+  </div>
+</header>
+
+<nav class="bc">
+  <a href="/">Início</a> › <span id="bc-prod">Produto</span>
+</nav>
+
+<div class="prod-wrap">
+  <!-- GALLERY -->
+  <div class="gallery">
+    <div class="main-img"><img id="main-photo" src="" alt="" onclick="openZoom(this.src)"></div>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+
+  <!-- INFO -->
+  <div class="prod-info">
+    <span class="prod-badge" id="prod-badge"></span>
+    <h1 class="prod-title" id="prod-title"></h1>
+    <p class="prod-sub" id="prod-sub"></p>
+
+    <div class="stars">
+      <span class="star-icons">★★★★★</span>
+      <span>4.9 · <strong>+5.000</strong> clientes satisfeitos</span>
+    </div>
+
+    <div class="trust-mini">
+      <span class="tbadge"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/></svg>Frete Grátis</span>
+      <span class="tbadge"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>Garantia 30 dias</span>
+      <span class="tbadge"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Entrega Rápida</span>
+    </div>
+
+    <div class="variants-label">Escolha seu kit:</div>
+    <div class="variants-grid" id="variants-grid"></div>
+
+    <div class="price-box">
+      <div class="price-main" id="price-main"></div>
+      <div class="price-old" id="price-old"></div>
+      <div class="price-inst" id="price-inst"></div>
+      <div class="price-pix" id="price-pix"></div>
+    </div>
+
+    <a class="btn-comprar" id="btn-comprar" href="#">🛒 COMPRAR AGORA</a>
+    <a class="btn-wpp" href="https://wa.me/5500000000000?text=Olá! Tenho interesse no produto." target="_blank">💬 Tirar dúvidas pelo WhatsApp</a>
+    <p class="checkout-note">🔒 Pagamento seguro via PIX, Boleto ou Cartão</p>
+  </div>
+</div>
+
+<!-- DESCRIPTION -->
+<div class="desc-section">
+  <h2 class="desc-title">Sobre o Produto</h2>
+  <div class="desc-body" id="desc-body"></div>
+</div>
+
+<!-- REVIEWS -->
+<div class="rev-section">
+  <div class="rev-section-title">Avaliações dos Clientes</div>
+  <div class="rev-section-sub">O que quem já comprou está dizendo</div>
+  <div class="rev-header">
+    <div class="rev-summary">
+      <div class="rev-score">4.9</div>
+      <div class="rev-score-details">
+        <div class="rev-stars-big">★★★★★</div>
+        <div class="rev-count">+5.000 avaliações verificadas</div>
+      </div>
+    </div>
+    <div class="rev-bars">
+      <div class="rev-bar-row">5★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:81%"></div></div> 81%</div>
+      <div class="rev-bar-row">4★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:13%"></div></div> 13%</div>
+      <div class="rev-bar-row">3★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:4%"></div></div> 4%</div>
+      <div class="rev-bar-row">2★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:1%"></div></div> 1%</div>
+      <div class="rev-bar-row">1★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:1%"></div></div> 1%</div>
+    </div>
+  </div>
+  <div class="rev-grid" id="rev-grid"></div>
+</div>
+
+<!-- MORE PRODUCTS -->
+<section class="more-section">
+  <div class="more-inner">
+    <h2 class="more-title">Você também pode gostar</h2>
+    <div class="more-grid" id="more-grid"></div>
+  </div>
+</section>
+
+<footer class="ftr">
+  <p>
+    <a href="/">Início</a>
+    <a href="#">Política de Privacidade</a>
+    <a href="#">Termos de Uso</a>
+    <a href="#">Devolução</a>
+  </p>
+  <p style="margin-top:10px">© 2025 Armazém Natural · Todos os direitos reservados</p>
+</footer>
+
+<!-- ZOOM MODAL -->
+<div class="zoom-overlay" id="zoom" onclick="closeZoom()">
+  <img id="zoom-img" src="" alt="">
+</div>
+
+<script src="js/produtos.js"></script>
+<script>
+// ─── Copy do produto (descrição específica por tipo) ─────────────────────────
+function gerarDescricao(p) {
+  const nome = p.nome;
+  const t = p.tipo || 'geral';
+
+  const copy = {
+    masc: {
+      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px">
+        <strong>${nome}</strong> é a fórmula desenvolvida para homens que querem recuperar a disposição, a força e o vigor que o dia a dia vai roubando. Com ativos naturais cuidadosamente combinados, age no organismo masculino de forma precisa — apoiando a produção hormonal, combatendo o cansaço crônico e devolvendo a energia que você precisa para render mais em tudo.
+      </p>
+      <p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">
+        Sem fórmulas sintéticas, sem estimulantes agressivos. Apenas o poder da natureza, concentrado em cada dose.
+      </p>`,
+      beneficios: [
+        '⚡ Aumenta a disposição e combate o cansaço crônico',
+        '💪 Apoia a produção hormonal natural do organismo masculino',
+        '🎯 Melhora o foco, clareza mental e desempenho',
+        '🌙 Contribui para um sono mais profundo e reparador',
+        '🌿 100% natural, sem conservantes artificiais',
+      ],
+      como_usar: 'Tome conforme indicado no rótulo, preferencialmente pela manhã com um copo de água em jejum ou com refeição leve. Para resultados consistentes, use continuamente por pelo menos 30 dias.',
+    },
+    fem: {
+      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px">
+        <strong>${nome}</strong> foi criado para a mulher que não tem tempo a perder — que quer se sentir bem, bonita e cheia de energia todos os dias. Com ingredientes botânicos de alta biodisponibilidade, atua no equilíbrio do organismo feminino de forma suave e eficaz, trabalhando de dentro para fora para trazer de volta a leveza, a disposição e o brilho que você merece.
+      </p>
+      <p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">
+        Formulado com respeito ao ritmo feminino — sem agressões, sem artifícios. Natureza pura a serviço do seu bem-estar.
+      </p>`,
+      beneficios: [
+        '🌸 Apoia o equilíbrio hormonal e o ciclo natural feminino',
+        '✨ Promove cabelos mais fortes, pele mais saudável e unhas firmes',
+        '💚 Reduz o inchaço, o cansaço e a irritabilidade',
+        '☀️ Melhora o humor, a energia e a autoestima',
+        '🌿 Ingredientes naturais com alta absorção e segurança comprovada',
+      ],
+      como_usar: 'Tome conforme indicado no rótulo, de preferência com a refeição principal. Para resultados expressivos e duradouros, utilize continuamente por no mínimo 30 dias.',
+    },
+    geral: {
+      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px">
+        <strong>${nome}</strong> é um suplemento natural desenvolvido para quem quer mais saúde, equilíbrio e qualidade de vida — sem complicações. Com uma combinação exclusiva de ingredientes naturais selecionados por sua eficácia e pureza, atua no organismo de forma inteligente, apoiando funções essenciais e ajudando seu corpo a funcionar no seu melhor todos os dias.
+      </p>
+      <p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">
+        Simples de tomar, fácil de sentir a diferença. Tecnologia natural a seu favor.
+      </p>`,
+      beneficios: [
+        '🌱 Contribui para o equilíbrio natural e bem-estar geral',
+        '⚡ Melhora a disposição e reduz o cansaço do dia a dia',
+        '🔬 Ingredientes de alta pureza e biodisponibilidade',
+        '🛡️ Sem conservantes artificiais ou substâncias nocivas',
+        '✅ Qualidade verificada, resultado sentido',
+      ],
+      como_usar: 'Tome conforme indicado no rótulo, preferencialmente com água. Para melhores resultados, use de forma contínua por pelo menos 30 dias.',
+    },
+  };
+
+  const tpl = copy[t] || copy.geral;
+
+  const bens = tpl.beneficios.map(b =>
+    `<li style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;line-height:1.5">${b}</li>`
+  ).join('');
+
+  return `
+    ${tpl.intro}
+
+    <h3 style="font-size:17px;font-weight:700;color:#356041;margin:0 0 14px;display:flex;align-items:center;gap:8px">
+      <span style="background:#15a731;color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">✓</span>
+      Principais Benefícios
+    </h3>
+    <ul style="list-style:none;padding:0;margin:0 0 28px;border-top:1px solid #f0f0f0">${bens}</ul>
+
+    <div style="background:linear-gradient(135deg,#f0fbf3,#e8f5e9);border-left:4px solid #15a731;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;color:#356041;margin-bottom:6px;display:flex;align-items:center;gap:6px">📋 Modo de Usar</div>
+      <p style="font-size:14px;color:#333;line-height:1.65;margin:0">${tpl.como_usar}</p>
+    </div>
+
+    <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:14px 16px;font-size:12px;color:#795548;line-height:1.6">
+      <strong>⚠️ Aviso:</strong> Suplemento alimentar. Não substitui alimentação equilibrada e hábitos de vida saudáveis. Mantenha fora do alcance de crianças. Consulte um médico se você tiver alguma condição de saúde.
+    </div>
+  `;
+}
+
+// ─── Avaliações por tipo ──────────────────────────────────────────────────────
+const CORES_AVATAR = ['#15a731','#356041','#2980b9','#8e44ad','#e67e22','#c0392b','#16a085','#d35400'];
+
+const REVIEWS = {
+  masc: [
+    { ini:'CS', nome:'Carlos S.',      cidade:'São Paulo, SP',         stars:5, data:'há 3 dias',    texto:'Cara, tô chocado. Em 3 semanas de uso já sinto uma diferença absurda. Disposição lá em cima, durmo melhor, treino mais. Recomendo demais!' },
+    { ini:'RM', nome:'Roberto M.',     cidade:'Curitiba, PR',          stars:5, data:'há 1 semana',  texto:'Voltei a me sentir jovem. Energia de manhã, foco no trabalho e ainda sobra ânimo pra treinar à noite. Produto de outro nível.' },
+    { ini:'FL', nome:'Fábio L.',       cidade:'Recife, PE',            stars:4, data:'há 2 semanas', texto:'Produto muito bom. Já tentei vários suplementos e esse foi o que realmente funcionou. Entrega também foi rapidíssima.' },
+    { ini:'MA', nome:'Marcelo A.',     cidade:'Belo Horizonte, MG',    stars:5, data:'há 2 semanas', texto:'Comprei pra ver se era papo ou não. É real. Terceira semana e já to sentindo nos treinos e no trabalho. Vou pedir mais.' },
+    { ini:'JS', nome:'João S.',        cidade:'Brasília, DF',          stars:5, data:'há 3 semanas', texto:'Minha esposa notou antes de mim! Disse que fiquei mais disposto e bem-humorado. Qualidade aprovada.' },
+    { ini:'LP', nome:'Lucas P.',       cidade:'Porto Alegre, RS',      stars:5, data:'há 1 mês',     texto:'Nunca pensei que um suplemento natural pudesse fazer tanta diferença. Indico pra todos os meus amigos.' },
+  ],
+  fem: [
+    { ini:'FO', nome:'Fernanda O.',    cidade:'São Paulo, SP',         stars:5, data:'há 2 dias',    texto:'Meu Deus! Em menos de um mês já me sinto completamente diferente. Mais energia, autoestima nas alturas e ainda emagreci 2kg. Amei!' },
+    { ini:'JR', nome:'Juliana R.',     cidade:'Florianópolis, SC',     stars:5, data:'há 5 dias',    texto:'Meus cabelos ficaram incríveis e minha pele está outra. Entrega super rápida e embalagem maravilhosa. 10/10!' },
+    { ini:'PC', nome:'Patrícia C.',    cidade:'Goiânia, GO',           stars:5, data:'há 1 semana',  texto:'Cheguei cética e fui completamente surpreendida. Recomendo de coração pra todas as mulheres que estão se sentindo sem energia.' },
+    { ini:'AB', nome:'Ana Beatriz T.', cidade:'Porto Alegre, RS',      stars:4, data:'há 2 semanas', texto:'Já estou no terceiro kit! Humor, energia e até o sono melhoraram. Qualidade real, não é moda passageira.' },
+    { ini:'CM', nome:'Camila M.',      cidade:'Ribeirão Preto, SP',    stars:5, data:'há 3 semanas', texto:'Indiquei pra minha mãe depois de ver os meus resultados. As duas adoramos! Produto maravilhoso.' },
+    { ini:'RS', nome:'Renata S.',      cidade:'Fortaleza, CE',         stars:5, data:'há 1 mês',     texto:'A diferença no meu ciclo e no meu humor foi perceptível na primeira semana. Produto sensacional.' },
+  ],
+  geral: [
+    { ini:'RB', nome:'Rodrigo B.',     cidade:'São Paulo, SP',         stars:5, data:'há 1 dia',     texto:'Dois meses de uso e os resultados são reais. Me sinto muito mais equilibrado e com energia constante ao longo do dia. Recomendo!' },
+    { ini:'MF', nome:'Mariana F.',     cidade:'Campinas, SP',          stars:5, data:'há 4 dias',    texto:'Produto de qualidade e entrega rápida. Fui surpreendida positivamente desde o primeiro uso. Já pedi o segundo kit.' },
+    { ini:'DM', nome:'Diego M.',       cidade:'Salvador, BA',          stars:5, data:'há 1 semana',  texto:'Faz parte da minha rotina agora. Nota 10 em tudo: qualidade, resultado e atendimento.' },
+    { ini:'SP', nome:'Sandra P.',      cidade:'Manaus, AM',            stars:4, data:'há 2 semanas', texto:'Fui cética no começo mas os resultados falaram por si. Produto muito bom, recomendo com confiança.' },
+    { ini:'TR', nome:'Thiago R.',      cidade:'Natal, RN',             stars:5, data:'há 2 semanas', texto:'Meu médico ficou surpreso com a minha melhora. Disse que eram bons ativos. Qualidade comprovada!' },
+    { ini:'LM', nome:'Lúcia M.',       cidade:'Curitiba, PR',          stars:5, data:'há 1 mês',     texto:'Comprei com medo e hoje já estou no quarto kit. A diferença é real e perceptível. Obrigada Armazém Natural!' },
+  ],
+};
+
+function gerarAvaliacoes(prod) {
+  const lista = REVIEWS[prod.tipo] || REVIEWS.geral;
+  const grid  = document.getElementById('rev-grid');
+  lista.forEach((r, i) => {
+    const cor = CORES_AVATAR[i % CORES_AVATAR.length];
+    const stars = '★'.repeat(r.stars) + (r.stars < 5 ? '☆'.repeat(5 - r.stars) : '');
+    const card = document.createElement('div');
+    card.className = 'rev-card';
+    card.innerHTML = `
+      <div class="rev-card-top">
+        <div class="rev-avatar" style="background:${cor}">${r.ini}</div>
+        <div>
+          <div class="rev-name">${r.nome}</div>
+          <div class="rev-city">${r.cidade}</div>
+          <div class="rev-verified">✓ Compra verificada</div>
+        </div>
+      </div>
+      <div class="rev-stars">${stars}</div>
+      <p class="rev-text">"${r.texto}"</p>
+      <div class="rev-date">${r.data}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function $$(c){
+  return 'R$ '+(c/100).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+function qs(id){ return document.getElementById(id); }
+
+// ─── Ler slug da URL ─────────────────────────────────────────────────────────
+// Via ?slug=glicofit (quando .htaccess está ativo, /products/glicofit vira isto)
+const slug = new URLSearchParams(location.search).get('slug') || '';
+const prod  = PRODUTOS.find(p => p.slug === slug);
+
+if (!prod) {
+  document.body.innerHTML = '<div style="text-align:center;padding:80px 24px"><h2>Produto não encontrado</h2><a href="/" style="color:#15a731">← Voltar à loja</a></div>';
+  throw new Error('produto nao encontrado');
+}
+
+// ─── Meta ─────────────────────────────────────────────────────────────────────
+document.getElementById('pg-title').textContent = prod.titulo + ' — Armazém Natural';
+document.getElementById('pg-desc').setAttribute('content', prod.subtitulo);
+document.getElementById('bc-prod').textContent = prod.nome;
+
+// ─── Badge ────────────────────────────────────────────────────────────────────
+const badge = qs('prod-badge');
+badge.textContent = prod.badge;
+badge.style.background = prod.badgeColor;
+
+qs('prod-title').textContent = prod.titulo;
+qs('prod-sub').textContent   = prod.subtitulo;
+qs('desc-body').innerHTML    = gerarDescricao(prod);
+
+// ─── Gallery ─────────────────────────────────────────────────────────────────
+const mainPhoto = qs('main-photo');
+mainPhoto.src = prod.imagens[0];
+mainPhoto.alt = prod.nome;
+
+const thumbsEl = qs('thumbs');
+prod.imagens.forEach((url, i) => {
+  const t = document.createElement('div');
+  t.className = 'thumb' + (i === 0 ? ' on' : '');
+  t.innerHTML = `<img src="${url}" alt="${prod.nome} ${i+1}" loading="lazy">`;
+  t.onclick = () => {
+    mainPhoto.src = url;
+    document.querySelectorAll('.thumb').forEach(el => el.classList.remove('on'));
+    t.classList.add('on');
+  };
+  thumbsEl.appendChild(t);
+});
+
+// ─── Variants ────────────────────────────────────────────────────────────────
+let selectedIdx = prod.variantes.findIndex(v => v.popular) ?? 0;
+if (selectedIdx < 0) selectedIdx = 0;
+
+const vgrid = qs('variants-grid');
+prod.variantes.forEach((v, i) => {
+  const el = document.createElement('div');
+  el.className = 'vcard' + (i === selectedIdx ? ' on' : '');
+  el.innerHTML = `
+    ${v.popular ? '<div class="vcard-pop">⭐ MAIS POPULAR</div>' : ''}
+    <div class="vcard-title">${v.titulo}</div>
+    <div class="vcard-price">${$$(v.preco)}</div>
+    ${v.comparar ? `<div class="vcard-compare">${$$(v.comparar)}</div>` : ''}
+    <div class="vcard-disc">${v.desconto}% OFF</div>
+  `;
+  el.onclick = () => {
+    document.querySelectorAll('.vcard').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+    selectedIdx = i;
+    // Atualizar imagem se disponível
+    if (prod.imagens[i]) {
+      mainPhoto.src = prod.imagens[i];
+      document.querySelectorAll('.thumb').forEach((t, ti) => {
+        t.classList.toggle('on', ti === i);
+      });
+    }
+    updatePrice();
+    updateBtn();
+  };
+  vgrid.appendChild(el);
+});
+
+function updatePrice() {
+  const v = prod.variantes[selectedIdx];
+  qs('price-main').textContent = $$(v.preco);
+  qs('price-old').textContent  = `De ${$$(v.comparar)}`;
+  qs('price-inst').textContent = `ou 12x de ${$$( Math.ceil(v.preco / 12) )} no cartão`;
+  qs('price-pix').textContent  = `💚 No PIX: ${$$( Math.round(v.preco * 0.95) )} (5% OFF)`;
+}
+
+function updateBtn() {
+  const v   = prod.variantes[selectedIdx];
+  const img = prod.imagens[Math.min(selectedIdx, prod.imagens.length-1)];
+  const params = new URLSearchParams({
+    nome:     prod.titulo,
+    variante: v.titulo,
+    preco:    v.preco,
+    qty:      1,
+    img:      img,
+  });
+  qs('btn-comprar').href = '/checkout.html?' + params.toString();
+}
+
+updatePrice();
+updateBtn();
+
+// ─── Avaliações ──────────────────────────────────────────────────────────────
+gerarAvaliacoes(prod);
+
+// ─── Mais produtos ────────────────────────────────────────────────────────────
+const mgrid = qs('more-grid');
+PRODUTOS.filter(p => p.slug !== slug).forEach(p => {
+  const minP = Math.min(...p.variantes.map(v => v.preco));
+  const a = document.createElement('a');
+  a.className = 'more-card';
+  a.href = '/products/' + p.slug;
+  a.innerHTML = `
+    <img src="${p.imagens[0]}" alt="${p.nome}" loading="lazy">
+    <div class="more-card-body">
+      <div class="more-card-name">${p.titulo}</div>
+      <div class="more-card-price">A partir de ${$$(minP)}</div>
+      <div class="more-card-cta">Ver oferta →</div>
+    </div>
+  `;
+  mgrid.appendChild(a);
+});
+
+// ─── Zoom ─────────────────────────────────────────────────────────────────────
+function openZoom(src){
+  qs('zoom-img').src = src;
+  qs('zoom').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeZoom(){
+  qs('zoom').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeZoom(); });
+</script>
+</body>
+</html>

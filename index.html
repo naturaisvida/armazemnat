@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Armazém Natural — Produtos Naturais para sua Saúde</title>
+<meta name="description" content="Suplementos e produtos naturais com qualidade garantida. Frete Grátis e entrega rápida para todo o Brasil.">
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#15a731;--green-d:#0e8a28;--green-2:#356041;--green-3:#427751;
+  --bg:#f5f5f5;--white:#fff;--text:#212121;--muted:#666;
+  --border:#e0e0e0;--font:'Poppins',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text)}
+
+/* HEADER */
+.hdr{background:var(--white);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.hdr-inner{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr-logo img{height:38px}
+.hdr-nav{display:flex;gap:24px;list-style:none}
+.hdr-nav a{text-decoration:none;font-size:14px;font-weight:500;color:var(--green-2);transition:color .15s}
+.hdr-nav a:hover{color:var(--green)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--green-2) 0%,var(--green-3) 60%,#5a9e6e 100%);color:#fff;padding:64px 24px;text-align:center}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;line-height:1.2;margin-bottom:14px;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hero p{font-size:clamp(15px,2vw,19px);opacity:.9;max-width:560px;margin:0 auto 28px}
+.hero-badges{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.hbadge{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:100px;padding:8px 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+
+/* PRODUTOS GRID */
+.section{max-width:1200px;margin:0 auto;padding:48px 24px}
+.section-title{font-size:24px;font-weight:700;color:var(--green-2);margin-bottom:6px}
+.section-sub{font-size:14px;color:var(--muted);margin-bottom:32px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
+
+/* CARD */
+.card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 2px 14px rgba(0,0,0,.07);transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.13)}
+.card-img{position:relative;overflow:hidden;aspect-ratio:1/1;background:#f9f9f9}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.card:hover .card-img img{transform:scale(1.04)}
+.badge{position:absolute;top:12px;left:12px;padding:5px 11px;border-radius:100px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px}
+.disc-badge{position:absolute;top:12px;right:12px;background:var(--green);color:#fff;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-direction:column;line-height:1.1;text-align:center}
+.card-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.card-name{font-size:13px;font-weight:600;color:var(--green-2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.35}
+.card-price-row{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.card-price{font-size:20px;font-weight:800;color:var(--green)}
+.card-compare{font-size:13px;color:#aaa;text-decoration:line-through}
+.card-frete{font-size:12px;color:var(--green-2);font-weight:600;margin-bottom:12px}
+.card-cta{margin-top:auto;display:block;width:100%;padding:12px;background:var(--green);color:#fff;border:none;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;transition:background .15s;text-transform:uppercase;letter-spacing:.4px}
+.card-cta:hover{background:var(--green-d)}
+.card-variants{font-size:12px;color:var(--muted);margin-bottom:10px}
+
+/* TRUST BAR */
+.trust{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 24px}
+.trust-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--green-2)}
+.trust-item svg{width:22px;height:22px;flex-shrink:0;color:var(--green)}
+
+/* FOOTER */
+.ftr{background:var(--green-3);color:#fff;padding:40px 24px 24px}
+.ftr-inner{max-width:1200px;margin:0 auto}
+.ftr-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-bottom:32px}
+.ftr-col h4{font-size:14px;font-weight:700;margin-bottom:12px;opacity:.85;text-transform:uppercase;letter-spacing:.5px}
+.ftr-col a,.ftr-col p{display:block;font-size:13px;color:rgba(255,255,255,.8);text-decoration:none;margin-bottom:6px}
+.ftr-col a:hover{color:#fff}
+.ftr-bottom{border-top:1px solid rgba(255,255,255,.2);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12px;color:rgba(255,255,255,.6)}
+.ftr-logo img{height:32px;filter:brightness(0) invert(1);opacity:.9}
+
+@media(max-width:768px){
+  .hdr-nav{display:none}
+  .hero{padding:40px 16px}
+  .section{padding:32px 16px}
+  .ftr-top{grid-template-columns:1fr}
+  .ftr-bottom{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <a class="hdr-logo" href="/"><img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural"></a>
+    <ul class="hdr-nav">
+      <li><a href="/">Início</a></li>
+      <li><a href="#produtos">Produtos</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Natureza que cuida de você</h1>
+  <p>Suplementos e produtos naturais com qualidade certificada. Frete Grátis para todo o Brasil.</p>
+  <div class="hero-badges">
+    <span class="hbadge">✓ Frete Grátis</span>
+    <span class="hbadge">✓ Garantia de 30 dias</span>
+    <span class="hbadge">✓ Pagamento Seguro</span>
+    <span class="hbadge">✓ Entrega Rápida</span>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/></svg>
+      Envio em 24h
+    </div>
+    <div class="trust-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      Garantia 30 dias
+    </div>
+    <div class="trust-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      Compra 100% Segura
+    </div>
+    <div class="trust-item">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/></svg>
+      Suporte 24h
+    </div>
+  </div>
+</div>
+
+<section class="section" id="produtos">
+  <h2 class="section-title">Nossos Produtos</h2>
+  <p class="section-sub">Qualidade natural entregue na sua porta</p>
+  <div class="grid" id="grid"></div>
+</section>
+
+<footer class="ftr" id="contato">
+  <div class="ftr-inner">
+    <div class="ftr-top">
+      <div class="ftr-col">
+        <div class="ftr-logo"><img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural"></div>
+        <p style="margin-top:12px">Produtos naturais de qualidade para sua saúde e bem-estar.</p>
+      </div>
+      <div class="ftr-col">
+        <h4>Links</h4>
+        <a href="#">Política de Privacidade</a>
+        <a href="#">Termos de Uso</a>
+        <a href="#">Política de Troca e Devolução</a>
+        <a href="#">Rastrear Pedido</a>
+      </div>
+      <div class="ftr-col">
+        <h4>Contato</h4>
+        <p>📧 contato@armazemnatural.shop</p>
+        <p>💬 WhatsApp: (00) 00000-0000</p>
+        <p>⏰ Seg–Sex, 9h–18h</p>
+      </div>
+    </div>
+    <div class="ftr-bottom">
+      <span>© 2025 Armazém Natural. Todos os direitos reservados.</span>
+      <span>CNPJ: 00.000.000/0001-00</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/produtos.js"></script>
+<script>
+const grid = document.getElementById('grid');
+
+PRODUTOS.forEach(p => {
+  const minPreco = Math.min(...p.variantes.map(v => v.preco));
+  const maxDesc  = Math.max(...p.variantes.map(v => v.desconto));
+  const varLabel = p.variantes.length > 1
+    ? `${p.variantes.length} kits disponíveis`
+    : '1 opção disponível';
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-img">
+      <img src="${p.imagens[0]}" alt="${p.nome}" loading="lazy">
+      <span class="badge" style="background:${p.badgeColor}">${p.badge}</span>
+      <div class="disc-badge">ATÉ<br>${maxDesc}%<br>OFF</div>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${p.nome}</div>
+      <div class="card-title">${p.titulo}</div>
+      <div class="card-price-row">
+        <span class="card-price">${$$(minPreco)}</span>
+        <span class="card-compare">${$$(Math.min(...p.variantes.map(v => v.comparar)))}</span>
+      </div>
+      <div class="card-frete">✓ FRETE GRÁTIS · Garantia 30 dias</div>
+      <div class="card-variants">${varLabel}</div>
+      <a class="card-cta" href="/products/${p.slug}">Ver Oferta →</a>
+    </div>
+  `;
+  grid.appendChild(card);
+});
+
+function $$(c){
+  return 'R$ '+(c/100).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+</script>
+</body>
+</html>

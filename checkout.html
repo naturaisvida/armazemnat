@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Armazém Natural</title>
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #15a731;
+  --green-dark: #0e8a28;
+  --green-2: #356041;
+  --green-3: #427751;
+  --bg: #f2f2f2;
+  --white: #fff;
+  --text: #212121;
+  --border: #dadada;
+  --border-light: #e7e7e7;
+  --red: #f71b1b;
+  --success: #07b959;
+  --font: 'Poppins', sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--white);border-bottom:1px solid var(--border-light);padding:14px 40px;display:flex;align-items:center;justify-content:space-between}
+.hdr img{height:38px}
+.hdr-sec{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--green-2);text-transform:uppercase;line-height:1.3}
+.hdr-sec svg{width:20px;height:20px;flex-shrink:0}
+
+/* LAYOUT */
+.wrap{max-width:1060px;margin:0 auto;padding:28px 20px;display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+
+/* STEP CARD */
+.card{background:var(--white);border:1px solid var(--border-light);border-radius:8px;overflow:hidden;margin-bottom:14px}
+.card-hdr{display:flex;justify-content:space-between;align-items:center;padding:17px 22px}
+.card-hdr h2{font-size:15px;font-weight:700}
+.card-hdr .num{font-size:12px;color:#999}
+.card.locked .card-hdr{opacity:.45}
+.card.locked .card-body{display:none}
+.card-body{padding:0 22px 22px}
+
+/* STEP DONE BAR */
+.done-bar{display:none;align-items:center;gap:8px;padding:0 22px 14px;font-size:13px;color:var(--green)}
+.done-bar.show{display:flex}
+.done-bar a{margin-left:auto;font-size:12px;color:var(--green);text-decoration:none}
+
+/* FORM */
+.row{display:grid;gap:11px;margin-bottom:11px}
+.row.c2{grid-template-columns:1fr 1fr}
+.field{display:flex;flex-direction:column;gap:3px}
+.field input,.field select{padding:12px 13px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:14px;color:var(--text);background:var(--white);outline:none;transition:border .15s}
+.field input:focus,.field select:focus{border-color:var(--green)}
+.field input.err{border-color:var(--red)}
+.ferr{font-size:11px;color:var(--red);min-height:14px}
+
+/* BTN */
+.btn{width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:6px;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;text-transform:uppercase;letter-spacing:.4px;margin-top:14px;position:relative}
+.btn:hover{background:var(--green-dark)}
+.btn:disabled{background:#bbb;cursor:not-allowed}
+.btn.spin{color:transparent}
+.btn.spin::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .65s linear infinite}
+@keyframes sp{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.note{text-align:center;font-size:12px;color:#999;margin-top:8px}
+.note a{color:var(--green-2)}
+
+/* PAYMENT TABS */
+.ptabs{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}
+.ptab{border:2px solid var(--border);border-radius:8px;background:var(--white);cursor:pointer;padding:11px 6px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:border .15s,background .15s;font-family:var(--font)}
+.ptab:hover{border-color:var(--green)}
+.ptab.on{border-color:var(--green);background:#f0fbf3}
+.ptab img{height:26px;object-fit:contain}
+.ptab span{font-size:12px;font-weight:600}
+.ptab svg{height:26px;width:auto}
+.pcont{display:none}
+.pcont.on{display:block}
+
+/* PIX */
+.pix-box{background:#f0fbf3;border:1px solid #b8e6c4;border-radius:8px;padding:14px;margin-bottom:14px;font-size:13px}
+.pix-box ul{list-style:none;margin-top:7px}
+.pix-box li{display:flex;align-items:flex-start;gap:9px;margin-bottom:7px}
+.pix-box .n{background:var(--green);color:#fff;width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.disc-tag{background:#f0fbf3;border:1px solid #b8e6c4;border-radius:6px;padding:9px 13px;font-size:13px;font-weight:600;color:var(--green-2);text-align:center;margin-bottom:14px}
+
+/* QR */
+.qr-wrap{text-align:center;padding:16px 0}
+.qr-wrap img{width:190px;height:190px;border:1px solid var(--border);border-radius:8px}
+.qr-wrap p{font-size:12px;color:#888;margin-top:7px}
+.copy-row{display:flex;gap:8px;margin-top:12px}
+.copy-row input{flex:1;padding:9px 11px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:#f9f9f9}
+.copybtn{padding:9px 14px;background:var(--green-2);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font);white-space:nowrap}
+.timer{text-align:center;font-size:13px;color:#666;margin-top:10px}
+.timer b{color:var(--red)}
+
+/* BOLETO */
+.blt-box{background:#fff8e4;border:1px solid #ffd166;border-radius:8px;padding:14px;margin-bottom:14px;font-size:13px}
+.blt-open{display:block;width:100%;padding:13px;background:var(--green-2);color:#fff;text-align:center;text-decoration:none;border-radius:6px;font-weight:700;font-size:14px;margin-bottom:11px}
+
+/* CARD */
+.card-prev{background:linear-gradient(135deg,var(--green-2),var(--green-3));border-radius:11px;padding:18px;margin-bottom:15px;color:#fff}
+.chip{width:28px;height:21px;background:#d4af37;border-radius:4px;margin-bottom:10px}
+.card-num-p{font-size:18px;letter-spacing:3px;margin-bottom:12px;font-weight:600;word-spacing:6px}
+.card-row-p{display:flex;justify-content:space-between;font-size:12px}
+.card-row-p div span{display:block;font-size:10px;opacity:.7;margin-bottom:2px}
+
+/* ALERT */
+.alert{padding:11px 14px;border-radius:6px;font-size:13px;margin-bottom:10px}
+.alert-err{background:#ffeaea;border:1px solid #f9c0c0;color:#c0392b}
+.alert-ok{background:#eafaf1;border:1px solid #a9dfbf;color:#1e8449}
+
+/* SUMMARY SIDEBAR */
+.sidebar{background:var(--white);border:1px solid var(--border-light);border-radius:8px;padding:18px;position:sticky;top:16px}
+.sidebar h3{font-size:14px;font-weight:700;margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid var(--border-light)}
+.obs{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:13px;resize:none;height:78px;outline:none;margin-bottom:3px}
+.obs-c{font-size:11px;color:#999;text-align:right;margin-bottom:14px}
+.sline{display:flex;justify-content:space-between;font-size:14px;margin-bottom:7px}
+.stotal{border-top:1px solid var(--border-light);margin-top:7px;padding-top:11px;font-weight:700;font-size:16px}
+.sprod{display:flex;gap:11px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border-light)}
+.sprod img{width:58px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border-light)}
+.sprod-info{flex:1}
+.sprod-name{font-size:12px;font-weight:600;margin-bottom:3px}
+.sprod-var{font-size:11px;color:var(--green);font-weight:600;text-transform:uppercase}
+.sprod-price{font-size:13px;font-weight:700;margin-top:4px}
+
+/* FOOTER */
+.ftr{text-align:center;padding:22px 20px;border-top:1px solid var(--border-light);background:var(--white);margin-top:10px}
+.ftr p{font-size:12px;color:#999;margin-bottom:9px}
+.badges{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+.badges img{height:22px;object-fit:contain}
+
+/* SUCCESS */
+.success-screen{text-align:center;padding:44px 22px}
+.success-icon{width:66px;height:66px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.success-screen h2{font-size:21px;color:var(--success);margin-bottom:8px}
+.success-screen p{font-size:13px;color:#666}
+
+@media(max-width:720px){
+  .hdr{padding:12px 16px}
+  .wrap{grid-template-columns:1fr;padding:14px}
+  .sidebar{order:-1}
+  .row.c2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural">
+  <div class="hdr-sec">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+    </svg>
+    <div>PAGAMENTO<br>100% SEGURO</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="steps">
+
+    <!-- STEP 1 -->
+    <div class="card" id="s1">
+      <div class="card-hdr"><h2>Identificação</h2><span class="num">1 de 3</span></div>
+      <div class="card-body" id="s1-body">
+        <div class="row"><div class="field">
+          <input type="text" id="nome" placeholder="Nome completo" autocomplete="name">
+          <span class="ferr" id="e-nome"></span>
+        </div></div>
+        <div class="row"><div class="field">
+          <input type="email" id="email" placeholder="E-mail" autocomplete="email">
+          <span class="ferr" id="e-email"></span>
+        </div></div>
+        <div class="row c2">
+          <div class="field">
+            <input type="text" id="cpf" placeholder="CPF" maxlength="14">
+            <span class="ferr" id="e-cpf"></span>
+          </div>
+          <div class="field">
+            <input type="tel" id="fone" placeholder="WhatsApp/Celular" maxlength="15">
+            <span class="ferr" id="e-fone"></span>
+          </div>
+        </div>
+        <button class="btn" onclick="toStep2()">Ir para Entrega</button>
+        <p class="note">Ao prosseguir, você concorda com as <a href="#">Políticas de Privacidade</a></p>
+      </div>
+      <div class="done-bar" id="s1-done">
+        <svg width="15" height="15" fill="var(--green)" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg>
+        <span id="s1-txt"></span>
+        <a href="#" onclick="edit(1,event)">Editar</a>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="card locked" id="s2">
+      <div class="card-hdr"><h2>Entrega</h2><span class="num">2 de 3</span></div>
+      <div class="card-body" id="s2-body">
+        <div class="row c2">
+          <div class="field">
+            <input type="text" id="cep" placeholder="CEP" maxlength="9">
+            <span class="ferr" id="e-cep"></span>
+          </div>
+          <div class="field" style="justify-content:flex-end">
+            <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank"
+               style="font-size:12px;color:var(--green);padding-bottom:4px;text-align:right">Não sei meu CEP</a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <input type="text" id="rua" placeholder="Endereço">
+            <span class="ferr" id="e-rua"></span>
+          </div>
+        </div>
+        <div class="row c2">
+          <div class="field">
+            <input type="text" id="num" placeholder="Número">
+            <span class="ferr" id="e-num"></span>
+          </div>
+          <div class="field">
+            <input type="text" id="comp" placeholder="Complemento (opcional)">
+          </div>
+        </div>
+        <div class="row c2">
+          <div class="field">
+            <input type="text" id="bairro" placeholder="Bairro">
+            <span class="ferr" id="e-bairro"></span>
+          </div>
+          <div class="field">
+            <input type="text" id="cidade" placeholder="Cidade">
+            <span class="ferr" id="e-cidade"></span>
+          </div>
+        </div>
+        <div class="row c2">
+          <div class="field">
+            <select id="estado">
+              <option value="">Estado</option>
+              <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+              <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+              <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+              <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+              <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+              <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+              <option>SP</option><option>SE</option><option>TO</option>
+            </select>
+            <span class="ferr" id="e-estado"></span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:center;background:#f0fbf3;border:1px solid #b8e6c4;border-radius:6px;font-size:13px;font-weight:600;color:var(--green-2)">
+            ✓ FRETE GRÁTIS
+          </div>
+        </div>
+        <button class="btn" onclick="toStep3()">Ir para Pagamento</button>
+      </div>
+      <div class="done-bar" id="s2-done">
+        <svg width="15" height="15" fill="var(--green)" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/></svg>
+        <span id="s2-txt"></span>
+        <a href="#" onclick="edit(2,event)">Editar</a>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="card locked" id="s3">
+      <div class="card-hdr"><h2>Pagamento</h2><span class="num">3 de 3</span></div>
+      <div class="card-body" id="s3-body">
+
+        <div class="ptabs">
+          <button class="ptab" id="tab-pix" onclick="selPay('pix')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg/512px-Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg.png" alt="PIX">
+            <span>PIX</span>
+          </button>
+          <button class="ptab" id="tab-boleto" onclick="selPay('boleto')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Logomarca_do_boleto_bancário.svg/320px-Logomarca_do_boleto_bancário.svg.png" alt="Boleto">
+            <span>Boleto</span>
+          </button>
+          <button class="ptab" id="tab-cartao" onclick="selPay('cartao')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green-2)" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+            </svg>
+            <span>Cartão</span>
+          </button>
+        </div>
+
+        <!-- PIX -->
+        <div class="pcont" id="pc-pix">
+          <div class="pix-box">
+            <strong>Como pagar com PIX:</strong>
+            <ul style="margin-top:8px">
+              <li><span class="n">1</span>Clique em "Gerar PIX" abaixo</li>
+              <li><span class="n">2</span>Abra seu banco no celular</li>
+              <li><span class="n">3</span>Escaneie o QR Code ou copie o código</li>
+              <li><span class="n">4</span>Confirmação automática em até 1 min</li>
+            </ul>
+          </div>
+          <div class="disc-tag" id="pix-disc"></div>
+          <div id="pix-res" style="display:none">
+            <div class="qr-wrap">
+              <p style="font-size:14px;font-weight:600;margin-bottom:10px">Escaneie o QR Code</p>
+              <img id="qr-img" src="" alt="QR Code PIX">
+              <p>ou use o código Pix Copia e Cola</p>
+            </div>
+            <div class="copy-row">
+              <input type="text" id="pix-code" readonly>
+              <button class="copybtn" onclick="cp('pix-code',this)">Copiar</button>
+            </div>
+            <div class="timer">Expira em: <b id="pix-timer">30:00</b></div>
+            <p style="font-size:12px;color:#888;text-align:center;margin-top:10px">Aguardando confirmação do pagamento…</p>
+          </div>
+          <div id="pix-btn">
+            <button class="btn" id="btn-pix" onclick="pay('pix')">Gerar PIX</button>
+          </div>
+        </div>
+
+        <!-- BOLETO -->
+        <div class="pcont" id="pc-boleto">
+          <div class="blt-box">
+            <strong>⚠️ Atenção:</strong> O boleto pode levar até <strong>3 dias úteis</strong> para ser compensado.
+            Seu pedido será separado somente após a confirmação do pagamento.<br><br>
+            <strong>Vencimento:</strong> 3 dias úteis após a emissão.
+          </div>
+          <div id="blt-res" style="display:none">
+            <a id="blt-link" href="#" target="_blank" class="blt-open">📄 Abrir Boleto</a>
+            <div class="copy-row">
+              <input type="text" id="blt-code" readonly placeholder="Linha digitável">
+              <button class="copybtn" onclick="cp('blt-code',this)">Copiar</button>
+            </div>
+            <p style="font-size:12px;color:#888;text-align:center;margin-top:10px">Guarde o código para pagar depois.</p>
+          </div>
+          <div id="blt-btn">
+            <button class="btn" id="btn-boleto" onclick="pay('boleto')">Gerar Boleto</button>
+          </div>
+        </div>
+
+        <!-- CARTÃO -->
+        <div class="pcont" id="pc-cartao">
+          <div class="card-prev">
+            <div class="chip"></div>
+            <div class="card-num-p" id="pv-num">•••• •••• •••• ••••</div>
+            <div class="card-row-p">
+              <div><span>NOME</span><strong id="pv-name">NOME DO TITULAR</strong></div>
+              <div><span>VALIDADE</span><strong id="pv-exp">MM/AA</strong></div>
+            </div>
+          </div>
+          <div class="row"><div class="field">
+            <input type="text" id="cn" placeholder="Número do cartão" maxlength="19" oninput="fmtCard(this)">
+            <span class="ferr" id="e-cn"></span>
+          </div></div>
+          <div class="row"><div class="field">
+            <input type="text" id="ch" placeholder="Nome igual ao cartão" oninput="document.getElementById('pv-name').textContent=this.value.toUpperCase()||'NOME DO TITULAR'">
+            <span class="ferr" id="e-ch"></span>
+          </div></div>
+          <div class="row c2">
+            <div class="field">
+              <input type="text" id="ce" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this)">
+              <span class="ferr" id="e-ce"></span>
+            </div>
+            <div class="field">
+              <input type="text" id="cv" placeholder="CVV" maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')">
+              <span class="ferr" id="e-cv"></span>
+            </div>
+          </div>
+          <div class="row"><div class="field">
+            <select id="parc"></select>
+          </div></div>
+          <div id="card-msg"></div>
+          <div id="card-res" style="display:none"></div>
+          <div id="card-btn">
+            <button class="btn" id="btn-card" onclick="pay('cartao')">Finalizar Compra</button>
+          </div>
+        </div>
+
+      </div><!-- /card-body -->
+    </div><!-- /step 3 -->
+
+  </div><!-- /steps -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h3>Resumo da compra</h3>
+    <textarea class="obs" id="obs" placeholder="Observação da compra (opcional)" maxlength="300"
+      oninput="document.getElementById('obs-c').textContent=this.value.length+'/300 caracteres'"></textarea>
+    <p class="obs-c" id="obs-c">0/300 caracteres</p>
+    <div class="sline"><span id="sb-lbl">Produto (1)</span><span id="sb-price"></span></div>
+    <div class="sline stotal"><span>Total</span><span id="sb-total"></span></div>
+    <div class="sprod">
+      <img id="sb-img" src="" alt="">
+      <div class="sprod-info">
+        <div class="sprod-name" id="sb-name"></div>
+        <div class="sprod-var" id="sb-var"></div>
+        <div class="sprod-price">Qtd.: <span id="sb-qty">1</span> &nbsp; <span id="sb-unit"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="ftr">
+  <p>Formas de pagamento</p>
+  <div class="badges">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo.svg/200px-American_Express_logo.svg.png" alt="Amex">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Elo_logo.svg/200px-Elo_logo.svg.png" alt="Elo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg/200px-Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg.png" alt="PIX" style="height:18px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Logomarca_do_boleto_bancário.svg/200px-Logomarca_do_boleto_bancário.svg.png" alt="Boleto" style="height:18px">
+  </div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════
+// CONFIGURAÇÃO — edite antes de publicar
+// ══════════════════════════════════════════
+const CFG = {
+  publicKey: 'pk_COLOQUE_SUA_CHAVE_PUBLICA',   // Pagar.me dashboard > API Keys
+  apiEndpoint: 'api.php',                        // backend PHP no mesmo servidor
+  pixDiscount: 5,                                // % desconto PIX (0 para desativar)
+  pixExpires: 1800,                              // segundos até expirar (1800 = 30 min)
+  maxParcelsSemJuros: 6,
+  maxParcelas: 12,
+  jurosMes: 2.5,                                 // % ao mês após parcelas sem juros
+};
+
+// Dados do produto — passe via URL: ?nome=...&preco=53990&variante=...&img=...&qty=1
+const P = (q => ({
+  nome:     q.get('nome')     || 'Produto Armazém Natural',
+  variante: q.get('variante') || '',
+  preco:    parseInt(q.get('preco'))  || 0,     // em centavos
+  qty:      parseInt(q.get('qty'))    || 1,
+  img:      q.get('img')      || '',
+}))(new URLSearchParams(location.search));
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+(function init() {
+  document.getElementById('sb-name').textContent = P.nome;
+  document.getElementById('sb-var').textContent  = P.variante;
+  document.getElementById('sb-qty').textContent  = P.qty;
+  document.getElementById('sb-img').src          = P.img;
+  document.getElementById('sb-lbl').textContent  = `Produto (${P.qty})`;
+  document.getElementById('sb-unit').textContent = $$(P.preco);
+
+  const total = P.preco * P.qty;
+  document.getElementById('sb-price').textContent = $$(total);
+  document.getElementById('sb-total').textContent = $$(total);
+
+  if (CFG.pixDiscount > 0) {
+    const desc = Math.round(total * CFG.pixDiscount / 100);
+    document.getElementById('pix-disc').textContent =
+      `🎉 No PIX: ${$$(total - desc)} (${CFG.pixDiscount}% de desconto)`;
+  } else {
+    document.getElementById('pix-disc').style.display = 'none';
+  }
+
+  buildParcelas(total);
+})();
+
+function $$(cents) {
+  return 'R$ ' + (cents/100).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+
+function buildParcelas(total) {
+  const sel = document.getElementById('parc');
+  sel.innerHTML = '';
+  for (let i = 1; i <= CFG.maxParcelas; i++) {
+    let val, label;
+    if (i <= CFG.maxParcelsSemJuros) {
+      val   = total / i;
+      label = `${i}x de ${$$(val)} sem juros`;
+    } else {
+      const r = CFG.jurosMes / 100;
+      val   = (total * r * Math.pow(1+r,i)) / (Math.pow(1+r,i)-1);
+      label = `${i}x de ${$$(val)} com juros`;
+    }
+    sel.add(new Option(label, i));
+  }
+}
+
+// ══════════════════════════════════════════
+// STEPS
+// ══════════════════════════════════════════
+function toStep2() {
+  if (!v1()) return;
+  lock(1);
+  document.getElementById('s1-txt').textContent =
+    `${g('nome').split(' ')[0]} · ${g('email')}`;
+  unlock(2);
+  scrollTo('s2');
+}
+
+function toStep3() {
+  if (!v2()) return;
+  lock(2);
+  document.getElementById('s2-txt').textContent =
+    `${g('rua')}, ${g('num')} — ${g('cidade')}/${g('estado')}`;
+  unlock(3);
+  selPay('pix');
+  scrollTo('s3');
+}
+
+function edit(n, e) {
+  e.preventDefault();
+  if (n === 1) { unlock(1); reLock(2); reLock(3); }
+  if (n === 2) { unlock(2); reLock(3); }
+}
+
+function lock(n) {
+  const s = document.getElementById('s'+n);
+  s.classList.add('locked');
+  document.getElementById('s'+n+'-body').style.display = 'none';
+  document.getElementById('s'+n+'-done').classList.add('show');
+}
+function unlock(n) {
+  const s = document.getElementById('s'+n);
+  s.classList.remove('locked');
+  document.getElementById('s'+n+'-body').style.display = '';
+}
+function reLock(n) {
+  const s = document.getElementById('s'+n);
+  s.classList.add('locked');
+  document.getElementById('s'+n+'-body').style.display = 'none';
+  document.getElementById('s'+n+'-done').classList.remove('show');
+}
+
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ══════════════════════════════════════════
+// VALIDATION
+// ══════════════════════════════════════════
+function v1() {
+  let ok = true;
+  const nome = g('nome').trim();
+  if (!nome || nome.trim().split(/\s+/).length < 2) { err('nome','Nome completo obrigatório'); ok=false; } else clr('nome');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(g('email'))) { err('email','E-mail inválido'); ok=false; } else clr('email');
+  if (!cpfOk(g('cpf').replace(/\D/g,''))) { err('cpf','CPF inválido'); ok=false; } else clr('cpf');
+  if (g('fone').replace(/\D/g,'').length < 10) { err('fone','Telefone inválido'); ok=false; } else clr('fone');
+  return ok;
+}
+function v2() {
+  let ok = true;
+  [['cep','CEP'],['rua','Endereço'],['num','Número'],['bairro','Bairro'],['cidade','Cidade'],['estado','Estado']]
+    .forEach(([f,l]) => {
+      if (!g(f).trim()) { err(f,`Informe o ${l}`); ok=false; } else clr(f);
+    });
+  return ok;
+}
+function vCard() {
+  let ok = true;
+  if (g('cn').replace(/\D/g,'').length < 13) { err('cn','Número inválido'); ok=false; } else clr('cn');
+  if (!g('ch').trim()) { err('ch','Informe o nome'); ok=false; } else clr('ch');
+  if (!/^\d{2}\/\d{2}$/.test(g('ce'))) { err('ce','Validade inválida'); ok=false; } else clr('ce');
+  if (g('cv').length < 3) { err('cv','CVV inválido'); ok=false; } else clr('cv');
+  return ok;
+}
+
+function g(id) { return document.getElementById(id).value; }
+function err(id, msg) { document.getElementById(id).classList.add('err'); document.getElementById('e-'+id).textContent=msg; }
+function clr(id) { document.getElementById(id).classList.remove('err'); document.getElementById('e-'+id).textContent=''; }
+
+// CPF validation
+function cpfOk(c) {
+  if (c.length!==11 || /^(\d)\1+$/.test(c)) return false;
+  let s=0; for(let i=0;i<9;i++) s+=+c[i]*(10-i);
+  let r=(s*10)%11; if(r===10||r===11) r=0; if(r!==+c[9]) return false;
+  s=0; for(let i=0;i<10;i++) s+=+c[i]*(11-i);
+  r=(s*10)%11; if(r===10||r===11) r=0; return r===+c[10];
+}
+
+// ══════════════════════════════════════════
+// MASKS
+// ══════════════════════════════════════════
+document.getElementById('cpf').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').slice(0,11);
+  v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1-$2');
+  this.value = v;
+});
+document.getElementById('fone').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').slice(0,11);
+  this.value = v.length>10 ? v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3')
+                            : v.replace(/(\d{2})(\d{4})(\d{4})/,'($1) $2-$3');
+});
+document.getElementById('cep').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').slice(0,8);
+  this.value = v.replace(/(\d{5})(\d)/,'$1-$2');
+  if (v.length===8) viaCEP(v);
+});
+
+async function viaCEP(cep) {
+  try {
+    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const d = await r.json();
+    if (d.erro) { err('cep','CEP não encontrado'); return; }
+    document.getElementById('rua').value    = d.logradouro;
+    document.getElementById('bairro').value = d.bairro;
+    document.getElementById('cidade').value = d.localidade;
+    const sel = document.getElementById('estado');
+    for (const o of sel.options) if (o.value===d.uf) { o.selected=true; break; }
+    document.getElementById('num').focus();
+    clr('cep');
+  } catch(e) { err('cep','Erro ao buscar CEP'); }
+}
+
+// ══════════════════════════════════════════
+// PAYMENT TABS
+// ══════════════════════════════════════════
+function selPay(m) {
+  ['pix','boleto','cartao'].forEach(x => {
+    document.getElementById('tab-'+x).classList.remove('on');
+    document.getElementById('pc-'+x).classList.remove('on');
+  });
+  document.getElementById('tab-'+m).classList.add('on');
+  document.getElementById('pc-'+m).classList.add('on');
+}
+
+// ══════════════════════════════════════════
+// CARD PREVIEW
+// ══════════════════════════════════════════
+function fmtCard(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,16).replace(/(.{4})/g,'$1 ').trim();
+  el.value = v;
+  const disp = v || '•••• •••• •••• ••••';
+  document.getElementById('pv-num').textContent = disp;
+}
+function fmtExp(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,4);
+  if (v.length>2) v = v.slice(0,2)+'/'+v.slice(2);
+  el.value = v;
+  document.getElementById('pv-exp').textContent = v || 'MM/AA';
+}
+
+// ══════════════════════════════════════════
+// PAYMENT PROCESSING
+// ══════════════════════════════════════════
+async function pay(method) {
+  const btnId = method==='cartao' ? 'btn-card' : 'btn-'+method;
+  const btn = document.getElementById(btnId);
+
+  if (method==='cartao' && !vCard()) return;
+
+  btn.classList.add('spin'); btn.disabled = true;
+
+  try {
+    let cardToken = null;
+    if (method==='cartao') cardToken = await tokenize();
+
+    const total = P.preco * P.qty;
+    const amount = method==='pix' && CFG.pixDiscount>0
+      ? Math.round(total*(1-CFG.pixDiscount/100))
+      : total;
+
+    const phone = g('fone').replace(/\D/g,'');
+    const payload = {
+      method,
+      amount,
+      card_token: cardToken,
+      installments: parseInt(g('parc')||'1'),
+      pix_expires_in: CFG.pixExpires,
+      observacao: g('obs'),
+      customer: {
+        name:        g('nome').trim(),
+        email:       g('email').trim(),
+        document:    g('cpf').replace(/\D/g,''),
+        phone_area:  phone.slice(0,2),
+        phone_number:phone.slice(2),
+      },
+      address: {
+        line_1:   `${g('num')}, ${g('rua')}, ${g('bairro')}`,
+        line_2:   g('comp'),
+        zip_code: g('cep').replace(/\D/g,''),
+        city:     g('cidade'),
+        state:    g('estado'),
+        country:  'BR',
+      },
+      items: [{
+        amount:      P.preco,
+        description: `${P.nome}${P.variante?' - '+P.variante:''}`,
+        quantity:    P.qty,
+      }],
+    };
+
+    const res = await fetch(CFG.apiEndpoint, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.message || 'Erro ao processar pagamento');
+
+    handleResult(method, data, btn);
+
+  } catch(e) {
+    showMsg(method, e.message, true);
+    btn.classList.remove('spin'); btn.disabled = false;
+  }
+}
+
+async function tokenize() {
+  const [mm, yy] = g('ce').split('/');
+  const res = await fetch(
+    `https://api.pagar.me/core/v5/tokens?appId=${CFG.publicKey}`,
+    {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        type:'card',
+        card:{
+          number:      g('cn').replace(/\D/g,''),
+          holder_name: g('ch').toUpperCase().trim(),
+          exp_month:   parseInt(mm),
+          exp_year:    parseInt('20'+yy),
+          cvv:         g('cv'),
+        }
+      })
+    }
+  );
+  const d = await res.json();
+  if (!res.ok) throw new Error('Dados do cartão inválidos');
+  return d.id;
+}
+
+function handleResult(method, data, btn) {
+  btn.classList.remove('spin'); btn.disabled = false;
+
+  if (method==='pix') {
+    const tx = data.charges?.[0]?.last_transaction;
+    document.getElementById('qr-img').src       = tx?.qr_code_url || '';
+    document.getElementById('pix-code').value   = tx?.qr_code || '';
+    document.getElementById('pix-res').style.display  = '';
+    document.getElementById('pix-btn').style.display  = 'none';
+    startTimer(CFG.pixExpires);
+    pollOrder(data.id);
+  }
+  else if (method==='boleto') {
+    const tx = data.charges?.[0]?.last_transaction;
+    document.getElementById('blt-link').href    = tx?.url || tx?.pdf || '#';
+    document.getElementById('blt-code').value   = tx?.line || '';
+    document.getElementById('blt-res').style.display = '';
+    document.getElementById('blt-btn').style.display = 'none';
+  }
+  else if (method==='cartao') {
+    const status = data.charges?.[0]?.status;
+    const ok = status==='paid' || status==='authorized_pending_capture';
+    document.getElementById('card-btn').style.display = 'none';
+    document.getElementById('card-res').innerHTML = ok
+      ? `<div class="alert alert-ok" style="text-align:center">
+           <strong>✅ Pagamento Aprovado!</strong><br>
+           Em breve você receberá a confirmação por e-mail.<br>
+           <small style="color:#888">Pedido: #${data.id}</small>
+         </div>`
+      : `<div class="alert alert-err">❌ Pagamento não aprovado. Verifique os dados do cartão e tente novamente.</div>`;
+    document.getElementById('card-res').style.display = '';
+    if (!ok) document.getElementById('card-btn').style.display = '';
+  }
+}
+
+function showMsg(method, msg, isErr) {
+  const el = document.getElementById('card-msg');
+  if (method==='cartao' && el) {
+    el.innerHTML = `<div class="alert ${isErr?'alert-err':'alert-ok'}">${msg}</div>`;
+  } else {
+    alert(msg);
+  }
+}
+
+// PIX timer
+let _timer;
+function startTimer(secs) {
+  clearInterval(_timer);
+  let t = secs;
+  _timer = setInterval(() => {
+    t--;
+    const el = document.getElementById('pix-timer');
+    if (!el) { clearInterval(_timer); return; }
+    el.textContent = `${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`;
+    if (t<=0) clearInterval(_timer);
+  }, 1000);
+}
+
+// Poll order status every 5s
+let _poll;
+async function pollOrder(orderId) {
+  clearInterval(_poll);
+  _poll = setInterval(async () => {
+    try {
+      const r = await fetch(`${CFG.apiEndpoint}?status=${orderId}`);
+      const d = await r.json();
+      if (d.status==='paid') {
+        clearInterval(_poll);
+        showSuccess(orderId);
+      }
+    } catch(e){}
+  }, 5000);
+}
+
+function showSuccess(id) {
+  document.getElementById('steps').innerHTML = `
+    <div class="card">
+      <div class="success-screen">
+        <div class="success-icon">
+          <svg width="32" height="32" fill="white" viewBox="0 0 16 16">
+            <path d="M13.854 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L6.5 10.293l6.646-6.647a.5.5 0 01.708 0z"/>
+          </svg>
+        </div>
+        <h2>Pagamento Confirmado!</h2>
+        <p>Obrigado pela sua compra! Você receberá um e-mail de confirmação em breve.</p>
+        <p style="margin-top:10px;font-size:12px;color:#aaa">Pedido: #${id}</p>
+      </div>
+    </div>`;
+}
+
+// Copy helper
+function cp(inputId, btn) {
+  const el = document.getElementById(inputId);
+  el.select();
+  navigator.clipboard.writeText(el.value);
+  btn.textContent = 'Copiado!';
+  setTimeout(() => btn.textContent = 'Copiar', 2000);
+}
+</script>
+</body>
+</html>
