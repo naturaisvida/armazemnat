@@ -413,7 +413,10 @@ function qs(id){ return document.getElementById(id); }
 
 // ─── Ler slug da URL ─────────────────────────────────────────────────────────
 // Via ?slug=glicofit (quando .htaccess está ativo, /products/glicofit vira isto)
-const slug = new URLSearchParams(location.search).get('slug') || '';
+// Apache: ?slug=xxx | Vercel (URL transparente): /products/xxx
+const slug = new URLSearchParams(location.search).get('slug')
+  || (location.pathname.match(/\/products\/([^/?#]+)/) || [])[1]
+  || '';
 const prod  = PRODUTOS.find(p => p.slug === slug);
 
 if (!prod) {
