@@ -266,10 +266,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
   <img id="zoom-img" src="" alt="">
 </div>
 
+<script src="/js/copys.js"></script>
 <script src="/js/produtos.js"></script>
 <script>
 // ─── Copy do produto (descrição específica por tipo) ─────────────────────────
 function gerarDescricao(p) {
+  // Usa a copy real do Shopify se disponível
+  if (typeof COPYS !== 'undefined' && COPYS[p.slug] && COPYS[p.slug].trim().length > 10) {
+    return COPYS[p.slug];
+  }
+
   const nome = p.nome;
   const t = p.tipo || 'geral';
 
