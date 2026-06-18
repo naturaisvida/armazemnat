@@ -69,6 +69,9 @@ module.exports = async function handler(req, res) {
   if (method === 'cartao' && !card_token) {
     return res.status(400).json({ error: true, message: 'Token do cartão ausente' });
   }
+  if (method === 'cartao' && !address.line_1?.trim()) {
+    return res.status(400).json({ error: true, message: 'Endereço incompleto. Volte ao passo 2 e preencha o endereço.' });
+  }
 
   const doc = (customer.document || '').replace(/\D/g, '');
   const cust = {
