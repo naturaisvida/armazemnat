@@ -25,6 +25,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .nav-item:hover,.nav-item.active{background:rgba(255,255,255,.1);color:#fff}
 .nav-item.active{border-left:3px solid var(--green)}
 .nav-sub{padding-left:40px;font-size:12.5px;color:rgba(255,255,255,.6)}
+.nav-arrow{margin-left:auto;transition:transform .2s;flex-shrink:0}
+.nav-group.open .nav-arrow{transform:rotate(90deg)}
+.nav-submenu{display:none}
+.nav-group.open .nav-submenu{display:block}
+.nav-sub-item{padding:7px 18px 7px 44px;font-size:12px}
 .nav-sub.active,.nav-sub:hover{color:#fff;background:rgba(255,255,255,.07)}
 .nav-icon{width:16px;height:16px;flex-shrink:0;opacity:.8}
 .sb-bottom{padding:14px 18px;border-top:1px solid rgba(255,255,255,.1)}
@@ -261,6 +266,12 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
   font-weight:700;color:var(--green);font-size:13px;font-family:monospace;
 }
 .order-id-btn:hover{text-decoration:underline}
+.di-edit-btn{
+  display:inline-flex;align-items:center;gap:3px;background:none;border:none;
+  font-family:var(--font);font-size:9px;font-weight:600;color:var(--muted);
+  cursor:pointer;padding:2px 5px;border-radius:4px;transition:.12s;
+}
+.di-edit-btn:hover{background:#f1f5f9;color:var(--green)}
 </style>
 </head>
 <body>
@@ -279,10 +290,18 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
       <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
       Início
     </a>
-    <a class="nav-item" href="#" onclick="toast('Em breve','ok');return false">
-      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-      Análises
-    </a>
+    <div class="nav-group" id="nav-analises">
+      <a class="nav-item nav-parent" onclick="toggleSubmenu('analises')" style="cursor:pointer;user-select:none">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Análises
+        <svg class="nav-arrow" id="arrow-analises" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="nav-submenu" id="sub-analises">
+        <a class="nav-item nav-sub-item" href="/admin/analises">Métricas</a>
+        <a class="nav-item nav-sub-item" href="/admin/relatorios">Relatórios</a>
+        <a class="nav-item nav-sub-item" href="#" onclick="toast('Em breve','ok');return false">Ao Vivo</a>
+      </div>
+    </div>
     <div class="nav-section">Vendas</div>
     <a class="nav-item active" href="/admin/pedidos">
       <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -508,16 +527,56 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
 
   <div class="drawer-info-grid">
     <div class="drawer-info-col">
-      <div class="di-title">CLIENTE</div>
-      <div id="d-customer"></div>
+      <div class="di-title" style="display:flex;align-items:center;justify-content:space-between">
+        CLIENTE
+        <button class="di-edit-btn" onclick="toggleCustomerEdit(true)" id="btn-edit-customer" title="Editar cliente">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          editar
+        </button>
+      </div>
+      <div id="d-customer-view"></div>
+      <div id="d-customer-edit" style="display:none">
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div><div class="di-muted" style="margin-bottom:2px">Nome</div><input type="text" id="e-cust-name" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+          <div><div class="di-muted" style="margin-bottom:2px">E-mail</div><input type="email" id="e-cust-email" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+          <div><div class="di-muted" style="margin-bottom:2px">Telefone</div><input type="text" id="e-cust-phone" placeholder="(00) 00000-0000" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+          <div><div class="di-muted" style="margin-bottom:2px">CPF</div><input type="text" id="e-cust-doc" placeholder="000.000.000-00" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px">
+          <button onclick="toggleCustomerEdit(false)" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">Cancelar</button>
+          <button onclick="saveCustomerEdit()" class="btn btn-green btn-sm" style="flex:1;justify-content:center" id="btn-save-customer">Salvar</button>
+        </div>
+      </div>
     </div>
     <div class="drawer-info-col">
       <div class="di-title">PAGAMENTO</div>
       <div id="d-payment"></div>
     </div>
     <div class="drawer-info-col">
-      <div class="di-title">ENTREGA</div>
-      <div id="d-shipping"></div>
+      <div class="di-title" style="display:flex;align-items:center;justify-content:space-between">
+        ENTREGA
+        <button class="di-edit-btn" onclick="toggleShippingEdit(true)" id="btn-edit-shipping" title="Editar endereço">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          editar
+        </button>
+      </div>
+      <div id="d-shipping-view"></div>
+      <div id="d-shipping-edit" style="display:none">
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div><div class="di-muted" style="margin-bottom:2px">Destinatário</div><input type="text" id="e-ship-name" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+          <div><div class="di-muted" style="margin-bottom:2px">CEP</div><input type="text" id="e-ship-zip" placeholder="00000-000" maxlength="9" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+          <div><div class="di-muted" style="margin-bottom:2px">Endereço</div><input type="text" id="e-ship-line1" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+          <div><div class="di-muted" style="margin-bottom:2px">Número / Complemento</div><input type="text" id="e-ship-line2" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+          <div style="display:grid;grid-template-columns:1fr 60px;gap:6px">
+            <div><div class="di-muted" style="margin-bottom:2px">Cidade</div><input type="text" id="e-ship-city" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;outline:none"></div>
+            <div><div class="di-muted" style="margin-bottom:2px">UF</div><input type="text" id="e-ship-state" maxlength="2" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:12px;text-transform:uppercase;outline:none"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px">
+          <button onclick="toggleShippingEdit(false)" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">Cancelar</button>
+          <button onclick="saveShippingEdit()" class="btn btn-green btn-sm" style="flex:1;justify-content:center" id="btn-save-shipping">Salvar</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -576,6 +635,10 @@ function logout() {
   location.href = '/admin';
 }
 
+function toggleSubmenu(id) {
+  document.getElementById('nav-' + id).classList.toggle('open');
+}
+
 // ── State ────────────────────────────────────────────────────────────────────
 let _status  = 'todos';
 let _page    = 1;
@@ -609,7 +672,7 @@ function fmtBRL(cents) {
 function fmtDate(iso) {
   if (!iso) return '—';
   const d = new Date(iso);
-  return d.toLocaleDateString('pt-BR') + '<br><small>' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) + '</small>';
+  return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
 }
 function relDate(iso) {
   if (!iso) return '';
@@ -697,9 +760,9 @@ function renderTable() {
         <div class="order-name">${escH(o.customer.name)}</div>
         <span class="order-method ${methodClass[o.method] || 'method-outro'}">${methodLabel[o.method] || 'Outro'}${parcStr}</span>
       </td>
-      <td>
-        <div class="dt-main">${fmtDate(o.createdAt)}</div>
-        <div class="dt-rel">${relDate(o.createdAt)}</div>
+      <td style="white-space:nowrap">
+        <span style="display:block;font-size:11px;font-weight:400;color:var(--text)">${fmtDate(o.createdAt)}</span>
+        <span style="display:block;font-size:10px;color:var(--muted);margin-top:2px">${relDate(o.createdAt)}</span>
       </td>
       <td><div class="amount">${fmtBRL(o.amount)}</div></td>
       <td><span class="badge s-${o.status}">${STATUS_LABELS[o.status] || o.status}</span></td>
@@ -1018,14 +1081,8 @@ function openDetail(orderId) {
   sb.textContent = STATUS_LABELS[o.status] || o.status;
 
   // Cliente
-  const phone = o.customer.phone ? fmtPhone(o.customer.phone) : null;
-  const cpf   = o.customer.document ? fmtDoc(o.customer.document) : null;
-  const waNum = o.customer.phone ? '55' + String(o.customer.phone).replace(/\D/g,'') : null;
-  document.getElementById('d-customer').innerHTML =
-    `<div class="di-name">${escH(o.customer.name)}</div>` +
-    `<div class="di-line">${escH(o.customer.email)}</div>` +
-    (phone && waNum ? `<div class="di-line"><a href="https://wa.me/${waNum}" target="_blank" style="color:var(--green);text-decoration:none">${escH(phone)}</a></div>` : '') +
-    (cpf ? `<div class="di-muted">CPF: ${escH(cpf)}</div>` : '');
+  fillCustomerView(o);
+  toggleCustomerEdit(false);
 
   // Pagamento
   const mLabel = {pix:'Pix',boleto:'Boleto Bancário',cartao:'Cartão de Crédito',outro:'Outro'};
@@ -1040,14 +1097,8 @@ function openDetail(orderId) {
     `<div class="di-muted">${escH(parcel)}</div>`;
 
   // Entrega
-  const a = o.shipping.address;
-  const addrLine = [a.line1, a.line2].filter(Boolean).join(', ');
-  document.getElementById('d-shipping').innerHTML =
-    `<div class="di-name">${escH(o.customer.name)}</div>` +
-    (addrLine ? `<div class="di-line">${escH(addrLine)}</div>` : '') +
-    (a.city ? `<div class="di-line">${escH(a.city)} / ${escH(a.state)}</div>` : '') +
-    (a.zipCode ? `<div class="di-muted">CEP: ${escH(a.zipCode)}</div>` : '') +
-    (o.shipping.carrier ? `<div style="margin-top:6px;font-size:12px;color:var(--green);font-weight:700">${escH(o.shipping.carrier)} - FRETE GRATIS</div>` : '');
+  fillShippingView(o);
+  toggleShippingEdit(false);
 
   // Total
   const itemsSum = o.items.reduce((s,i) => s + (i.amount||0)*(i.quantity||1), 0);
@@ -1195,6 +1246,108 @@ async function resendEmailFromDetail(status) {
 function openStatusFromDetail() {
   if (!_detailOrder) return;
   openStatus(_detailOrder.id);
+}
+
+// ── Customer / Shipping edit ──────────────────────────────────────────────────
+function fillCustomerView(o) {
+  const phone = o.customer.phone ? fmtPhone(o.customer.phone) : null;
+  const cpf   = o.customer.document ? fmtDoc(o.customer.document) : null;
+  const waNum = o.customer.phone ? '55' + String(o.customer.phone).replace(/\D/g,'') : null;
+  document.getElementById('d-customer-view').innerHTML =
+    `<div class="di-name">${escH(o.customer.name)}</div>` +
+    `<div class="di-line">${escH(o.customer.email)}</div>` +
+    (phone && waNum ? `<div class="di-line"><a href="https://wa.me/${waNum}" target="_blank" style="color:var(--green);text-decoration:none">${escH(phone)}</a></div>` : '') +
+    (cpf ? `<div class="di-muted">CPF: ${escH(cpf)}</div>` : '');
+}
+
+function fillShippingView(o) {
+  const a = o.shipping.address;
+  const recipName = o.shipping.recipientName || o.customer.name;
+  const addrLine = [a.line1, a.line2].filter(Boolean).join(', ');
+  document.getElementById('d-shipping-view').innerHTML =
+    `<div class="di-name">${escH(recipName)}</div>` +
+    (addrLine ? `<div class="di-line">${escH(addrLine)}</div>` : '') +
+    (a.city ? `<div class="di-line">${escH(a.city)} / ${escH(a.state)}</div>` : '') +
+    (a.zipCode ? `<div class="di-muted">CEP: ${escH(a.zipCode)}</div>` : '') +
+    (o.shipping.carrier ? `<div style="margin-top:6px;font-size:12px;color:var(--green);font-weight:700">${escH(o.shipping.carrier)} - FRETE GRATIS</div>` : '');
+}
+
+function toggleCustomerEdit(show) {
+  document.getElementById('d-customer-view').style.display  = show ? 'none'  : 'block';
+  document.getElementById('d-customer-edit').style.display  = show ? 'block' : 'none';
+  document.getElementById('btn-edit-customer').style.display = show ? 'none'  : '';
+  if (show && _detailOrder) {
+    const c = _detailOrder.customer;
+    document.getElementById('e-cust-name').value  = c.name;
+    document.getElementById('e-cust-email').value = c.email;
+    document.getElementById('e-cust-phone').value = c.phone ? fmtPhone(c.phone) : '';
+    document.getElementById('e-cust-doc').value   = c.document ? fmtDoc(c.document) : '';
+  }
+}
+
+async function saveCustomerEdit() {
+  if (!_detailOrder) return;
+  const btn = document.getElementById('btn-save-customer');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+  const name  = document.getElementById('e-cust-name').value.trim();
+  const email = document.getElementById('e-cust-email').value.trim();
+  const phone = document.getElementById('e-cust-phone').value.trim();
+  const doc   = document.getElementById('e-cust-doc').value.trim();
+  try {
+    const r = await authFetch('/api/admin/orders', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ orderId: _detailOrder.id, editType: 'customer', name, email, phone, document: doc }),
+    });
+    const d = await r.json().catch(()=>({}));
+    if (r.ok) {
+      toast('Cliente atualizado!', 'ok');
+      toggleCustomerEdit(false);
+      loadOrders();
+    } else { toast(d.error || 'Erro ao salvar', 'err'); }
+  } catch { toast('Erro de conexão', 'err'); }
+  btn.disabled = false; btn.textContent = 'Salvar';
+}
+
+function toggleShippingEdit(show) {
+  document.getElementById('d-shipping-view').style.display  = show ? 'none'  : 'block';
+  document.getElementById('d-shipping-edit').style.display  = show ? 'block' : 'none';
+  document.getElementById('btn-edit-shipping').style.display = show ? 'none'  : '';
+  if (show && _detailOrder) {
+    const a = _detailOrder.shipping.address;
+    document.getElementById('e-ship-name').value  = _detailOrder.shipping.recipientName || _detailOrder.customer.name;
+    document.getElementById('e-ship-zip').value   = a.zipCode;
+    document.getElementById('e-ship-line1').value = a.line1;
+    document.getElementById('e-ship-line2').value = a.line2;
+    document.getElementById('e-ship-city').value  = a.city;
+    document.getElementById('e-ship-state').value = a.state;
+  }
+}
+
+async function saveShippingEdit() {
+  if (!_detailOrder) return;
+  const btn = document.getElementById('btn-save-shipping');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+  const name    = document.getElementById('e-ship-name').value.trim();
+  const zipCode = document.getElementById('e-ship-zip').value.trim();
+  const line1   = document.getElementById('e-ship-line1').value.trim();
+  const line2   = document.getElementById('e-ship-line2').value.trim();
+  const city    = document.getElementById('e-ship-city').value.trim();
+  const state   = document.getElementById('e-ship-state').value.trim().toUpperCase();
+  try {
+    const r = await authFetch('/api/admin/orders', {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ orderId: _detailOrder.id, editType: 'shipping', name, zipCode, line1, line2, city, state }),
+    });
+    const d = await r.json().catch(()=>({}));
+    if (r.ok) {
+      toast('Endereço atualizado!', 'ok');
+      toggleShippingEdit(false);
+      loadOrders();
+    } else { toast(d.error || 'Erro ao salvar', 'err'); }
+  } catch { toast('Erro de conexão', 'err'); }
+  btn.disabled = false; btn.textContent = 'Salvar';
 }
 
 // ── Init ─────────────────────────────────────────────────────────────────────

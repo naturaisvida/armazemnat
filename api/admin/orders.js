@@ -86,14 +86,16 @@ function formatOrder(raw) {
     else                                                            status = 'aguardando_pagamento';
   }
 
+  const basePhone = (cust.phones?.mobile_phone?.area_code || '') + (cust.phones?.mobile_phone?.number || '');
+
   return {
     id:         raw.id,
     code:       raw.code || raw.id,
     customer: {
-      name:     cust.name     || '',
-      email:    cust.email    || '',
-      document: cust.document || '',
-      phone:    (cust.phones?.mobile_phone?.area_code || '') + (cust.phones?.mobile_phone?.number || ''),
+      name:     meta.edit_customer_name     || cust.name     || '',
+      email:    meta.edit_customer_email    || cust.email    || '',
+      document: meta.edit_customer_document || cust.document || '',
+      phone:    meta.edit_customer_phone    || basePhone,
     },
     amount:      raw.amount   || 0,
     status,
@@ -110,13 +112,14 @@ function formatOrder(raw) {
     shipping: {
       carrier:      meta.shipping_carrier || (ship.description || 'Correios'),
       trackingCode: meta.tracking_code    || '',
+      recipientName: meta.edit_shipping_name || cust.name || '',
       address: {
-        line1:    addr.line_1    || '',
-        line2:    addr.line_2    || '',
-        city:     addr.city      || '',
-        state:    addr.state     || '',
-        zipCode:  addr.zip_code  || '',
-        country:  addr.country   || 'BR',
+        line1:    meta.edit_shipping_line1 || addr.line_1   || '',
+        line2:    meta.edit_shipping_line2 || addr.line_2   || '',
+        city:     meta.edit_shipping_city  || addr.city     || '',
+        state:    meta.edit_shipping_state || addr.state    || '',
+        zipCode:  meta.edit_shipping_zip   || addr.zip_code || '',
+        country:  addr.country             || 'BR',
       },
     },
   };
@@ -251,15 +254,45 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  // ── PATCH — update order status/tracking ─────────────────────────────────
+  // ── PATCH — update order status/tracking/customer/shipping ──────────────
   if (req.method === 'PATCH') {
     const body = req.body || {};
-    const { orderId, status, trackingCode } = body;
+    const { orderId, editType } = body;
 
-    // Input validation — strict
     if (!orderId || typeof orderId !== 'string' || !/^[a-zA-Z0-9_-]{5,50}$/.test(orderId)) {
       return res.status(400).json({ error: 'orderId inválido' });
     }
+
+    // ── Edit customer info ─────────────────────────────────────────────────
+    if (editType === 'customer' || editType === 'shipping') {
+      const current = await pagarmeReq('GET', `/orders/${orderId}`);
+      if (current._http >= 400) return res.status(404).json({ error: 'Pedido não encontrado' });
+
+      const newMeta = { ...(current.metadata || {}) };
+
+      if (editType === 'customer') {
+        if (body.name     != null) newMeta.edit_customer_name     = String(body.name).replace(/[<>"]/g,'').slice(0, 100);
+        if (body.email    != null) newMeta.edit_customer_email    = String(body.email).replace(/[<>"]/g,'').slice(0, 200);
+        if (body.phone    != null) newMeta.edit_customer_phone    = String(body.phone).replace(/\D/g,'').slice(0, 15);
+        if (body.document != null) newMeta.edit_customer_document = String(body.document).replace(/\D/g,'').slice(0, 14);
+      }
+
+      if (editType === 'shipping') {
+        if (body.name    != null) newMeta.edit_shipping_name  = String(body.name).replace(/[<>"]/g,'').slice(0, 100);
+        if (body.line1   != null) newMeta.edit_shipping_line1 = String(body.line1).replace(/[<>"]/g,'').slice(0, 200);
+        if (body.line2   != null) newMeta.edit_shipping_line2 = String(body.line2).replace(/[<>"]/g,'').slice(0, 100);
+        if (body.city    != null) newMeta.edit_shipping_city  = String(body.city).replace(/[<>"]/g,'').slice(0, 100);
+        if (body.state   != null) newMeta.edit_shipping_state = String(body.state).replace(/[^a-zA-Z]/g,'').slice(0, 2).toUpperCase();
+        if (body.zipCode != null) newMeta.edit_shipping_zip   = String(body.zipCode).replace(/\D/g,'').slice(0, 8);
+      }
+
+      const updated = await pagarmeReq('PATCH', `/orders/${orderId}`, { metadata: newMeta });
+      if (updated._http >= 400) return res.status(502).json({ error: 'Erro ao salvar alterações' });
+      return res.status(200).json({ ok: true, editType });
+    }
+
+    const { status, trackingCode } = body;
+
     if (!VALID_STATUSES.includes(status)) {
       return res.status(400).json({ error: 'Status inválido' });
     }
