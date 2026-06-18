@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Armazém Natural</title>
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#f0f2f5;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.card{background:#fff;border-radius:16px;padding:40px 36px;width:100%;max-width:400px;box-shadow:0 4px 32px rgba(0,0,0,.12)}
+.logo{display:flex;align-items:center;justify-content:center;margin-bottom:28px}
+.logo img{height:44px}
+h1{font-size:20px;font-weight:700;color:#1a2e22;text-align:center;margin-bottom:6px}
+.sub{font-size:13px;color:#888;text-align:center;margin-bottom:28px}
+label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6px}
+.input-wrap{position:relative;margin-bottom:20px}
+input[type=password]{width:100%;padding:12px 44px 12px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-family:'Poppins',sans-serif;font-size:14px;color:#1e293b;outline:none;transition:border .15s}
+input[type=password]:focus{border-color:#15a731}
+.eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);cursor:pointer;color:#94a3b8;background:none;border:none;padding:2px;display:flex;align-items:center}
+.eye:hover{color:#15a731}
+.btn{width:100%;padding:13px;background:#15a731;color:#fff;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s}
+.btn:hover:not(:disabled){background:#0e8a28}
+.btn:disabled{background:#94a3b8;cursor:not-allowed}
+.alert{padding:11px 14px;border-radius:8px;font-size:13px;margin-bottom:18px;display:none}
+.alert-err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626}
+.alert-ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.footer{text-align:center;font-size:12px;color:#cbd5e1;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural">
+  </div>
+  <h1>Painel Administrativo</h1>
+  <p class="sub">Acesso restrito — apenas usuários autorizados</p>
+
+  <div id="alert" class="alert"></div>
+
+  <form id="form" autocomplete="off" onsubmit="login(event)">
+    <label for="pwd">Senha de acesso</label>
+    <div class="input-wrap">
+      <input type="password" id="pwd" placeholder="••••••••••••" maxlength="128" autocomplete="current-password" required>
+      <button type="button" class="eye" onclick="togglePwd()" title="Mostrar senha">
+        <svg id="eye-icon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+      </button>
+    </div>
+    <button type="submit" class="btn" id="btn">
+      <span class="spinner" id="sp"></span>
+      Entrar
+    </button>
+  </form>
+  <p class="footer">Armazém Natural &copy; 2025</p>
+</div>
+
+<script>
+// Se já tem token válido, redireciona direto
+(function(){
+  const t = localStorage.getItem('admin_token');
+  if (t) {
+    try {
+      const p = JSON.parse(atob(t.split('.')[1]));
+      if (p.exp > Date.now()/1000) { location.href = '/admin/pedidos'; return; }
+    } catch(e) {}
+    localStorage.removeItem('admin_token');
+  }
+})();
+
+function showAlert(msg, type='err') {
+  const el = document.getElementById('alert');
+  el.className = 'alert alert-' + type;
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function hideAlert() { document.getElementById('alert').style.display = 'none'; }
+
+function togglePwd() {
+  const inp = document.getElementById('pwd');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+async function login(e) {
+  e.preventDefault();
+  hideAlert();
+
+  const pwd = document.getElementById('pwd').value;
+  const btn = document.getElementById('btn');
+  const sp  = document.getElementById('sp');
+
+  btn.disabled = true;
+  sp.style.display = 'inline-block';
+  btn.lastChild.textContent = 'Entrando...';
+
+  try {
+    const r  = await fetch('/api/admin/login', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ password: pwd }),
+    });
+    const d  = await r.json();
+
+    if (r.ok && d.token) {
+      localStorage.setItem('admin_token', d.token);
+      showAlert('Acesso autorizado! Redirecionando...', 'ok');
+      setTimeout(() => location.href = '/admin/pedidos', 800);
+    } else {
+      showAlert(d.error || 'Erro ao fazer login');
+      btn.disabled = false;
+      sp.style.display = 'none';
+      btn.lastChild.textContent = 'Entrar';
+    }
+  } catch {
+    showAlert('Erro de conexão. Tente novamente.');
+    btn.disabled = false;
+    sp.style.display = 'none';
+    btn.lastChild.textContent = 'Entrar';
+  }
+}
+</script>
+</body>
+</html>
