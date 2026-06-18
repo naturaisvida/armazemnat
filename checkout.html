@@ -1011,7 +1011,7 @@ const _cartId = (function(){
   // Check if coming from a recovery email (cartId in URL)
   const fromUrl = new URLSearchParams(location.search).get('cartId');
   if (fromUrl && /^[a-zA-Z0-9_-]{5,80}$/.test(fromUrl)) {
-    localStorage.setItem('armazem_cart_id', fromUrl);
+    sessionStorage.setItem('armazem_cart_id', fromUrl);
     // Restore customer data
     fetch('/api/cart/get?cartId=' + encodeURIComponent(fromUrl))
       .then(r => r.ok ? r.json() : null)
@@ -1033,10 +1033,10 @@ const _cartId = (function(){
       }).catch(() => {});
     return fromUrl;
   }
-  let id = localStorage.getItem('armazem_cart_id');
+  let id = sessionStorage.getItem('armazem_cart_id');
   if (!id) {
     id = 'c_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    localStorage.setItem('armazem_cart_id', id);
+    sessionStorage.setItem('armazem_cart_id', id);
   }
   return id;
 })();
@@ -1085,7 +1085,7 @@ function _markCartConverted() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cartId: _cartId, converted: true }),
     }).catch(() => {});
-    localStorage.removeItem('armazem_cart_id');
+    sessionStorage.removeItem('armazem_cart_id');
   } catch(e) {}
 }
 
