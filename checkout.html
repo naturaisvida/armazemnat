@@ -662,13 +662,24 @@ async function viaCEP(cep) {
 // ══════════════════════════════════════════
 // PAYMENT TABS
 // ══════════════════════════════════════════
+let _payLocked = false;
+
 function selPay(m) {
+  if (_payLocked) return;
   ['pix','boleto','cartao'].forEach(x => {
     document.getElementById('tab-'+x).classList.remove('on');
     document.getElementById('pc-'+x).classList.remove('on');
   });
   document.getElementById('tab-'+m).classList.add('on');
   document.getElementById('pc-'+m).classList.add('on');
+}
+
+function lockPayTabs() {
+  _payLocked = true;
+  ['pix','boleto','cartao'].forEach(x => {
+    const t = document.getElementById('tab-'+x);
+    if (t) { t.style.opacity = '0.5'; t.style.cursor = 'default'; t.style.pointerEvents = 'none'; }
+  });
 }
 
 // ══════════════════════════════════════════
@@ -796,6 +807,7 @@ function handleResult(method, data, btn) {
     document.getElementById('pix-btn').style.display  = 'none';
     startTimer(CFG.pixExpires);
     pollOrder(data.id);
+    lockPayTabs();
   }
   else if (method==='boleto') {
     const tx = data.charges?.[0]?.last_transaction;
@@ -803,6 +815,7 @@ function handleResult(method, data, btn) {
     document.getElementById('blt-code').value   = tx?.line || '';
     document.getElementById('blt-res').style.display = '';
     document.getElementById('blt-btn').style.display = 'none';
+    lockPayTabs();
   }
   else if (method==='cartao') {
     const status = data.charges?.[0]?.status;
