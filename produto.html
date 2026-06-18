@@ -370,41 +370,64 @@ function gerarSobre(p) {
 
 function gerarComoUsar(p) {
   const t = p.tipo || 'geral';
-  const steps = {
-    masc: [
-      { n:'1', titulo:'Tome',        desc:'Use a quantidade indicada no rótulo, com um copo de água — preferencialmente em jejum ou com refeição leve.' },
-      { n:'2', titulo:'Pela manhã',  desc:'De preferência no começo do dia, sempre no mesmo horário, pra criar o hábito e potencializar os resultados.' },
-      { n:'3', titulo:'Continue',    desc:'Use com regularidade. Recomendamos uso contínuo por pelo menos 3 meses para resultados expressivos.' },
-    ],
-    fem: [
-      { n:'1', titulo:'Tome',        desc:'Use a quantidade indicada no rótulo, de preferência com a refeição principal do dia.' },
-      { n:'2', titulo:'Todo dia',    desc:'Sempre no mesmo horário, pra criar o hábito e manter os níveis dos ativos constantes no organismo.' },
-      { n:'3', titulo:'Continue',    desc:'Use com regularidade. Recomendamos uso contínuo por pelo menos 3 meses para resultados expressivos.' },
-    ],
-    geral: [
-      { n:'1', titulo:'Tome',        desc:'Use a quantidade indicada no rótulo, com um copo de água ou conforme orientação do profissional de saúde.' },
-      { n:'2', titulo:'Todo dia',    desc:'Sempre no mesmo horário, pra criar o hábito e manter os níveis dos ativos constantes no organismo.' },
-      { n:'3', titulo:'Continue',    desc:'Use com regularidade. Recomendamos uso contínuo por pelo menos 3 meses para resultados expressivos.' },
-    ],
+  const DATA = {
+    masc: {
+      titulo: 'Como utilizar ' + p.nome + ':',
+      passos: [
+        { titulo: 'Use conforme indicado no rótulo',          desc: 'Respeite a dose diária recomendada para obter todos os nutrientes necessários e os melhores resultados.' },
+        { titulo: 'Pela manhã, ao acordar',                   desc: 'Tome preferencialmente no início do dia, com um copo d\'água, para que os ativos atuem ao longo de toda a jornada.' },
+        { titulo: 'Use todos os dias, sem interrupções',      desc: 'A consistência é essencial para que o organismo absorva os nutrientes de forma contínua e eficiente.' },
+      ],
+      destaque:   'Uso contínuo recomendado por pelo menos 90 dias.',
+      dest_sub:   'Para resultados expressivos e duradouros, combine o uso com alimentação equilibrada, boa hidratação e sono de qualidade.',
+      rendimento: 'Consulte a embalagem para informações de rendimento e validade do produto.',
+    },
+    fem: {
+      titulo: 'Como utilizar ' + p.nome + ':',
+      passos: [
+        { titulo: 'Use conforme indicado no rótulo',          desc: 'Respeite a dose diária recomendada para obter todos os nutrientes necessários e os melhores resultados.' },
+        { titulo: 'Preferencialmente com a refeição',         desc: 'Tome com o café da manhã ou almoço para melhor absorção dos ativos e menor desconforto gástrico.' },
+        { titulo: 'Use todos os dias, sem interrupções',      desc: 'A consistência é essencial para que o organismo absorva os nutrientes de forma contínua e eficiente.' },
+      ],
+      destaque:   'Uso contínuo recomendado por pelo menos 90 dias.',
+      dest_sub:   'A suplementação apresenta melhores resultados com uso prolongado e contínuo. Para potencializar, combine com alimentação equilibrada e hábitos saudáveis.',
+      rendimento: 'Consulte a embalagem para informações de rendimento e validade do produto.',
+    },
+    geral: {
+      titulo: 'Como utilizar ' + p.nome + ':',
+      passos: [
+        { titulo: 'Use conforme indicado no rótulo',          desc: 'Respeite a dose diária recomendada para obter todos os nutrientes necessários e os melhores resultados.' },
+        { titulo: 'Todo dia, no mesmo horário',               desc: 'Criar um horário fixo ajuda a não esquecer e mantém os níveis dos ativos constantes no organismo.' },
+        { titulo: 'Use todos os dias, sem interrupções',      desc: 'A consistência é essencial para que o organismo absorva os nutrientes de forma contínua e eficiente.' },
+      ],
+      destaque:   'Uso contínuo recomendado por pelo menos 90 dias.',
+      dest_sub:   'A suplementação apresenta melhores resultados com uso prolongado e contínuo. Para potencializar, combine com alimentação equilibrada e hábitos saudáveis.',
+      rendimento: 'Consulte a embalagem para informações de rendimento e validade do produto.',
+    },
   };
-  const lista = steps[t] || steps.geral;
-  const cards = lista.map(s => `
-    <div style="background:#2d5a3e;border-radius:12px;padding:22px 20px;margin-bottom:12px">
-      <div style="font-size:36px;font-weight:800;color:rgba(255,255,255,.22);line-height:1;margin-bottom:6px">${s.n}</div>
-      <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:6px">${s.titulo}</div>
-      <p style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.6;margin:0">${s.desc}</p>
+  const d = DATA[t] || DATA.geral;
+  const C = '#15a731';
+  const passos = d.passos.map((s, i) => `
+    <div style="${i > 0 ? 'border-top:1px solid #d0ecd5;padding-top:16px;margin-top:16px' : ''}display:flex;align-items:flex-start;gap:14px">
+      <span style="background:${C};color:#fff;font-size:14px;font-weight:700;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px">${i+1}</span>
+      <div>
+        <strong style="color:#212121;font-size:15px;display:block;margin-bottom:4px">${s.titulo}</strong>
+        <p style="color:#666;font-size:13px;margin:0;line-height:1.6">${s.desc}</p>
+      </div>
     </div>`).join('');
   return `
-    <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Modo de Uso</div>
-      <h3 style="font-size:22px;font-weight:800;color:#212121;margin-bottom:6px">Simples de incluir na rotina</h3>
-      <p style="font-size:14px;color:#777;margin-bottom:16px">Fácil de lembrar, todos os dias.</p>
-      <div style="display:inline-block;background:#f0fbf3;border:1px solid #b8e6c4;border-radius:8px;padding:10px 20px;font-size:14px;color:#356041;font-weight:600">
-        Dose diária: <strong>conforme indicação do rótulo</strong>
-      </div>
+    <div style="background:#fff;border:1px solid #d0ecd5;border-radius:12px;padding:24px;margin-bottom:16px">
+      <h2 style="color:#356041;font-size:20px;font-weight:700;margin:0 0 20px;text-align:center">${d.titulo}</h2>
+      ${passos}
     </div>
-    ${cards}
-    <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:14px 16px;font-size:12px;color:#795548;line-height:1.6;margin-top:4px">
+    <div style="background:#f0fbf3;border-radius:12px;padding:20px;margin-bottom:16px;text-align:center">
+      <p style="color:#356041;font-size:15px;font-weight:700;margin:0 0 6px">${d.destaque}</p>
+      <p style="color:#666;font-size:13px;line-height:1.6;margin:0">${d.dest_sub}</p>
+    </div>
+    <div style="background:#fff;border:1px solid #d0ecd5;border-radius:12px;padding:18px;margin-bottom:16px;text-align:center">
+      <p style="color:#356041;font-size:14px;font-weight:600;margin:0">${d.rendimento}</p>
+    </div>
+    <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:14px 16px;font-size:12px;color:#795548;line-height:1.6">
       <strong>Aviso:</strong> Suplemento alimentar. Não substitui alimentação equilibrada e hábitos de vida saudáveis. Mantenha fora do alcance de crianças. Consulte um médico se você tiver alguma condição de saúde.
     </div>`;
 }
