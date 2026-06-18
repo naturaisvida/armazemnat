@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ao Vivo — Armazém Natural</title>
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#15a731;--green-d:#0e8a28;--green-2:#1a3d24;--green-3:#234d2e;
+  --sidebar-w:220px;--font:'Poppins',sans-serif;
+  --bg:#f0f2f5;--card:#fff;--border:#e5e7eb;--text:#1e293b;--muted:#64748b;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--green-2);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-nav{flex:1;padding:10px 0}
+.sb-bottom{padding:14px 18px;border-top:1px solid rgba(255,255,255,.1)}
+.sb-logout{display:flex;align-items:center;gap:8px;background:none;border:none;color:rgba(255,255,255,.5);font-family:var(--font);font-size:12.5px;cursor:pointer;padding:6px 0;transition:color .12s;width:100%}
+.sb-logout:hover{color:#fff}
+.nav-section{padding:10px 18px 4px;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;font-weight:500;color:rgba(255,255,255,.75);cursor:pointer;transition:background .12s;text-decoration:none}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.1);color:#fff}
+.nav-item.active{border-left:3px solid var(--green)}
+.nav-icon{width:16px;height:16px;flex-shrink:0}
+.nav-arrow{margin-left:auto;transition:transform .2s;flex-shrink:0}
+.nav-group.open .nav-arrow{transform:rotate(90deg)}
+.nav-submenu{display:none}
+.nav-group.open .nav-submenu{display:block}
+.nav-sub-item{padding:7px 18px 7px 44px;font-size:12px}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.page-title{font-size:16px;font-weight:700;color:var(--text)}
+.content{padding:24px 28px;flex:1}
+
+/* HERO ROW */
+.hero-row{display:flex;gap:14px;margin-bottom:24px}
+.hero-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 26px;flex:1;position:relative;overflow:hidden}
+.hero-card-online{border-left:4px solid var(--green)}
+
+/* PULSE DOT */
+.pulse-wrap{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.pulse{width:10px;height:10px;border-radius:50%;background:var(--green);position:relative;flex-shrink:0}
+.pulse::after{content:'';position:absolute;inset:-4px;border-radius:50%;background:rgba(21,167,49,.3);animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.8);opacity:1}100%{transform:scale(2);opacity:0}}
+.pulse-label{font-size:12px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.06em}
+
+.hero-value{font-size:52px;font-weight:800;color:var(--text);line-height:1;margin-bottom:4px}
+.hero-sub{font-size:13px;color:var(--muted)}
+
+.hero-card-vendas{background:linear-gradient(135deg,var(--green-2) 0%,var(--green-3) 100%);border-color:transparent}
+.hero-card-vendas .hero-value,.hero-card-vendas .hero-sub{color:#fff}
+.hero-card-vendas .hero-label{font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+
+.hero-card-pedidos{border-left:4px solid #3b82f6}
+.hero-card-pedidos .hero-big{font-size:52px;font-weight:800;color:var(--text);line-height:1}
+.hero-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+
+/* REFRESH badge */
+.refresh-badge{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.refresh-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+/* BOTTOM ROW */
+.bottom-row{display:grid;grid-template-columns:1fr 340px;gap:14px}
+
+/* ESTADOS LIST */
+.estados-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;height:420px;overflow-y:auto}
+.section-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px}
+.estado-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f8fafc}
+.estado-row:last-child{border-bottom:none}
+.estado-rank{width:20px;font-size:11px;font-weight:700;color:var(--muted);text-align:center;flex-shrink:0}
+.estado-uf{width:28px;font-size:12px;font-weight:800;color:var(--green-2);flex-shrink:0}
+.estado-name{flex:1;font-size:13px;color:var(--text)}
+.estado-bar-wrap{width:80px;height:4px;background:#f1f5f9;border-radius:2px;overflow:hidden}
+.estado-bar{height:100%;border-radius:2px;background:var(--green)}
+.estado-count{width:24px;text-align:right;font-size:12.5px;font-weight:700;color:var(--text)}
+.empty-state{text-align:center;padding:30px;color:var(--muted);font-size:12.5px}
+
+/* MAP CARD */
+.map-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;height:420px;display:flex;flex-direction:column}
+.map-wrap{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.map-wrap svg{width:100%;height:100%}
+
+/* PEDIDOS LIST */
+.pedidos-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-top:14px}
+.pedido-live-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f8fafc;font-size:12.5px}
+.pedido-live-row:last-child{border-bottom:none}
+.plr-code{font-weight:700;color:var(--green-2);min-width:60px}
+.plr-name{flex:1;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plr-amount{font-weight:700;color:var(--text);white-space:nowrap}
+.plr-time{font-size:11px;color:var(--muted);white-space:nowrap}
+
+@media(max-width:900px){
+  .bottom-row{grid-template-columns:1fr}
+  .map-card{display:none}
+  .hero-value{font-size:36px}
+  .sidebar{transform:translateX(-100%)}
+  .main{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:9px;height:9px;background:#15a731;border-radius:50%;flex-shrink:0"></div>
+      <span style="font-size:14px;font-weight:700;color:#fff;letter-spacing:.02em">Armazém Natural</span>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-section">Menu</div>
+    <a class="nav-item" href="/admin/pedidos">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Início
+    </a>
+    <div class="nav-group open" id="nav-analises">
+      <a class="nav-item" onclick="toggleSubmenu('analises')" style="cursor:pointer;user-select:none">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Análises
+        <svg class="nav-arrow" id="arrow-analises" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="nav-submenu" id="sub-analises">
+        <a class="nav-item nav-sub-item" href="/admin/analises">Métricas</a>
+        <a class="nav-item nav-sub-item" href="/admin/relatorios">Relatórios</a>
+        <a class="nav-item nav-sub-item active" href="/admin/ao-vivo">Ao Vivo</a>
+      </div>
+    </div>
+    <div class="nav-section">Vendas</div>
+    <a class="nav-item" href="/admin/pedidos">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Pedidos
+    </a>
+    <a class="nav-item" href="#" onclick="toast('Em breve','ok');return false">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      Carrinhos Abandonados
+    </a>
+  </nav>
+  <div class="sb-bottom">
+    <button class="sb-logout" onclick="logout()">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sair
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar">
+    <div class="page-title">Ao Vivo</div>
+    <div class="refresh-badge" id="refresh-badge">
+      <div class="refresh-dot"></div>
+      Atualiza a cada 30s
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- HERO ROW -->
+    <div class="hero-row">
+
+      <!-- VISITANTES ONLINE -->
+      <div class="hero-card hero-card-online">
+        <div class="pulse-wrap">
+          <div class="pulse"></div>
+          <span class="pulse-label">Visitantes online</span>
+        </div>
+        <div class="hero-value" id="v-online">—</div>
+        <div class="hero-sub">pessoas no site agora</div>
+      </div>
+
+      <!-- VENDIDO HOJE -->
+      <div class="hero-card hero-card-vendas">
+        <div class="hero-label">Vendido hoje (pago)</div>
+        <div class="hero-value" id="v-receita" style="color:#fff">—</div>
+        <div class="hero-sub" id="v-receita-sub">— pedidos pagos</div>
+      </div>
+
+      <!-- PEDIDOS HOJE -->
+      <div class="hero-card hero-card-pedidos">
+        <div class="hero-label">Pedidos feitos hoje</div>
+        <div class="hero-big" id="v-pedidos">—</div>
+        <div class="hero-sub" id="v-pedidos-sub" style="margin-top:4px">— aguardando pagamento</div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div class="bottom-row">
+
+      <!-- ESTADOS LIST -->
+      <div>
+        <div class="estados-card">
+          <div class="section-title">Pedidos por estado (hoje)</div>
+          <div id="estados-list"><div class="empty-state">Carregando...</div></div>
+        </div>
+
+        <!-- ULTIMOS PEDIDOS -->
+        <div class="pedidos-card" style="margin-top:14px">
+          <div class="section-title">Ultimos pedidos (hoje)</div>
+          <div id="pedidos-list"><div class="empty-state">Carregando...</div></div>
+        </div>
+      </div>
+
+      <!-- MAPA BRASIL SVG -->
+      <div class="map-card">
+        <div class="section-title">Atividade por estado</div>
+        <div class="map-wrap">
+          <svg id="brazil-map" viewBox="0 0 360 420" xmlns="http://www.w3.org/2000/svg">
+            <!-- Simplified Brazil outline -->
+            <path d="M175,18 L200,15 L220,22 L240,18 L258,28 L270,22 L285,30 L295,24 L310,35 L320,30 L330,42 L322,55 L335,65 L342,78 L338,90 L345,102 L340,115 L348,128 L342,140 L350,155 L344,168 L352,180 L346,195 L340,210 L330,220 L320,215 L308,225 L298,235 L285,242 L278,255 L268,265 L258,275 L248,285 L240,298 L228,308 L218,320 L208,332 L195,340 L182,348 L170,358 L158,368 L148,378 L140,388 L135,398 L130,410 L122,415 L115,408 L110,395 L115,382 L108,370 L112,358 L106,345 L112,332 L105,318 L115,305 L108,292 L118,278 L112,265 L122,252 L115,238 L125,225 L118,212 L128,198 L122,185 L132,172 L125,158 L135,145 L128,130 L138,118 L132,105 L142,92 L138,78 L148,65 L142,52 L152,40 L162,28 L175,18Z" fill="#f8fafc" stroke="#e5e7eb" stroke-width="1.5"/>
+            <!-- State capital dots — positioned to approximate real coords -->
+            <!-- Populated dynamically via JS -->
+            <g id="map-dots"></g>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+// Approximate SVG positions (viewBox 0 0 360 420) for state capitals
+const STATE_POS = {
+  RR:{x:162,y:42,name:'Boa Vista'},
+  AP:{x:230,y:38,name:'Macapá'},
+  AM:{x:115,y:130,name:'Manaus'},
+  PA:{x:218,y:110,name:'Belém'},
+  AC:{x:72,y:210,name:'Rio Branco'},
+  RO:{x:105,y:218,name:'Porto Velho'},
+  MT:{x:162,y:268,name:'Cuiabá'},
+  TO:{x:228,y:202,name:'Palmas'},
+  MA:{x:268,y:118,name:'São Luís'},
+  PI:{x:288,y:158,name:'Teresina'},
+  CE:{x:315,y:138,name:'Fortaleza'},
+  RN:{x:338,y:162,name:'Natal'},
+  PB:{x:336,y:182,name:'João Pessoa'},
+  PE:{x:332,y:202,name:'Recife'},
+  AL:{x:330,y:222,name:'Maceió'},
+  SE:{x:325,y:242,name:'Aracaju'},
+  BA:{x:295,y:278,name:'Salvador'},
+  GO:{x:218,y:298,name:'Goiânia'},
+  DF:{x:228,y:280,name:'Brasília'},
+  MG:{x:265,y:318,name:'Belo Horizonte'},
+  ES:{x:308,y:305,name:'Vitória'},
+  RJ:{x:292,y:340,name:'Rio de Janeiro'},
+  SP:{x:252,y:352,name:'São Paulo'},
+  PR:{x:225,y:378,name:'Curitiba'},
+  SC:{x:222,y:398,name:'Florianópolis'},
+  RS:{x:202,y:412,name:'Porto Alegre'},
+  MS:{x:192,y:340,name:'Campo Grande'},
+};
+
+const UF_NAMES = {
+  RR:'Roraima',AP:'Amapá',AM:'Amazonas',PA:'Pará',AC:'Acre',RO:'Rondônia',
+  MT:'Mato Grosso',TO:'Tocantins',MA:'Maranhão',PI:'Piauí',CE:'Ceará',
+  RN:'Rio Grande do Norte',PB:'Paraíba',PE:'Pernambuco',AL:'Alagoas',
+  SE:'Sergipe',BA:'Bahia',GO:'Goiás',DF:'Distrito Federal',
+  MG:'Minas Gerais',ES:'Espírito Santo',RJ:'Rio de Janeiro',
+  SP:'São Paulo',PR:'Paraná',SC:'Santa Catarina',RS:'Rio Grande do Sul',
+  MS:'Mato Grosso do Sul',
+};
+
+let _online = 0;
+let _estados = [];
+let _pedidos = [];
+
+function getToken() { return localStorage.getItem('admin_token'); }
+function logout() { localStorage.removeItem('admin_token'); location.href = '/admin'; }
+function toggleSubmenu(id) { document.getElementById('nav-' + id).classList.toggle('open'); }
+
+function fmtBRL(v) {
+  return 'R$ ' + ((v || 0) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function escH(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toast(msg, type) {
+  let el = document.getElementById('_toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = '_toast';
+    el.style.cssText='position:fixed;bottom:22px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;color:#fff;pointer-events:none;transition:opacity .3s';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = type === 'ok' ? '#15a731' : '#ef4444';
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = '0'; }, 2500);
+}
+
+// ── Fetch visitors ─────────────────────────────────────────────────────────────
+async function fetchOnline() {
+  try {
+    const r = await fetch('/api/analytics/ping');
+    if (r.ok) { const d = await r.json(); _online = d.online || 0; }
+  } catch {}
+  document.getElementById('v-online').textContent = _online;
+}
+
+// ── Fetch today metrics ────────────────────────────────────────────────────────
+async function fetchMetrics() {
+  const token = getToken();
+  if (!token) { location.href = '/admin'; return; }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const pm = new URLSearchParams({ date_from: today, date_to: today });
+
+  try {
+    const r = await fetch('/api/admin/analytics?' + pm, {
+      headers: { Authorization: 'Bearer ' + token },
+    });
+    if (r.status === 401) { logout(); return; }
+    if (!r.ok) return;
+    const m = await r.json();
+
+    // Vendido hoje
+    document.getElementById('v-receita').textContent     = fmtBRL(m.receita.amount);
+    document.getElementById('v-receita-sub').textContent = m.receita.count + ' pedidos pagos';
+
+    // Pedidos feitos
+    document.getElementById('v-pedidos').textContent     = m.vendas.count;
+    const aguardando = m.total - m.receita.count - m.cancelados.count;
+    document.getElementById('v-pedidos-sub').textContent = Math.max(0, aguardando) + ' aguardando pagamento';
+
+    // Estados
+    _estados = m.top_estados || [];
+    renderEstados(_estados);
+    renderMap(_estados);
+
+    // Ultimos pedidos
+    await fetchPedidosHoje(today, token);
+
+  } catch (e) { console.error(e); }
+}
+
+async function fetchPedidosHoje(today, token) {
+  try {
+    const pm = new URLSearchParams({ date_from: today, date_to: today });
+    const r = await fetch('/api/admin/orders?' + pm, {
+      headers: { Authorization: 'Bearer ' + token },
+    });
+    if (!r.ok) return;
+    const d = await r.json();
+    _pedidos = (d.orders || []).slice(0, 8);
+    renderPedidos(_pedidos);
+  } catch {}
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────────
+function renderEstados(estados) {
+  const el = document.getElementById('estados-list');
+  if (!estados.length) { el.innerHTML = '<div class="empty-state">Nenhum pedido hoje</div>'; return; }
+  const max = estados[0].count || 1;
+  el.innerHTML = estados.map((e, i) =>
+    `<div class="estado-row">
+      <span class="estado-rank">${i+1}</span>
+      <span class="estado-uf">${escH(e.state)}</span>
+      <span class="estado-name">${escH(UF_NAMES[e.state] || e.state)}</span>
+      <div class="estado-bar-wrap"><div class="estado-bar" style="width:${(e.count/max*100).toFixed(0)}%"></div></div>
+      <span class="estado-count">${e.count}</span>
+    </div>`
+  ).join('');
+}
+
+function renderMap(estados) {
+  const stateMap = {};
+  estados.forEach(e => { stateMap[e.state] = e.count; });
+  const max = Math.max(...estados.map(e => e.count), 1);
+
+  let dots = '';
+  for (const [uf, pos] of Object.entries(STATE_POS)) {
+    const count = stateMap[uf] || 0;
+    const active = count > 0;
+    const r = active ? Math.max(5, Math.min(14, 5 + (count / max) * 9)) : 3.5;
+    const fill   = active ? '#15a731' : '#e2e8f0';
+    const stroke = active ? '#0e8a28' : '#cbd5e1';
+    const opacity = active ? '1' : '0.6';
+    const title  = active ? `${uf}: ${count} pedido${count > 1 ? 's' : ''}` : uf;
+    dots += `<circle cx="${pos.x}" cy="${pos.y}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="1" opacity="${opacity}">
+      <title>${title}</title>
+    </circle>`;
+    if (active) {
+      dots += `<text x="${pos.x}" y="${pos.y + r + 9}" text-anchor="middle" font-size="7" fill="#64748b" font-family="sans-serif">${uf}</text>`;
+    }
+  }
+  document.getElementById('map-dots').innerHTML = dots;
+}
+
+function renderPedidos(pedidos) {
+  const el = document.getElementById('pedidos-list');
+  if (!pedidos.length) { el.innerHTML = '<div class="empty-state">Nenhum pedido hoje</div>'; return; }
+
+  const STATUS_LABELS = {
+    aguardando_pagamento:'Aguardando',faturado:'Pago',em_transporte:'Em transporte',
+    entregue:'Entregue',cancelado:'Cancelado',nao_integrado:'N integrado',
+  };
+  const STATUS_COLORS = {
+    faturado:'#15a731',em_transporte:'#3b82f6',entregue:'#10b981',
+    cancelado:'#ef4444',aguardando_pagamento:'#f59e0b',
+  };
+
+  el.innerHTML = pedidos.map(o => {
+    const time = o.createdAt ? new Date(o.createdAt).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : '';
+    const statusColor = STATUS_COLORS[o.status] || '#94a3b8';
+    return `<div class="pedido-live-row">
+      <span class="plr-code">#${escH(o.code)}</span>
+      <span class="plr-name">${escH(o.customer.name)}</span>
+      <span style="font-size:11px;font-weight:600;color:${statusColor};white-space:nowrap">${STATUS_LABELS[o.status]||o.status}</span>
+      <span class="plr-amount">${fmtBRL(o.amount)}</span>
+      <span class="plr-time">${time}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── Auto refresh ───────────────────────────────────────────────────────────────
+async function refresh() {
+  await Promise.all([fetchOnline(), fetchMetrics()]);
+  document.getElementById('refresh-badge').innerHTML = `<div class="refresh-dot"></div> Atualizado agora`;
+  setTimeout(() => {
+    document.getElementById('refresh-badge').innerHTML = `<div class="refresh-dot"></div> Atualiza a cada 30s`;
+  }, 2000);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+(function() {
+  const t = getToken();
+  if (!t) { location.href = '/admin'; return; }
+  try {
+    const p = JSON.parse(atob(t.split('.')[1]));
+    if (p.exp < Date.now() / 1000) { localStorage.removeItem('admin_token'); location.href = '/admin'; return; }
+  } catch { location.href = '/admin'; return; }
+
+  refresh();
+  setInterval(refresh, 30000);
+})();
+</script>
+</body>
+</html>

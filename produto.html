@@ -739,5 +739,14 @@ function closeModal() {
     <a class="sticky-buy-btn" id="sticky-buy-btn" href="#">COMPRAR</a>
   </div>
 </div>
+<script>
+(function(){
+  let sid = sessionStorage.getItem('_asid');
+  if (!sid) { sid = Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2); sessionStorage.setItem('_asid', sid); }
+  function ping() { fetch('/api/analytics/ping',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sid})}).catch(()=>{}); }
+  ping();
+  setInterval(ping, 30000);
+})();
+</script>
 </body>
 </html>

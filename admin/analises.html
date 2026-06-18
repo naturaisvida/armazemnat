@@ -156,7 +156,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
       <div class="nav-submenu" id="sub-analises">
         <a class="nav-item nav-sub-item active" href="/admin/analises">Métricas</a>
         <a class="nav-item nav-sub-item" href="/admin/relatorios">Relatórios</a>
-        <a class="nav-item nav-sub-item" href="#" onclick="toast('Em breve','ok');return false">Ao Vivo</a>
+        <a class="nav-item nav-sub-item" href="/admin/ao-vivo">Ao Vivo</a>
       </div>
     </div>
     <div class="nav-section">Vendas</div>
@@ -203,14 +203,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
     <!-- METRIC CARDS -->
     <div class="metric-grid">
       <div class="metric-card">
-        <div class="mc-label">Vendas</div>
+        <div class="mc-label">Pedidos Feitos</div>
         <div class="mc-value" id="m-vendas">—</div>
-        <div class="mc-sub" id="m-vendas-qty">— pedidos</div>
+        <div class="mc-sub" id="m-vendas-qty">— em valor total</div>
       </div>
       <div class="metric-card">
-        <div class="mc-label">Receita (pago)</div>
+        <div class="mc-label">Pedidos Pagos</div>
         <div class="mc-value mc-accent" id="m-receita">—</div>
-        <div class="mc-sub" id="m-receita-qty">— pedidos pagos</div>
+        <div class="mc-sub" id="m-receita-qty">— em receita confirmada</div>
       </div>
       <div class="metric-card">
         <div class="mc-label">Ticket Médio</div>
@@ -372,10 +372,10 @@ async function loadMetrics() {
 // ── Render ────────────────────────────────────────────────────────────────────
 function render(m) {
   // Metric cards
-  document.getElementById('m-vendas').textContent     = fmtBRL(m.vendas.amount);
-  document.getElementById('m-vendas-qty').textContent = m.vendas.count + ' pedidos';
-  document.getElementById('m-receita').textContent    = fmtBRL(m.receita.amount);
-  document.getElementById('m-receita-qty').textContent = m.receita.count + ' pedidos pagos';
+  document.getElementById('m-vendas').textContent     = m.vendas.count;
+  document.getElementById('m-vendas-qty').textContent = fmtBRL(m.vendas.amount) + ' em valor total';
+  document.getElementById('m-receita').textContent    = m.receita.count;
+  document.getElementById('m-receita-qty').textContent = fmtBRL(m.receita.amount) + ' em receita confirmada';
   document.getElementById('m-ticket').textContent     = fmtBRL(m.ticket_medio);
   const cancelRate = m.total ? (m.cancelados.count / m.total) : 0;
   document.getElementById('m-cancel-rate').textContent = pct(cancelRate);
