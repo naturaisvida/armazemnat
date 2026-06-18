@@ -81,8 +81,8 @@ function buildEmail(cart, emailNum) {
 <tr><td align="center" style="padding:32px 16px">
 <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden">
 
-<tr><td style="padding:28px 40px 24px;text-align:center;border-bottom:2px solid #f0f0f0">
-  <p style="margin:0;font-size:15px;font-weight:800;color:#1a2e22;letter-spacing:.02em;font-family:Arial,sans-serif">Armazem Natural</p>
+<tr><td style="padding:20px 40px 18px;text-align:center;border-bottom:2px solid #f0f0f0">
+  <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazem Natural" width="140" style="height:auto;display:block;margin:0 auto">
 </td></tr>
 
 <tr><td style="padding:32px 40px 28px">
