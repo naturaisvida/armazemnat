@@ -36,6 +36,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
 /* LAYOUT */
 .wrap{max-width:1060px;margin:0 auto;padding:28px 20px;display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+#steps{grid-column:1;grid-row:1}
+.sidebar{grid-column:2;grid-row:1}
 
 /* STEP CARD */
 .card{background:var(--white);border:1px solid var(--border-light);border-radius:8px;overflow:hidden;margin-bottom:14px}
@@ -160,11 +162,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
 @media(max-width:720px){
   .hdr{padding:12px 16px}
-  .wrap{grid-template-columns:1fr;padding:12px}
+  .wrap{grid-template-columns:1fr;padding:12px;gap:0}
+  #steps{grid-column:auto;grid-row:auto}
+  .sidebar{grid-column:auto;grid-row:auto;position:static;display:none;border-radius:0;border-left:0;border-right:0;margin-bottom:12px}
+  .sidebar.mob-open{display:block}
   .card-body{padding:0 14px 18px}
   .card-hdr{padding:14px 16px}
-  .sidebar{display:none;position:static;border-radius:0;border-left:0;border-right:0;margin-bottom:0}
-  .sidebar.mob-open{display:block}
   .mob-sum{display:flex}
   .row.c2{grid-template-columns:1fr}
 }
@@ -193,6 +196,24 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 </div>
 
 <div class="wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h3>Resumo da compra</h3>
+    <textarea class="obs" id="obs" placeholder="Observação da compra (opcional)" maxlength="300"
+      oninput="document.getElementById('obs-c').textContent=this.value.length+'/300 caracteres'"></textarea>
+    <p class="obs-c" id="obs-c">0/300 caracteres</p>
+    <div class="sline"><span id="sb-lbl">Produto (1)</span><span id="sb-price"></span></div>
+    <div class="sline stotal"><span>Total</span><span id="sb-total"></span></div>
+    <div class="sprod">
+      <img id="sb-img" src="" alt="">
+      <div class="sprod-info">
+        <div class="sprod-name" id="sb-name"></div>
+        <div class="sprod-var" id="sb-var"></div>
+        <div class="sprod-price">Qtd.: <span id="sb-qty">1</span> &nbsp; <span id="sb-unit"></span></div>
+      </div>
+    </div>
+  </div>
+
   <div id="steps">
 
     <!-- STEP 1 -->
@@ -417,24 +438,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
     </div><!-- /step 3 -->
 
   </div><!-- /steps -->
-
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <h3>Resumo da compra</h3>
-    <textarea class="obs" id="obs" placeholder="Observação da compra (opcional)" maxlength="300"
-      oninput="document.getElementById('obs-c').textContent=this.value.length+'/300 caracteres'"></textarea>
-    <p class="obs-c" id="obs-c">0/300 caracteres</p>
-    <div class="sline"><span id="sb-lbl">Produto (1)</span><span id="sb-price"></span></div>
-    <div class="sline stotal"><span>Total</span><span id="sb-total"></span></div>
-    <div class="sprod">
-      <img id="sb-img" src="" alt="">
-      <div class="sprod-info">
-        <div class="sprod-name" id="sb-name"></div>
-        <div class="sprod-var" id="sb-var"></div>
-        <div class="sprod-price">Qtd.: <span id="sb-qty">1</span> &nbsp; <span id="sb-unit"></span></div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <footer class="ftr">
