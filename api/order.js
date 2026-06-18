@@ -124,9 +124,7 @@ module.exports = async function handler(req, res) {
         installments:         parseInt(installments),
         statement_descriptor: 'ARMAZEM NATURAL',
         card_token:           card_token,
-        card: {
-          billing_address: addr,
-        },
+        billing_address:      addr,
       }
     }];
   } else {
@@ -156,7 +154,11 @@ module.exports = async function handler(req, res) {
     closed: true,
   };
 
+  console.error('[order] billing_address sent:', JSON.stringify(addr));
   const result = await pagarmeReq('POST', '/orders', orderData);
+  if ((result._http || 200) >= 400) {
+    console.error('[order] pagarme error:', JSON.stringify(result));
+  }
 
   if ((result._http || 200) >= 400) {
     const msg = result.message || 'Erro ao processar pagamento';

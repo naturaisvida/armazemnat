@@ -836,7 +836,6 @@ async function pay(method) {
 
 async function tokenize() {
   const [mm, yy] = g('ce').split('/');
-  const line1 = [g('num'), g('rua'), g('bairro')].filter(x => x && x.trim()).join(', ');
   const res = await fetch(
     `https://api.pagar.me/core/v5/tokens?appId=${CFG.publicKey}`,
     {
@@ -850,13 +849,6 @@ async function tokenize() {
           exp_month:   parseInt(mm),
           exp_year:    parseInt('20'+yy),
           cvv:         g('cv'),
-          billing_address: {
-            line_1:   line1 || 'S/N',
-            zip_code: g('cep').replace(/\D/g,''),
-            city:     g('cidade'),
-            state:    g('estado'),
-            country:  'BR',
-          },
         }
       })
     }
