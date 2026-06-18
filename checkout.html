@@ -25,6 +25,7 @@
   --font: 'Poppins', sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden}
 body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;min-height:100vh}
 
 /* HEADER */
@@ -136,6 +137,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
 /* ALWAYS 2-COL (CPF + Fone) */
 .row-2col{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+.row-2col>*{min-width:0}
 
 /* FRETE BOX */
 .frete-box{display:flex;align-items:center;gap:10px;background:#f0fbf3;border:1px solid #b8e6c4;border-radius:8px;padding:12px 14px;margin-bottom:11px}
@@ -158,7 +160,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
 @media(max-width:720px){
   .hdr{padding:12px 16px}
-  .wrap{grid-template-columns:1fr;padding:14px}
+  .wrap{grid-template-columns:1fr;padding:12px}
+  .card-body{padding:0 14px 18px}
+  .card-hdr{padding:14px 16px}
   .sidebar{display:none;position:static;border-radius:0;border-left:0;border-right:0;margin-bottom:0}
   .sidebar.mob-open{display:block}
   .mob-sum{display:flex}
@@ -434,7 +438,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 </div>
 
 <footer class="ftr">
-  <p>Formas de pagamento</p>
+  <p>Métodos de pagamento aceitos:</p>
   <div class="badges">
     <img src="/img/pagamentos/card-pix.svg" alt="PIX">
     <img src="/img/pagamentos/card-billet.svg" alt="Boleto">
@@ -454,7 +458,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 // CONFIGURAÇÃO — edite antes de publicar
 // ══════════════════════════════════════════
 const CFG = {
-  publicKey: 'pk_gKEVdkNTafKGLO82',
+  publicKey: 'pk_test_nx1KVYWTl5fJ6Ylg',
   apiEndpoint: 'https://api.armazemnatural.shop/api.php',
   pixDiscount: 5,                                // % desconto PIX (0 para desativar)
   pixExpires: 1800,                              // segundos até expirar (1800 = 30 min)
