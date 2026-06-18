@@ -13,7 +13,7 @@ const _STD = () => [
 const PRODUTOS = [
   {
     slug:"glicofit", nome:"Glicofit", tipo:"geral",
-    titulo:"Glicofit: Oferta Do Dia + Frete Grátis",
+    titulo:"Glicofit",
     subtitulo:"Suplemento natural em gotas para equilíbrio glicêmico",
     badge:"MAIS VENDIDO", badgeColor:"#15a731",
     variantes:_STD(),
@@ -27,7 +27,7 @@ const PRODUTOS = [
   },
   {
     slug:"insufree", nome:"Insufree", tipo:"geral",
-    titulo:"Insufree: Oferta Do Dia + Frete Grátis",
+    titulo:"Insufree",
     subtitulo:"Fórmula natural para suporte metabólico e glicêmico",
     badge:"OFERTA DO DIA", badgeColor:"#e67e22",
     variantes:_STD(),
@@ -41,7 +41,7 @@ const PRODUTOS = [
   },
   {
     slug:"purenex-glico", nome:"Purenex Glico", tipo:"geral",
-    titulo:"Purenex Glico: Oferta Do Dia + Frete Grátis",
+    titulo:"Purenex Glico",
     subtitulo:"Controle glicêmico com ingredientes da natureza",
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
     variantes:_STD(),
@@ -55,7 +55,7 @@ const PRODUTOS = [
   },
   {
     slug:"pulmoclean", nome:"Pulmoclean", tipo:"geral",
-    titulo:"Pulmoclean: Oferta Do Dia + Frete Grátis",
+    titulo:"Pulmoclean",
     subtitulo:"Suporte respiratório com ingredientes naturais",
     badge:"MAIS VENDIDO", badgeColor:"#15a731",
     variantes:_STD(),
@@ -70,7 +70,7 @@ const PRODUTOS = [
   },
   {
     slug:"dht-blocker", nome:"DHT Blocker", tipo:"masc",
-    titulo:"DHT Blocker: Oferta Do Dia + Frete Grátis",
+    titulo:"DHT Blocker",
     subtitulo:"Bloqueador natural de DHT para saúde capilar masculina",
     badge:"OFERTA DO DIA", badgeColor:"#e67e22",
     variantes:_STD(),
@@ -84,7 +84,7 @@ const PRODUTOS = [
   },
   {
     slug:"hair-fortin", nome:"Hair Fortin", tipo:"fem",
-    titulo:"Hair Fortin: Oferta Do Dia + Frete Grátis",
+    titulo:"Hair Fortin",
     subtitulo:"Nutrição capilar intensiva de dentro para fora",
     badge:"OFERTA DO DIA", badgeColor:"#e67e22",
     variantes:_STD(),
@@ -98,7 +98,7 @@ const PRODUTOS = [
   },
   {
     slug:"long-beauty", nome:"Long Beauty", tipo:"fem",
-    titulo:"Long Beauty: Oferta Do Dia + Frete Grátis",
+    titulo:"Long Beauty",
     subtitulo:"Beleza e vitalidade capilar com a força da natureza",
     badge:"LANÇAMENTO", badgeColor:"#c0392b",
     variantes:_STD(),
@@ -112,7 +112,7 @@ const PRODUTOS = [
   },
   {
     slug:"rosa-oriental", nome:"Rosa Oriental", tipo:"fem",
-    titulo:"Rosa Oriental: Oferta Do Dia + Frete Grátis",
+    titulo:"Rosa Oriental",
     subtitulo:"Beleza e bem-estar feminino com ervas do Oriente",
     badge:"OFERTA DO DIA", badgeColor:"#e91e8c",
     variantes:_STD(),
@@ -126,7 +126,7 @@ const PRODUTOS = [
   },
   {
     slug:"rejuvita", nome:"Rejuvita", tipo:"fem",
-    titulo:"Rejuvita: Oferta Do Dia + Frete Grátis",
+    titulo:"Rejuvita",
     subtitulo:"Antienvelhecimento e rejuvenescimento com ativos naturais",
     badge:"MAIS VENDIDO", badgeColor:"#15a731",
     variantes:_STD(),
@@ -140,7 +140,7 @@ const PRODUTOS = [
   },
   {
     slug:"meno-care", nome:"Meno Care", tipo:"fem",
-    titulo:"Meno Care: Oferta Do Dia + Frete Grátis",
+    titulo:"Meno Care",
     subtitulo:"Suporte natural para os sintomas da menopausa",
     badge:"OFERTA DO DIA", badgeColor:"#e91e8c",
     variantes:_STD(),
@@ -154,7 +154,7 @@ const PRODUTOS = [
   },
   {
     slug:"dura-max", nome:"DuraMax", tipo:"masc",
-    titulo:"DuraMax: Oferta Do Dia + Frete Grátis",
+    titulo:"DuraMax",
     subtitulo:"Fórmula masculina para disposição e vitalidade",
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
     variantes:[
@@ -174,7 +174,7 @@ const PRODUTOS = [
   },
   {
     slug:"viriforte", nome:"Viriforte", tipo:"masc",
-    titulo:"Viriforte: Oferta Do Dia + Frete Grátis",
+    titulo:"Viriforte",
     subtitulo:"Força e vitalidade masculina com a natureza",
     badge:"OFERTA DO DIA", badgeColor:"#e67e22",
     variantes:_STD(),
@@ -188,7 +188,7 @@ const PRODUTOS = [
   },
   {
     slug:"elefantol", nome:"Elefantol", tipo:"masc",
-    titulo:"Elefantol: Oferta Do Dia + Frete Grátis",
+    titulo:"Elefantol",
     subtitulo:"Potência e resistência com ativos naturais",
     badge:"MAIS VENDIDO", badgeColor:"#15a731",
     variantes:_STD(),
@@ -202,7 +202,7 @@ const PRODUTOS = [
   },
   {
     slug:"mounjax", nome:"Mounjax", tipo:"geral",
-    titulo:"Mounjax: Oferta Do Dia + Frete Grátis",
+    titulo:"Mounjax",
     subtitulo:"Suporte ao emagrecimento com ingredientes naturais",
     badge:"OFERTA DO DIA", badgeColor:"#e67e22",
     variantes:_STD(),
@@ -216,7 +216,7 @@ const PRODUTOS = [
   },
   {
     slug:"burnzine", nome:"Burnzine", tipo:"geral",
-    titulo:"Burnzine: Oferta Do Dia + Frete Grátis",
+    titulo:"Burnzine",
     subtitulo:"Termogênico natural para acelerar o metabolismo",
     badge:"OFERTA DO DIA", badgeColor:"#c0392b",
     variantes:_STD(),
@@ -230,7 +230,7 @@ const PRODUTOS = [
   },
   {
     slug:"neurovex", nome:"Neurovex", tipo:"geral",
-    titulo:"Neurovex: Oferta Do Dia + Frete Grátis",
+    titulo:"Neurovex",
     subtitulo:"Suporte cognitivo e neurológico com nootrópicos naturais",
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
     variantes:_STD(),
@@ -244,7 +244,7 @@ const PRODUTOS = [
   },
   {
     slug:"memoralis", nome:"Memoralis", tipo:"geral",
-    titulo:"Memoralis: Oferta Do Dia + Frete Grátis",
+    titulo:"Memoralis",
     subtitulo:"Memória e concentração com nootrópicos naturais",
     badge:"OFERTA DO DIA", badgeColor:"#8e44ad",
     variantes:_STD(),
@@ -258,7 +258,7 @@ const PRODUTOS = [
   },
   {
     slug:"nervomax", nome:"Nervomax", tipo:"geral",
-    titulo:"Nervomax: Oferta Do Dia + Frete Grátis",
+    titulo:"Nervomax",
     subtitulo:"Saúde do sistema nervoso com ingredientes naturais",
     badge:"MAIS VENDIDO", badgeColor:"#15a731",
     variantes:_STD(),
@@ -272,7 +272,7 @@ const PRODUTOS = [
   },
   {
     slug:"vision-x", nome:"Vision-X", tipo:"geral",
-    titulo:"Vision-X: Oferta Do Dia + Frete Grátis",
+    titulo:"Vision-X",
     subtitulo:"Saúde ocular com luteína e zeaxantina naturais",
     badge:"OFERTA DO DIA", badgeColor:"#2980b9",
     variantes:_STD(),
@@ -286,7 +286,7 @@ const PRODUTOS = [
   },
   {
     slug:"articuly", nome:"Articuly", tipo:"geral",
-    titulo:"Articuly: Oferta Do Dia + Frete Grátis",
+    titulo:"Articuly",
     subtitulo:"Articulações flexíveis com colágeno e ativos naturais",
     badge:"MAIS VENDIDO", badgeColor:"#15a731",
     variantes:_STD(),
@@ -300,7 +300,7 @@ const PRODUTOS = [
   },
   {
     slug:"hemo-gotas", nome:"Hemo Gotas", tipo:"geral",
-    titulo:"Hemo Gotas: Oferta Do Dia + Frete Grátis",
+    titulo:"Hemo Gotas",
     subtitulo:"Suporte ao sangue e circulação com ferro natural",
     badge:"OFERTA DO DIA", badgeColor:"#c0392b",
     variantes:_STD(),
@@ -314,7 +314,7 @@ const PRODUTOS = [
   },
   {
     slug:"prostavex", nome:"Prostavex", tipo:"masc",
-    titulo:"Prostavex: Oferta Do Dia + Frete Grátis",
+    titulo:"Prostavex",
     subtitulo:"Saúde da próstata com saw palmetto e zinco",
     badge:"OFERTA DO DIA", badgeColor:"#2980b9",
     variantes:_STD(),
@@ -328,7 +328,7 @@ const PRODUTOS = [
   },
   {
     slug:"mitocondril", nome:"Mitocondril", tipo:"geral",
-    titulo:"Mitocondril: Oferta Do Dia + Frete Grátis",
+    titulo:"Mitocondril",
     subtitulo:"Energia celular profunda com CoQ10 e ativos mitocondriais",
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
     variantes:_STD(),
@@ -342,7 +342,7 @@ const PRODUTOS = [
   },
   {
     slug:"akkermat", nome:"Akkermat", tipo:"geral",
-    titulo:"Akkermat: Oferta Do Dia + Frete Grátis",
+    titulo:"Akkermat",
     subtitulo:"Microbiota intestinal com Akkermansia e probióticos naturais",
     badge:"LANÇAMENTO", badgeColor:"#15a731",
     variantes:_STD(),
@@ -356,7 +356,7 @@ const PRODUTOS = [
   },
   {
     slug:"naturion", nome:"Naturion", tipo:"geral",
-    titulo:"Naturion: Oferta Do Dia + Frete Grátis",
+    titulo:"Naturion",
     subtitulo:"Equilíbrio mineral e vital com eletrólitos naturais",
     badge:"OFERTA DO DIA", badgeColor:"#e67e22",
     variantes:_STD(),
