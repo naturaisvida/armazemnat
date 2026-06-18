@@ -141,6 +141,10 @@ module.exports = async function handler(req, res) {
   const orderData = {
     items:    orderItems,
     customer: cust,
+    billing: {
+      name:    customer.name,
+      address: addr,
+    },
     payments: payment,
     shipping: {
       amount:          parseInt(shipping_amount) || 0,
@@ -161,7 +165,7 @@ module.exports = async function handler(req, res) {
     closed: true,
   };
 
-  console.error('[order] billing_address sent:', JSON.stringify(addr));
+  console.error('[order] PAYLOAD:', JSON.stringify(orderData));
   const result = await pagarmeReq('POST', '/orders', orderData);
   if ((result._http || 200) >= 400) {
     console.error('[order] pagarme error:', JSON.stringify(result));
