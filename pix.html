@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagar com PIX — Armazém Natural</title>
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#f5f5f5;color:#212121;min-height:100vh;display:flex;flex-direction:column}
+.hdr{background:#fff;border-bottom:1px solid #e0e0e0;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.hdr img{height:36px}
+.hdr-sec{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#356041;text-transform:uppercase}
+.wrap{max-width:480px;margin:32px auto;padding:0 16px;flex:1}
+.card{background:#fff;border-radius:14px;padding:28px 24px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
+.title{font-size:20px;font-weight:800;color:#356041;text-align:center;margin-bottom:6px}
+.sub{font-size:13px;color:#666;text-align:center;margin-bottom:20px}
+.qr-box{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:20px}
+.qr-box img{width:220px;height:220px;border-radius:10px;border:1px solid #e0e0e0}
+.timer-box{background:#f0fbf3;border:1px solid #b8e6c4;border-radius:10px;padding:12px;text-align:center;margin-bottom:18px}
+.timer-box p{font-size:13px;color:#356041;font-weight:600}
+.timer-box b{font-size:22px;font-weight:800;color:#15a731}
+.copy-row{display:flex;gap:8px;margin-bottom:18px}
+.copy-row input{flex:1;padding:11px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:12px;font-family:'Poppins',sans-serif;color:#444;background:#f9f9f9;min-width:0}
+.copybtn{background:#15a731;color:#fff;border:none;border-radius:8px;padding:11px 16px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s}
+.copybtn:hover{background:#0e8a28}
+.steps{background:#f9f9f9;border-radius:10px;padding:16px;margin-bottom:20px}
+.steps p{font-size:13px;font-weight:700;color:#356041;margin-bottom:10px}
+.steps ul{list-style:none;padding:0}
+.steps li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#444;margin-bottom:8px}
+.n{background:#15a731;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.success{display:none;background:#e8f5e9;border:2px solid #15a731;border-radius:12px;padding:24px;text-align:center;margin-bottom:16px}
+.success h2{font-size:18px;font-weight:800;color:#15a731;margin-bottom:6px}
+.success p{font-size:13px;color:#356041}
+.ftr{text-align:center;padding:20px;font-size:12px;color:#aaa}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural">
+  <div class="hdr-sec">
+    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+    PAGAMENTO SEGURO
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <div class="success" id="success-box">
+      <h2>✓ Pagamento Confirmado!</h2>
+      <p>Seu pedido foi processado com sucesso. Em breve você receberá a confirmação por e-mail.</p>
+    </div>
+    <div id="pix-box">
+      <div class="title">Pague com PIX</div>
+      <div class="sub">Escaneie o QR Code ou copie o código abaixo</div>
+      <div class="qr-box">
+        <img id="qr-img" src="" alt="QR Code PIX">
+      </div>
+      <div class="timer-box">
+        <p>Expira em:</p>
+        <b id="timer">30:00</b>
+      </div>
+      <div class="copy-row">
+        <input type="text" id="pix-code" readonly>
+        <button class="copybtn" onclick="cp()">Copiar</button>
+      </div>
+      <div class="steps">
+        <p>Como pagar:</p>
+        <ul>
+          <li><span class="n">1</span>Abra o app do seu banco</li>
+          <li><span class="n">2</span>Escolha pagar via PIX → "Copia e Cola" ou QR Code</li>
+          <li><span class="n">3</span>Cole o código ou escaneie o QR Code</li>
+          <li><span class="n">4</span>Confirme o pagamento</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ftr">© 2025 Armazém Natural · Pagamento 100% seguro</div>
+
+<script>
+const data = JSON.parse(localStorage.getItem('armazem_pix') || '{}');
+if (!data.qrCode) {
+  document.querySelector('.wrap').innerHTML =
+    '<div class="card" style="text-align:center;padding:40px"><p style="color:#666">Nenhuma cobrança PIX ativa.<br><a href="/" style="color:#15a731">← Voltar à loja</a></p></div>';
+} else {
+  document.getElementById('qr-img').src       = data.qrImg  || '';
+  document.getElementById('pix-code').value   = data.qrCode || '';
+  startTimer(data.expira || 1800);
+  if (data.orderId) pollOrder(data.orderId);
+}
+
+function cp() {
+  const el = document.getElementById('pix-code');
+  el.select();
+  navigator.clipboard?.writeText(el.value).catch(() => document.execCommand('copy'));
+  const btn = document.querySelector('.copybtn');
+  btn.textContent = 'Copiado!';
+  setTimeout(() => btn.textContent = 'Copiar', 2000);
+}
+
+let _timer;
+function startTimer(secs) {
+  clearInterval(_timer);
+  let t = secs;
+  _timer = setInterval(() => {
+    t--;
+    const el = document.getElementById('timer');
+    if (!el) { clearInterval(_timer); return; }
+    el.textContent = `${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`;
+    if (t <= 0) { clearInterval(_timer); el.textContent = 'Expirado'; }
+  }, 1000);
+}
+
+let _poll;
+function pollOrder(orderId) {
+  clearInterval(_poll);
+  _poll = setInterval(async () => {
+    try {
+      const r = await fetch(`/api/order?status=${orderId}`);
+      const d = await r.json();
+      if (d.status === 'paid') {
+        clearInterval(_poll);
+        clearInterval(_timer);
+        localStorage.removeItem('armazem_pix');
+        document.getElementById('pix-box').style.display   = 'none';
+        document.getElementById('success-box').style.display = 'block';
+      }
+    } catch(e) {}
+  }, 5000);
+}
+</script>
+</body>
+</html>

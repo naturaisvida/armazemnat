@@ -480,11 +480,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 const CFG = {
   publicKey: 'pk_gKEVdkNTafKGLO82',
   apiEndpoint: '/api/order',
-  pixDiscount: 5,                                // % desconto PIX (0 para desativar)
-  pixExpires: 1800,                              // segundos até expirar (1800 = 30 min)
-  maxParcelsSemJuros: 6,
+  pixDiscount: 5,       // % desconto PIX (0 para desativar)
+  pixExpires: 1800,     // segundos até expirar (1800 = 30 min)
   maxParcelas: 12,
-  jurosMes: 2.5,                                 // % ao mês após parcelas sem juros
+  // Tabela de juros Yampi — índice = nº de parcelas, valor = % ao mês
+  // 1x=0%, 2x=4%, 3x=4%, 4-12x=7%
+  jurosTable: [0, 0, 4, 4, 7, 7, 7, 7, 7, 7, 7, 7, 7],
 };
 
 // Dados do produto — passe via URL: ?nome=...&preco=53990&variante=...&img=...&qty=1
@@ -529,19 +530,21 @@ function $$(cents) {
   return 'R$ ' + (cents/100).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
 }
 
+function calcPMT(total, parcelas) {
+  const r = (CFG.jurosTable[parcelas] || 0) / 100;
+  if (r === 0) return total / parcelas;
+  return (total * r * Math.pow(1+r, parcelas)) / (Math.pow(1+r, parcelas) - 1);
+}
+
 function buildParcelas(total) {
   const sel = document.getElementById('parc');
   sel.innerHTML = '';
   for (let i = 1; i <= CFG.maxParcelas; i++) {
-    let val, label;
-    if (i <= CFG.maxParcelsSemJuros) {
-      val   = total / i;
-      label = `${i}x de ${$$(val)} sem juros`;
-    } else {
-      const r = CFG.jurosMes / 100;
-      val   = (total * r * Math.pow(1+r,i)) / (Math.pow(1+r,i)-1);
-      label = `${i}x de ${$$(val)} com juros`;
-    }
+    const r   = (CFG.jurosTable[i] || 0) / 100;
+    const pmt = calcPMT(total, i);
+    const label = r === 0
+      ? `${i}x de ${$$(Math.round(pmt))} sem juros`
+      : `${i}x de ${$$(Math.round(pmt))} com juros`;
     sel.add(new Option(label, i));
   }
 }
@@ -772,10 +775,8 @@ async function pay(method) {
     let amount;
     if (method === 'pix' && CFG.pixDiscount > 0) {
       amount = Math.round(grandTotal * (1 - CFG.pixDiscount / 100));
-    } else if (method === 'cartao' && parcelas > CFG.maxParcelsSemJuros) {
-      const r = CFG.jurosMes / 100;
-      const pmt = (grandTotal * r * Math.pow(1+r, parcelas)) / (Math.pow(1+r, parcelas) - 1);
-      amount = Math.round(pmt * parcelas);
+    } else if (method === 'cartao' && (CFG.jurosTable[parcelas] || 0) > 0) {
+      amount = Math.round(calcPMT(grandTotal, parcelas) * parcelas);
     } else {
       amount = grandTotal;
     }
@@ -863,20 +864,29 @@ function handleResult(method, data, btn) {
 
   if (method==='pix') {
     const tx = data.charges?.[0]?.last_transaction;
-    document.getElementById('qr-img').src       = tx?.qr_code_url || '';
-    document.getElementById('pix-code').value   = tx?.qr_code || '';
-    document.getElementById('pix-res').style.display  = '';
-    document.getElementById('pix-btn').style.display  = 'none';
-    startTimer(CFG.pixExpires);
+    localStorage.setItem('armazem_pix', JSON.stringify({
+      qrImg:   tx?.qr_code_url || '',
+      qrCode:  tx?.qr_code    || '',
+      orderId: data.id,
+      expira:  CFG.pixExpires,
+      valor:   amount,
+    }));
+    window.open('/pix.html', '_blank');
+    document.getElementById('pix-btn').style.display = 'none';
+    document.getElementById('pix-res').innerHTML =
+      '<p style="text-align:center;color:var(--green-2);font-size:14px;padding:16px 0">'+
+      '✓ PIX gerado! A página de pagamento foi aberta em uma nova aba.</p>';
+    document.getElementById('pix-res').style.display = '';
     pollOrder(data.id);
     lockPayTabs();
   }
   else if (method==='boleto') {
     const tx = data.charges?.[0]?.last_transaction;
-    document.getElementById('blt-link').href    = tx?.url || tx?.pdf || '#';
-    document.getElementById('blt-code').value   = tx?.line || '';
-    document.getElementById('blt-res').style.display = '';
+    const bltUrl = tx?.url || tx?.pdf || '#';
+    window.open(bltUrl, '_blank');
     document.getElementById('blt-btn').style.display = 'none';
+    document.getElementById('blt-res').style.display = '';
+    document.getElementById('blt-link').href = bltUrl;
     lockPayTabs();
   }
   else if (method==='cartao') {
