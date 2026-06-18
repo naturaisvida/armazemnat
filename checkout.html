@@ -540,11 +540,8 @@ function buildParcelas(total) {
   const sel = document.getElementById('parc');
   sel.innerHTML = '';
   for (let i = 1; i <= CFG.maxParcelas; i++) {
-    const r   = (CFG.jurosTable[i] || 0) / 100;
-    const pmt = calcPMT(total, i);
-    const label = r === 0
-      ? `${i}x de ${$$(Math.round(pmt))} sem juros`
-      : `${i}x de ${$$(Math.round(pmt))} com juros`;
+    const pmt   = calcPMT(total, i);
+    const label = `${i}x de ${$$(Math.round(pmt))}`;
     sel.add(new Option(label, i));
   }
 }
@@ -821,7 +818,7 @@ async function pay(method) {
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.message || 'Erro ao processar pagamento');
 
-    handleResult(method, data, btn);
+    handleResult(method, data, btn, amount);
 
   } catch(e) {
     showMsg(method, e.message, true);
@@ -853,7 +850,7 @@ async function tokenize() {
   return d.id;
 }
 
-function handleResult(method, data, btn) {
+function handleResult(method, data, btn, amount) {
   btn.classList.remove('spin'); btn.disabled = false;
 
   // PIX e boleto: pedido criado = contar como conversao (igual Yampi)
@@ -887,6 +884,7 @@ function handleResult(method, data, btn) {
     document.getElementById('blt-btn').style.display = 'none';
     document.getElementById('blt-res').style.display = '';
     document.getElementById('blt-link').href = bltUrl;
+    document.getElementById('blt-code').value = tx?.line || '';
     lockPayTabs();
   }
   else if (method==='cartao') {
