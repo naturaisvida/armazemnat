@@ -723,6 +723,12 @@ async function tokenize() {
 function handleResult(method, data, btn) {
   btn.classList.remove('spin'); btn.disabled = false;
 
+  // PIX e boleto: pedido criado = contar como conversao (igual Yampi)
+  // Cartao: so conta apos aprovacao (pode ser recusado)
+  if ((method==='pix' || method==='boleto') && data.id) {
+    fireConversion(data.id);
+  }
+
   if (method==='pix') {
     const tx = data.charges?.[0]?.last_transaction;
     document.getElementById('qr-img').src       = tx?.qr_code_url || '';
@@ -806,7 +812,6 @@ function fireConversion(orderId) {
 }
 
 function showSuccess(id) {
-  fireConversion(id);
   document.getElementById('steps').innerHTML = `
     <div class="card">
       <div class="success-screen">
