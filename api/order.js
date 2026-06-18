@@ -44,6 +44,8 @@ module.exports = async function handler(req, res) {
   const {
     method,
     amount,
+    shipping_amount = 0,
+    shipping_label = 'Correios',
     customer = {},
     address = {},
     items = [],
@@ -130,8 +132,8 @@ module.exports = async function handler(req, res) {
     customer: cust,
     payments: payment,
     shipping: {
-      amount:          0,
-      description:     'Frete Grátis',
+      amount:          parseInt(shipping_amount) || 0,
+      description:     shipping_amount > 0 ? `Frete ${shipping_label}` : 'Frete Grátis',
       recipient_name:  cust.name,
       recipient_phone: '55' + cust.phones.mobile_phone.area_code + cust.phones.mobile_phone.number,
       address:         addr,

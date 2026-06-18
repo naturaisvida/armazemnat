@@ -141,12 +141,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .row-2col{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
 .row-2col>*{min-width:0}
 
-/* FRETE BOX */
-.frete-box{display:flex;align-items:center;gap:10px;background:#f0fbf3;border:1px solid #b8e6c4;border-radius:8px;padding:12px 14px;margin-bottom:11px}
-.frete-box svg{color:var(--green);flex-shrink:0}
-.frete-box-info{font-size:13px;line-height:1.4}
-.frete-box-info strong{color:var(--green-2);font-weight:700;display:block}
-.frete-box-info span{color:#666;font-size:12px}
+/* FRETE OPTIONS */
+.frete-lbl{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px}
+.frete-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.frete-opt{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
+.frete-opt.on{border-color:var(--green);background:#f0fbf3}
+.frete-opt input[type=radio]{accent-color:var(--green);width:18px;height:18px;flex-shrink:0;cursor:pointer}
+.frete-opt-logo{height:32px;width:auto;max-width:88px;object-fit:contain;flex-shrink:0}
+.frete-opt-info{flex:1;min-width:0}
+.frete-opt-name{font-size:12px;font-weight:700;color:var(--text);line-height:1.35}
+.frete-opt-desc{font-size:11px;color:var(--green-2);margin-top:2px}
+.frete-opt-price{font-size:13px;font-weight:700;color:var(--green);white-space:nowrap;flex-shrink:0}
 
 /* FOOTER */
 .ftr{text-align:center;padding:22px 20px;border-top:1px solid var(--border-light);background:var(--white);margin-top:10px}
@@ -203,6 +208,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
       oninput="document.getElementById('obs-c').textContent=this.value.length+'/300 caracteres'"></textarea>
     <p class="obs-c" id="obs-c">0/300 caracteres</p>
     <div class="sline"><span id="sb-lbl">Produto (1)</span><span id="sb-price"></span></div>
+    <div class="sline"><span>Frete</span><span id="sb-frete" style="color:var(--green)">Grátis</span></div>
     <div class="sline stotal"><span>Total</span><span id="sb-total"></span></div>
     <div class="sprod">
       <img id="sb-img" src="" alt="">
@@ -302,12 +308,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
             <span class="ferr" id="e-estado"></span>
           </div>
         </div>
-        <div class="frete-box">
-          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-          <div class="frete-box-info">
-            <strong>Frete Grátis para todo o Brasil</strong>
-            <span>Entrega via Correios · Prazo estimado: 5 a 10 dias úteis</span>
-          </div>
+        <div class="frete-lbl">Escolha uma forma de entrega:</div>
+        <div class="frete-opts">
+          <label class="frete-opt on" id="frete-correios" onclick="selFrete(0)">
+            <input type="radio" name="frete" value="0" checked>
+            <img class="frete-opt-logo" src="/img/fretes/correios.png" alt="Correios">
+            <div class="frete-opt-info">
+              <div class="frete-opt-name">CORREIOS – Frete Grátis (4 a 10 dias úteis)</div>
+              <div class="frete-opt-desc">Entrega garantida</div>
+            </div>
+            <div class="frete-opt-price">Grátis</div>
+          </label>
+          <label class="frete-opt" id="frete-jadlog" onclick="selFrete(2155)">
+            <input type="radio" name="frete" value="2155">
+            <img class="frete-opt-logo" src="/img/fretes/jadlog.png" alt="Jadlog">
+            <div class="frete-opt-info">
+              <div class="frete-opt-name">JADLOG – Frete Expresso (1 a 4 dias úteis)</div>
+              <div class="frete-opt-desc">Entrega garantida</div>
+            </div>
+            <div class="frete-opt-price">R$ 21,55</div>
+          </label>
         </div>
         <button class="btn" onclick="toStep3()">Ir para Pagamento</button>
       </div>
@@ -662,6 +682,36 @@ async function viaCEP(cep) {
 // ══════════════════════════════════════════
 // PAYMENT TABS
 // ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// SHIPPING SELECTION
+// ══════════════════════════════════════════
+let shippingCost = 0;
+let shippingLabel = 'Correios';
+
+function selFrete(cost) {
+  shippingCost = cost;
+  shippingLabel = cost === 0 ? 'Correios' : 'Jadlog';
+  document.getElementById('frete-correios').classList.toggle('on', cost === 0);
+  document.getElementById('frete-jadlog').classList.toggle('on', cost > 0);
+  document.querySelector('#frete-correios input').checked = cost === 0;
+  document.querySelector('#frete-jadlog input').checked   = cost > 0;
+  updateSidebarTotal();
+}
+
+function updateSidebarTotal() {
+  const productTotal = P.preco * P.qty;
+  const grandTotal   = productTotal + shippingCost;
+  document.getElementById('sb-frete').textContent  = shippingCost === 0 ? 'Grátis' : $$(shippingCost);
+  document.getElementById('sb-total').textContent  = $$(grandTotal);
+  const mobPrice = document.getElementById('mob-sum-price');
+  if (mobPrice) mobPrice.textContent = $$(grandTotal);
+  if (CFG.pixDiscount > 0) {
+    const desc = Math.round(grandTotal * CFG.pixDiscount / 100);
+    const el = document.getElementById('pix-disc');
+    if (el) el.textContent = `No PIX: ${$$(grandTotal - desc)} (${CFG.pixDiscount}% de desconto)`;
+  }
+}
+
 let _payLocked = false;
 
 function selPay(m) {
@@ -715,15 +765,18 @@ async function pay(method) {
     let cardToken = null;
     if (method==='cartao') cardToken = await tokenize();
 
-    const total = P.preco * P.qty;
+    const productTotal = P.preco * P.qty;
+    const grandTotal   = productTotal + shippingCost;
     const amount = method==='pix' && CFG.pixDiscount>0
-      ? Math.round(total*(1-CFG.pixDiscount/100))
-      : total;
+      ? Math.round(grandTotal*(1-CFG.pixDiscount/100))
+      : grandTotal;
 
     const phone = g('fone').replace(/\D/g,'');
     const payload = {
       method,
       amount,
+      shipping_amount: shippingCost,
+      shipping_label:  shippingLabel,
       card_token: cardToken,
       installments: parseInt(g('parc')||'1'),
       pix_expires_in: CFG.pixExpires,
