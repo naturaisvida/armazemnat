@@ -212,7 +212,10 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: 'Erro ao buscar pedidos no Pagar.me' });
     }
 
-    let orders = (raw.data || []).map(formatOrder);
+    // Filtra apenas pedidos criados pelo site (exclui Yampi, Shopify, etc.)
+    let orders = (raw.data || [])
+      .filter(o => (o.metadata || {}).source === 'checkout_html')
+      .map(formatOrder);
 
     // Name search (client-side, Pagar.me doesn't support name search)
     if (search && !search.includes('@') && !/^\d+$/.test(search)) {

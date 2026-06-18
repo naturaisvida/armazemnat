@@ -2,8 +2,8 @@ const RESEND_API = 'https://api.resend.com/emails';
 
 const STATUS_CONFIG = {
   faturado: {
-    subject: 'Pagamento aprovado — Pedido #{code}',
-    title:   'Pagamento Aprovado!',
+    subject: 'Pagamento confirmado — Pedido #{code}',
+    title:   'Pagamento Confirmado!',
     message: 'O pagamento da sua compra foi aprovado. Agradecemos sua preferência pela Armazém Natural! Você receberá atualizações por e-mail sobre o andamento da sua compra até o momento de entrega.',
     accent:  '#15a731',
   },
@@ -122,7 +122,7 @@ function buildHtml(order, statusKey, trackingCode) {
         <!-- ENTREGA -->
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;border:1px solid #e8e8e8;border-radius:9px;overflow:hidden">
           <tr><td style="padding:10px 16px;background:#fafafa;border-bottom:1px solid #e8e8e8">
-            <span style="font-size:11px;font-weight:700;color:#e67e22;letter-spacing:.08em;text-transform:uppercase;font-family:Arial,sans-serif">&#9679; ENTREGA</span>
+            <span style="font-size:11px;font-weight:700;color:#e67e22;letter-spacing:.08em;text-transform:uppercase;font-family:Arial,sans-serif">ENTREGA</span>
           </td></tr>
           <tr><td style="padding:14px 16px;font-size:14px;color:#333;line-height:1.6;font-family:Arial,sans-serif">
             <strong>${escH(order.customer?.name || '')}</strong><br>
@@ -135,7 +135,7 @@ function buildHtml(order, statusKey, trackingCode) {
         <!-- PAGAMENTO -->
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;border:1px solid #e8e8e8;border-radius:9px;overflow:hidden">
           <tr><td style="padding:10px 16px;background:#fafafa;border-bottom:1px solid #e8e8e8">
-            <span style="font-size:11px;font-weight:700;color:#3b82f6;letter-spacing:.08em;text-transform:uppercase;font-family:Arial,sans-serif">&#9679; PAGAMENTO</span>
+            <span style="font-size:11px;font-weight:700;color:#3b82f6;letter-spacing:.08em;text-transform:uppercase;font-family:Arial,sans-serif">PAGAMENTO</span>
           </td></tr>
           <tr><td style="padding:14px 16px;font-size:14px;color:#333;font-family:Arial,sans-serif">
             ${escH(methodLabel[order.method] || 'Outro')}
@@ -146,7 +146,7 @@ function buildHtml(order, statusKey, trackingCode) {
         <!-- ITENS -->
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;border:1px solid #e8e8e8;border-radius:9px;overflow:hidden">
           <tr><td style="padding:10px 16px;background:#fafafa;border-bottom:1px solid #e8e8e8">
-            <span style="font-size:11px;font-weight:700;color:#555;letter-spacing:.08em;text-transform:uppercase;font-family:Arial,sans-serif">&#128722; ITENS</span>
+            <span style="font-size:11px;font-weight:700;color:#555;letter-spacing:.08em;text-transform:uppercase;font-family:Arial,sans-serif">ITENS</span>
           </td></tr>
           <tr><td style="padding:8px 16px">
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${itemsHtml}</table>

@@ -52,7 +52,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .stab.active{border-bottom-color:currentColor}
 .stab[data-s="todos"]     {color:#6b7280}.stab[data-s="todos"].active{color:#6b7280}
 .stab[data-s="aguardando_pagamento"]{color:#f59e0b}.stab[data-s="aguardando_pagamento"].active{color:#f59e0b}
-.stab[data-s="faturado"]  {color:#8b5cf6}.stab[data-s="faturado"].active{color:#8b5cf6}
+.stab[data-s="faturado"]  {color:#15a731}.stab[data-s="faturado"].active{color:#15a731}
 .stab[data-s="em_transporte"]{color:#3b82f6}.stab[data-s="em_transporte"].active{color:#3b82f6}
 .stab[data-s="entregue"]  {color:#10b981}.stab[data-s="entregue"].active{color:#10b981}
 .stab[data-s="excecao_entrega"]{color:#ef4444}.stab[data-s="excecao_entrega"].active{color:#ef4444}
@@ -89,7 +89,7 @@ tr:hover td{background:#fafafa}
 .amount{font-size:14px;font-weight:700;color:var(--text)}
 .badge{display:inline-block;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:700;white-space:nowrap}
 .s-aguardando_pagamento{background:#fef3c7;color:#92400e}
-.s-faturado{background:#ede9fe;color:#6d28d9}
+.s-faturado{background:#dcfce7;color:#15803d}
 .s-em_transporte{background:#dbeafe;color:#1d4ed8}
 .s-entregue{background:#dcfce7;color:#15803d}
 .s-excecao_entrega{background:#fee2e2;color:#dc2626}
@@ -240,7 +240,7 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
   <div class="status-tabs" id="status-tabs">
     <button class="stab active" data-s="todos"                onclick="setStatus('todos',this)">Todos</button>
     <button class="stab" data-s="aguardando_pagamento"        onclick="setStatus('aguardando_pagamento',this)">Aguardando Pagamento</button>
-    <button class="stab" data-s="faturado"                    onclick="setStatus('faturado',this)">Faturado</button>
+    <button class="stab" data-s="faturado"                    onclick="setStatus('faturado',this)">Pago</button>
     <button class="stab" data-s="em_transporte"               onclick="setStatus('em_transporte',this)">Em Transporte</button>
     <button class="stab" data-s="entregue"                    onclick="setStatus('entregue',this)">Entregue</button>
     <button class="stab" data-s="excecao_entrega"             onclick="setStatus('excecao_entrega',this)">Exceção de Entrega</button>
@@ -333,7 +333,7 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
       <div class="filter-section-title">Status</div>
       <div class="check-group">
         <label class="check-item"><input type="checkbox" value="aguardando_pagamento"> Aguardando Pagamento</label>
-        <label class="check-item"><input type="checkbox" value="faturado">             Faturado</label>
+        <label class="check-item"><input type="checkbox" value="faturado">             Pago</label>
         <label class="check-item"><input type="checkbox" value="em_transporte">        Em Transporte</label>
         <label class="check-item"><input type="checkbox" value="entregue">             Entregue</label>
         <label class="check-item"><input type="checkbox" value="excecao_entrega">      Exceção de Entrega</label>
@@ -363,7 +363,7 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
         <select id="modal-status">
           <option value="">Selecione...</option>
           <option value="aguardando_pagamento">Aguardando Pagamento</option>
-          <option value="faturado">Faturado</option>
+          <option value="faturado">Pago</option>
           <option value="em_transporte">Em Transporte</option>
           <option value="entregue">Entregue</option>
           <option value="excecao_entrega">Exceção de Entrega</option>
@@ -449,7 +449,7 @@ let _fMethods  = new Set();
 // ── Status labels ─────────────────────────────────────────────────────────────
 const STATUS_LABELS = {
   aguardando_pagamento: 'Aguardando Pagamento',
-  faturado:             'Faturado',
+  faturado:             'Pago',
   em_transporte:        'Em Transporte',
   entregue:             'Entregue',
   excecao_entrega:      'Exceção de Entrega',
@@ -530,7 +530,7 @@ function renderTable() {
     const checked = _sel.has(o.id) ? 'checked' : '';
     const parcStr = (o.installments > 1 && o.method === 'cartao') ? ` ${o.installments}x` : '';
     const tracking   = o.shipping.trackingCode
-      ? `<div class="tracking">📦 ${escH(o.shipping.trackingCode)}</div>` : '';
+      ? `<div class="tracking">${escH(o.shipping.trackingCode)}</div>` : '';
     const emailCount = (o.emails || []).length;
     const emailBadge = emailCount > 0 ? `<span class="email-count">${emailCount}</span>` : '';
 
@@ -781,7 +781,7 @@ function toast(msg, type='ok') {
 
 // ── Emails modal ─────────────────────────────────────────────────────────────
 const EMAIL_STATUS_LABELS = {
-  faturado:        'Pagamento Aprovado',
+  faturado:        'Pagamento Confirmado',
   em_transporte:   'Pedido a Caminho',
   entregue:        'Pedido Entregue',
   excecao_entrega: 'Problema na Entrega',
