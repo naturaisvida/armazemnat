@@ -381,4 +381,15 @@ const PRODUTOS = [
       "/img/produtos/corretor-postural/2.webp",
     ],
   },
+  {
+    slug:"teste", nome:"Produto Teste", tipo:"geral",
+    titulo:"Produto Teste",
+    subtitulo:"Produto interno para testes de pagamento",
+    variantes:[
+      { titulo:"TESTE R$2", preco:200, comparar:1000, desconto:80 },
+    ],
+    imagens:[
+      "/img/produtos/glicofit/1.png",
+    ],
+  },
 ];
