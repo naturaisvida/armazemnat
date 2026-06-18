@@ -365,6 +365,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
           </div></div>
           <div id="card-msg"></div>
           <div id="card-res" style="display:none"></div>
+          <div style="margin:12px 0 0">
+            <button type="button" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.textContent=this.textContent.includes('Ver')?' Ocultar tutorial':'Ver como pagar →'" style="background:none;border:none;font-family:var(--font);font-size:12px;color:var(--green-2);cursor:pointer;padding:0;text-decoration:underline">Ver como pagar →</button>
+            <div style="display:none;margin-top:10px;border-radius:8px;overflow:hidden;border:1px solid var(--border-light)">
+              <img src="/img/como-pagar-cartao.gif" alt="Como pagar com cartão" style="width:100%;display:block">
+            </div>
+          </div>
           <div id="card-btn">
             <button class="btn" id="btn-card" onclick="pay('cartao')">Finalizar Compra</button>
           </div>

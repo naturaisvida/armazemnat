@@ -60,13 +60,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .stars{display:flex;align-items:center;gap:6px;margin-bottom:16px;font-size:13px;color:var(--muted)}
 .star-icons{color:#ffb627;font-size:15px;letter-spacing:1px}
 
-/* TRUST BADGES */
-.trust-mini{display:flex;gap:10px;margin-bottom:20px}
-.tbadge{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 8px;background:#fff;border:1px solid #e0f0e5;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:center}
-.tbadge-icon{width:36px;height:36px;background:linear-gradient(135deg,#2e7d32,#43a047);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.tbadge-icon svg{width:18px;height:18px;stroke:#fff;flex-shrink:0}
-.tbadge-title{font-size:11px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.3px;line-height:1.2}
-.tbadge-sub{font-size:10px;color:var(--muted);line-height:1.2}
+/* TRUST STRIP */
+.trust-strip{display:flex;align-items:stretch;margin-bottom:20px;border:1px solid #d8eedd;border-radius:10px;overflow:hidden;background:#fff}
+.trust-item{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 6px;font-size:12px;font-weight:600;color:var(--green-2);text-align:center}
+.trust-item+.trust-item{border-left:1px solid #d8eedd}
+.trust-item svg{width:15px;height:15px;flex-shrink:0;color:var(--green)}
 
 /* VARIANTS */
 .variants-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
@@ -108,10 +106,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .btn-wpp:hover{background:#1dae52}
 .checkout-note{text-align:center;font-size:12px;color:var(--muted);margin-top:10px}
 
-/* DESCRIPTION */
+/* DESCRIPTION TABS */
 .desc-section{max-width:1200px;margin:0 auto;padding:0 24px 64px}
-.desc-title{font-size:20px;font-weight:700;color:var(--green-2);margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--border)}
-.desc-body{line-height:1.8;color:#333}
+.desc-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:28px;gap:4px}
+.desc-tab{background:none;border:none;border-bottom:3px solid transparent;padding:12px 22px;font-family:var(--font);font-size:15px;font-weight:600;color:var(--muted);cursor:pointer;margin-bottom:-2px;transition:color .15s,border-color .15s}
+.desc-tab.on{color:var(--green-2);border-bottom-color:var(--green)}
+.desc-tab:hover{color:var(--green-2)}
+.desc-pane{line-height:1.8;color:#333}
 
 /* REVIEWS SECTION */
 .rev-section{max-width:1200px;margin:0 auto;padding:0 24px 64px}
@@ -152,9 +153,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .more-card-cta{font-size:12px;color:var(--green-2);font-weight:600;margin-top:6px}
 
 /* FOOTER */
-.ftr{background:var(--green-3);color:#fff;padding:28px 24px;text-align:center;font-size:13px;color:rgba(255,255,255,.7)}
-.ftr a{color:rgba(255,255,255,.8);text-decoration:none;margin:0 10px}
-.ftr a:hover{color:#fff}
+.ftr{background:var(--green-3);color:#fff;padding:44px 24px 24px}
+.ftr-inner{max-width:1200px;margin:0 auto}
+.ftr-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-bottom:32px}
+.ftr-col h4{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;opacity:.7;margin-bottom:14px}
+.ftr-col p,.ftr-col a{display:block;font-size:13px;color:rgba(255,255,255,.8);text-decoration:none;margin-bottom:7px;line-height:1.5}
+.ftr-col a:hover{color:#fff}
+.ftr-bottom{border-top:1px solid rgba(255,255,255,.18);padding-top:20px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.ftr-pay{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center}
+.ftr-pay img{height:24px;object-fit:contain;opacity:.85;filter:brightness(0) invert(1)}
+.ftr-copy{font-size:12px;color:rgba(255,255,255,.55)}
+@media(max-width:768px){.ftr-grid{grid-template-columns:1fr}}
 
 /* MODAL ZOOM */
 .zoom-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center;cursor:zoom-out}
@@ -209,21 +218,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
       <span>4.9 · <strong>+5.000</strong> clientes satisfeitos</span>
     </div>
 
-    <div class="trust-mini">
-      <div class="tbadge">
-        <div class="tbadge-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/></svg></div>
-        <div class="tbadge-title">Frete Grátis</div>
-        <div class="tbadge-sub">Todo Brasil</div>
+    <div class="trust-strip">
+      <div class="trust-item">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/></svg>
+        Frete Grátis
       </div>
-      <div class="tbadge">
-        <div class="tbadge-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
-        <div class="tbadge-title">Garantia</div>
-        <div class="tbadge-sub">30 dias</div>
+      <div class="trust-item">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        Garantia 30 dias
       </div>
-      <div class="tbadge">
-        <div class="tbadge-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
-        <div class="tbadge-title">Entrega</div>
-        <div class="tbadge-sub">Rápida</div>
+      <div class="trust-item">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Entrega Rápida
       </div>
     </div>
 
@@ -242,10 +248,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
   </div>
 </div>
 
-<!-- DESCRIPTION -->
+<!-- DESCRIPTION TABS -->
 <div class="desc-section">
-  <h2 class="desc-title">Sobre o Produto</h2>
-  <div class="desc-body" id="desc-body"></div>
+  <div class="desc-tabs">
+    <button class="desc-tab on" data-tab="sobre" onclick="switchTab('sobre')">Sobre <span id="tab-nome"></span></button>
+    <button class="desc-tab" data-tab="como-usar" onclick="switchTab('como-usar')">Como Usar</button>
+  </div>
+  <div class="desc-pane" id="desc-sobre"></div>
+  <div class="desc-pane" id="desc-como-usar" style="display:none"></div>
 </div>
 
 <!-- REVIEWS -->
@@ -283,12 +293,32 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 </div>
 
 <footer class="ftr">
-  <p>
-    <a href="#" onclick="openModal('privacidade');return false">Política de Privacidade</a>
-    <a href="#" onclick="openModal('termos');return false">Termos de Uso</a>
-    <a href="#" onclick="openModal('devolucao');return false">Política de Devolução</a>
-  </p>
-  <p style="margin-top:10px">© 2025 Armazém Natural · Todos os direitos reservados</p>
+  <div class="ftr-inner">
+    <div class="ftr-grid">
+      <div class="ftr-col">
+        <h4>Atendimento ao Cliente</h4>
+        <p>📧 contato@armazemnatural.shop</p>
+        <p>⏰ Seg–Sex, 9h–18h</p>
+      </div>
+      <div class="ftr-col">
+        <h4>Endereço</h4>
+        <p>Armazém Natural LTDA</p>
+        <p>Brasil</p>
+      </div>
+      <div class="ftr-col">
+        <h4>Políticas</h4>
+        <a href="#" onclick="openModal('privacidade');return false">Política de Privacidade</a>
+        <a href="#" onclick="openModal('termos');return false">Termos de Uso</a>
+        <a href="#" onclick="openModal('devolucao');return false">Política de Devolução</a>
+      </div>
+    </div>
+    <div class="ftr-bottom">
+      <div class="ftr-pay">
+        <img src="/img/pagamento-seguro.png" alt="Formas de pagamento aceitas" style="height:28px;filter:none;opacity:.9">
+      </div>
+      <p class="ftr-copy">© 2025 Armazém Natural · Todos os direitos reservados · Produtos naturais para sua saúde e bem-estar.</p>
+    </div>
+  </div>
 </footer>
 
 <!-- ZOOM MODAL -->
@@ -299,91 +329,62 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 <script src="/js/copys.js"></script>
 <script src="/js/produtos.js"></script>
 <script>
-// ─── Copy do produto (descrição específica por tipo) ─────────────────────────
-function gerarDescricao(p) {
-  // Usa a copy real do Shopify se disponível
-  if (typeof COPYS !== 'undefined' && COPYS[p.slug] && COPYS[p.slug].trim().length > 10) {
-    return COPYS[p.slug];
-  }
-
-  const nome = p.nome;
-  const t = p.tipo || 'geral';
-
-  const copy = {
+// ─── Copy do produto ──────────────────────────────────────────────────────────
+function _getTpl(nome, tipo) {
+  const t = tipo || 'geral';
+  const map = {
     masc: {
-      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px">
-        <strong>${nome}</strong> é a fórmula desenvolvida para homens que querem recuperar a disposição, a força e o vigor que o dia a dia vai roubando. Com ativos naturais cuidadosamente combinados, age no organismo masculino de forma precisa — apoiando a produção hormonal, combatendo o cansaço crônico e devolvendo a energia que você precisa para render mais em tudo.
-      </p>
-      <p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">
-        Sem fórmulas sintéticas, sem estimulantes agressivos. Apenas o poder da natureza, concentrado em cada dose.
-      </p>`,
-      beneficios: [
-        'Aumenta a disposição e combate o cansaço crônico',
-        'Apoia a produção hormonal natural do organismo masculino',
-        'Melhora o foco, clareza mental e desempenho',
-        'Contribui para um sono mais profundo e reparador',
-        '100% natural, sem conservantes artificiais',
-      ],
+      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px"><strong>${nome}</strong> é a fórmula desenvolvida para homens que querem recuperar a disposição, a força e o vigor que o dia a dia vai roubando. Com ativos naturais cuidadosamente combinados, age no organismo masculino de forma precisa — apoiando a produção hormonal, combatendo o cansaço crônico e devolvendo a energia que você precisa para render mais em tudo.</p><p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">Sem fórmulas sintéticas, sem estimulantes agressivos. Apenas o poder da natureza, concentrado em cada dose.</p>`,
+      beneficios: ['Aumenta a disposição e combate o cansaço crônico','Apoia a produção hormonal natural do organismo masculino','Melhora o foco, clareza mental e desempenho','Contribui para um sono mais profundo e reparador','100% natural, sem conservantes artificiais'],
       como_usar: 'Tome conforme indicado no rótulo, preferencialmente pela manhã com um copo de água em jejum ou com refeição leve. Para resultados consistentes, use continuamente por pelo menos 30 dias.',
     },
     fem: {
-      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px">
-        <strong>${nome}</strong> foi criado para a mulher que não tem tempo a perder — que quer se sentir bem, bonita e cheia de energia todos os dias. Com ingredientes botânicos de alta biodisponibilidade, atua no equilíbrio do organismo feminino de forma suave e eficaz, trabalhando de dentro para fora para trazer de volta a leveza, a disposição e o brilho que você merece.
-      </p>
-      <p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">
-        Formulado com respeito ao ritmo feminino — sem agressões, sem artifícios. Natureza pura a serviço do seu bem-estar.
-      </p>`,
-      beneficios: [
-        'Apoia o equilíbrio hormonal e o ciclo natural feminino',
-        'Promove cabelos mais fortes, pele mais saudável e unhas firmes',
-        'Reduz o inchaço, o cansaço e a irritabilidade',
-        'Melhora o humor, a energia e a autoestima',
-        'Ingredientes naturais com alta absorção e segurança comprovada',
-      ],
+      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px"><strong>${nome}</strong> foi criado para a mulher que não tem tempo a perder — que quer se sentir bem, bonita e cheia de energia todos os dias. Com ingredientes botânicos de alta biodisponibilidade, atua no equilíbrio do organismo feminino de forma suave e eficaz, trabalhando de dentro para fora para trazer de volta a leveza, a disposição e o brilho que você merece.</p><p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">Formulado com respeito ao ritmo feminino — sem agressões, sem artifícios. Natureza pura a serviço do seu bem-estar.</p>`,
+      beneficios: ['Apoia o equilíbrio hormonal e o ciclo natural feminino','Promove cabelos mais fortes, pele mais saudável e unhas firmes','Reduz o inchaço, o cansaço e a irritabilidade','Melhora o humor, a energia e a autoestima','Ingredientes naturais com alta absorção e segurança comprovada'],
       como_usar: 'Tome conforme indicado no rótulo, de preferência com a refeição principal. Para resultados expressivos e duradouros, utilize continuamente por no mínimo 30 dias.',
     },
     geral: {
-      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px">
-        <strong>${nome}</strong> é um suplemento natural desenvolvido para quem quer mais saúde, equilíbrio e qualidade de vida — sem complicações. Com uma combinação exclusiva de ingredientes naturais selecionados por sua eficácia e pureza, atua no organismo de forma inteligente, apoiando funções essenciais e ajudando seu corpo a funcionar no seu melhor todos os dias.
-      </p>
-      <p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">
-        Simples de tomar, fácil de sentir a diferença. Tecnologia natural a seu favor.
-      </p>`,
-      beneficios: [
-        'Contribui para o equilíbrio natural e bem-estar geral',
-        'Melhora a disposição e reduz o cansaço do dia a dia',
-        'Ingredientes de alta pureza e biodisponibilidade',
-        'Sem conservantes artificiais ou substâncias nocivas',
-        'Qualidade verificada, resultado sentido',
-      ],
+      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px"><strong>${nome}</strong> é um suplemento natural desenvolvido para quem quer mais saúde, equilíbrio e qualidade de vida — sem complicações. Com uma combinação exclusiva de ingredientes naturais selecionados por sua eficácia e pureza, atua no organismo de forma inteligente, apoiando funções essenciais e ajudando seu corpo a funcionar no seu melhor todos os dias.</p><p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">Simples de tomar, fácil de sentir a diferença. Tecnologia natural a seu favor.</p>`,
+      beneficios: ['Contribui para o equilíbrio natural e bem-estar geral','Melhora a disposição e reduz o cansaço do dia a dia','Ingredientes de alta pureza e biodisponibilidade','Sem conservantes artificiais ou substâncias nocivas','Qualidade verificada, resultado sentido'],
       como_usar: 'Tome conforme indicado no rótulo, preferencialmente com água. Para melhores resultados, use de forma contínua por pelo menos 30 dias.',
     },
   };
+  return map[t] || map.geral;
+}
 
-  const tpl = copy[t] || copy.geral;
-
+function gerarSobre(p) {
+  if (typeof COPYS !== 'undefined' && COPYS[p.slug] && COPYS[p.slug].trim().length > 10) {
+    return COPYS[p.slug];
+  }
+  const tpl = _getTpl(p.nome, p.tipo);
   const bens = tpl.beneficios.map(b =>
     `<li style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;line-height:1.5">${b}</li>`
   ).join('');
-
-  return `
-    ${tpl.intro}
-
+  return `${tpl.intro}
     <h3 style="font-size:17px;font-weight:700;color:#356041;margin:0 0 14px;display:flex;align-items:center;gap:8px">
       <span style="background:#15a731;color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">✓</span>
       Principais Benefícios
     </h3>
-    <ul style="list-style:none;padding:0;margin:0 0 28px;border-top:1px solid #f0f0f0">${bens}</ul>
+    <ul style="list-style:none;padding:0;margin:0 0 8px;border-top:1px solid #f0f0f0">${bens}</ul>`;
+}
 
-    <div style="background:linear-gradient(135deg,#f0fbf3,#e8f5e9);border-left:4px solid #15a731;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:12px">
-      <div style="font-size:13px;font-weight:700;color:#356041;margin-bottom:6px;display:flex;align-items:center;gap:6px">Modo de Usar</div>
-      <p style="font-size:14px;color:#333;line-height:1.65;margin:0">${tpl.como_usar}</p>
+function gerarComoUsar(p) {
+  const tpl = _getTpl(p.nome, p.tipo);
+  return `
+    <div style="background:linear-gradient(135deg,#f0fbf3,#e8f5e9);border-left:4px solid #15a731;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:20px">
+      <div style="font-size:14px;font-weight:700;color:#356041;margin-bottom:8px">Modo de Usar</div>
+      <p style="font-size:14px;color:#333;line-height:1.7;margin:0">${tpl.como_usar}</p>
     </div>
-
     <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:14px 16px;font-size:12px;color:#795548;line-height:1.6">
       <strong>Aviso:</strong> Suplemento alimentar. Não substitui alimentação equilibrada e hábitos de vida saudáveis. Mantenha fora do alcance de crianças. Consulte um médico se você tiver alguma condição de saúde.
-    </div>
-  `;
+    </div>`;
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.desc-tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.desc-pane').forEach(p => p.style.display = 'none');
+  document.querySelector('.desc-tab[data-tab="' + tab + '"]').classList.add('on');
+  document.getElementById('desc-' + tab).style.display = '';
 }
 
 // ─── Avaliações por tipo ──────────────────────────────────────────────────────
@@ -477,7 +478,9 @@ if (prod.badge) {
 
 qs('prod-title').textContent = prod.titulo;
 qs('prod-sub').textContent   = prod.subtitulo;
-qs('desc-body').innerHTML    = gerarDescricao(prod);
+qs('tab-nome').textContent   = prod.nome;
+qs('desc-sobre').innerHTML   = gerarSobre(prod);
+qs('desc-como-usar').innerHTML = gerarComoUsar(prod);
 
 // ─── Gallery ─────────────────────────────────────────────────────────────────
 const mainPhoto = qs('main-photo');
