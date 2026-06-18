@@ -6,6 +6,9 @@
     { "source": "/admin/analises",    "destination": "/admin/analises.html" },
     { "source": "/admin/relatorios",  "destination": "/admin/relatorios.html" },
     { "source": "/admin/ao-vivo",     "destination": "/admin/ao-vivo.html" },
+    { "source": "/admin/carrinhos",   "destination": "/admin/carrinhos.html" },
+    { "source": "/admin/inicio",      "destination": "/admin/inicio.html" },
+    { "source": "/admin/campanhas",   "destination": "/admin/campanhas.html" },
     { "source": "/webhook/pagarme",   "destination": "/api/webhook/pagarme" }
   ],
   "headers": [

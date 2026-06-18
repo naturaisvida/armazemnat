@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrinhos Abandonados — Armazém Natural</title>
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#15a731;--green-d:#0e8a28;--green-2:#1a3d24;--green-3:#234d2e;
+  --sidebar-w:220px;--font:'Poppins',sans-serif;
+  --bg:#f0f2f5;--card:#fff;--border:#e5e7eb;--text:#1e293b;--muted:#64748b;
+  --orange:#f59e0b;--red:#ef4444;--blue:#3b82f6;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--green-2);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-nav{flex:1;padding:10px 0}
+.sb-bottom{padding:14px 18px;border-top:1px solid rgba(255,255,255,.1)}
+.sb-logout{display:flex;align-items:center;gap:8px;background:none;border:none;color:rgba(255,255,255,.5);font-family:var(--font);font-size:12.5px;cursor:pointer;padding:6px 0;transition:color .12s;width:100%}
+.sb-logout:hover{color:#fff}
+.nav-section{padding:10px 18px 4px;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;font-weight:500;color:rgba(255,255,255,.75);cursor:pointer;transition:background .12s;text-decoration:none}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.1);color:#fff}
+.nav-item.active{border-left:3px solid var(--green)}
+.nav-icon{width:16px;height:16px;flex-shrink:0}
+.nav-arrow{margin-left:auto;transition:transform .2s;flex-shrink:0}
+.nav-group.open .nav-arrow{transform:rotate(90deg)}
+.nav-submenu{display:none}
+.nav-group.open .nav-submenu{display:block}
+.nav-sub-item{padding:7px 18px 7px 44px;font-size:12px}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.page-title{font-size:16px;font-weight:700;color:var(--text)}
+.content{padding:28px 32px;flex:1}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px}
+.tab{padding:10px 18px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .12s;user-select:none}
+.tab.active{color:var(--green);border-color:var(--green)}
+.tab-badge{display:inline-block;background:#f1f5f9;color:var(--muted);font-size:11px;font-weight:700;border-radius:10px;padding:1px 7px;margin-left:5px}
+.tab.active .tab-badge{background:rgba(21,167,49,.12);color:var(--green)}
+
+/* TABLE */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.table-toolbar{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.tb-count{font-size:13px;color:var(--muted);font-weight:500}
+table{width:100%;border-collapse:collapse}
+thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);background:#fafafa}
+tbody tr{border-bottom:1px solid #f3f4f6;cursor:pointer;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#f8fafc}
+tbody td{padding:13px 14px;font-size:13px;color:var(--text)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.badge-orange{background:#fffbeb;color:#d97706}
+.badge-red{background:#fef2f2;color:#dc2626}
+.badge-blue{background:#eff6ff;color:#2563eb}
+.badge-green{background:#f0fdf4;color:#16a34a}
+.badge-gray{background:#f1f5f9;color:#64748b}
+.step-label{font-size:12px;color:var(--muted)}
+.email-pills{display:flex;gap:4px}
+.epill{width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);color:var(--muted)}
+.epill.sent{background:var(--green);border-color:var(--green);color:#fff}
+.epill.fail{background:var(--red);border-color:var(--red);color:#fff}
+
+/* EMPTY */
+.empty{text-align:center;padding:64px 24px;color:var(--muted)}
+.empty svg{margin:0 auto 12px;display:block;opacity:.25}
+.empty p{font-size:14px;font-weight:500}
+.empty small{font-size:12px;display:block;margin-top:4px;opacity:.7}
+
+/* DRAWER */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;display:none}
+.drawer-overlay.open{display:block}
+.drawer{position:fixed;top:0;right:0;width:490px;max-width:97vw;height:100vh;background:#fff;z-index:201;box-shadow:-4px 0 32px rgba(0,0,0,.12);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1)}
+.drawer.open{transform:translateX(0)}
+.dr-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
+.dr-title{font-size:14px;font-weight:700;color:var(--text)}
+.dr-close{background:none;border:none;cursor:pointer;padding:5px;color:var(--muted);border-radius:6px;transition:background .1s}
+.dr-close:hover{background:#f3f4f6}
+.dr-body{flex:1;overflow-y:auto;padding:22px}
+.dr-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin:-22px -22px 20px;padding:0 22px}
+.dr-tab{padding:10px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;user-select:none;transition:all .12s}
+.dr-tab.active{color:var(--green);border-color:var(--green)}
+.dr-panel{display:none}
+.dr-panel.active{display:block}
+.dr-section{margin-bottom:22px}
+.dr-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.dr-val{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.dr-val span{font-weight:400;color:var(--muted)}
+.dr-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.dr-btn{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:9px;border:1.5px solid var(--border);background:#fff;font-family:var(--font);font-size:13px;font-weight:600;color:var(--text);cursor:pointer;transition:all .12s;text-decoration:none}
+.dr-btn:hover{border-color:var(--green);color:var(--green)}
+.dr-btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.dr-btn.primary:hover{background:var(--green-d)}
+.step-flow{display:flex;align-items:center;gap:0;margin-bottom:16px}
+.sf-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.sf-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);position:relative;z-index:1}
+.sf-dot.done{background:var(--green);border-color:var(--green);color:#fff}
+.sf-dot.current{border-color:var(--orange);color:var(--orange)}
+.sf-dot.fail{background:var(--red);border-color:var(--red);color:#fff}
+.sf-line{flex:1;height:2px;background:var(--border);margin:0 -4px;position:relative;top:-14px;z-index:0}
+.sf-line.done{background:var(--green)}
+.sf-lbl{font-size:10px;color:var(--muted);text-align:center;margin-top:2px}
+.recovery-item{padding:12px;background:#f8fafc;border-radius:9px;margin-bottom:8px;border-left:3px solid var(--border)}
+.recovery-item.sent{border-color:var(--green)}
+.recovery-item.pending{border-color:var(--orange)}
+.ri-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.ri-title{font-size:13px;font-weight:700;color:var(--text)}
+.ri-time{font-size:11px;color:var(--muted)}
+.ri-body{font-size:12px;color:var(--muted)}
+.prod-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f3f4f6}
+.prod-item:last-child{border-bottom:none}
+.prod-name{font-size:13px;font-weight:600}
+.prod-sub{font-size:12px;color:var(--muted)}
+.prod-price{font-size:13px;font-weight:700;color:var(--green)}
+
+/* LOADING skeleton */
+.skeleton{background:linear-gradient(90deg,#f0f2f5 25%,#e8eaed 50%,#f0f2f5 75%);background-size:200% 100%;animation:skel 1.4s ease infinite;border-radius:6px}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-row td div{height:14px;display:inline-block;border-radius:6px}
+
+/* REFRESH SPINNER */
+.spin{animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:9px;height:9px;background:#15a731;border-radius:50%;flex-shrink:0"></div>
+      <span style="font-size:14px;font-weight:700;color:#fff;letter-spacing:.02em">Armazém Natural</span>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-section">Menu</div>
+    <a class="nav-item" href="/admin/inicio">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Início
+    </a>
+    <div class="nav-group" id="nav-analises">
+      <a class="nav-item" onclick="toggleSubmenu('analises')" style="cursor:pointer;user-select:none">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Análises
+        <svg class="nav-arrow" id="arrow-analises" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="nav-submenu" id="sub-analises">
+        <a class="nav-item nav-sub-item" href="/admin/analises">Métricas</a>
+        <a class="nav-item nav-sub-item" href="/admin/relatorios">Relatórios</a>
+        <a class="nav-item nav-sub-item" href="/admin/ao-vivo">Ao Vivo</a>
+      </div>
+    </div>
+    <div class="nav-section">Vendas</div>
+    <a class="nav-item" href="/admin/pedidos">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Pedidos
+    </a>
+    <a class="nav-item active" href="/admin/carrinhos">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      Carrinhos Abandonados
+    </a>
+  </nav>
+  <div class="sb-bottom">
+    <button class="sb-logout" onclick="logout()">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sair
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar">
+    <div class="page-title">Carrinhos Abandonados</div>
+    <button onclick="loadCarts(true)" style="background:none;border:1.5px solid var(--border);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;font-family:var(--font)">
+      <svg id="refresh-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      Atualizar
+    </button>
+  </header>
+
+  <div class="content">
+    <div class="tabs">
+      <div class="tab active" id="tab-todos" onclick="setTab('todos')">Todos <span class="tab-badge" id="badge-todos">0</span></div>
+      <div class="tab" id="tab-sem_transacao" onclick="setTab('sem_transacao')">Sem transacao <span class="tab-badge" id="badge-sem_transacao">—</span></div>
+      <div class="tab" id="tab-nao_aprovado" onclick="setTab('nao_aprovado')">Pagamento nao aprovado <span class="tab-badge" id="badge-nao_aprovado">—</span></div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-toolbar">
+        <span class="tb-count" id="count-label">Carregando...</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Carrinho</th>
+            <th>Criado em</th>
+            <th>Cliente</th>
+            <th>Abandonou em</th>
+            <th>Recuperação</th>
+            <th>Valor</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr class="skel-row"><td colspan="7" style="padding:40px;text-align:center;color:var(--muted);font-size:13px">Carregando carrinhos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- DRAWER OVERLAY -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="dr-head">
+    <div>
+      <div class="dr-title" id="dr-cart-id">Carrinho</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px" id="dr-cart-date"></div>
+    </div>
+    <button class="dr-close" onclick="closeDrawer()">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Tabs inside drawer -->
+  <div class="dr-tabs" style="margin-top:0;border-top:none;padding-top:0;padding-left:22px">
+    <div class="dr-tab active" onclick="drTab('resumo')">Resumo</div>
+    <div class="dr-tab" onclick="drTab('produtos')">Produtos</div>
+    <div class="dr-tab" onclick="drTab('recuperacao')">Recuperação</div>
+  </div>
+
+  <div class="dr-body" id="dr-body">
+
+    <!-- RESUMO PANEL -->
+    <div class="dr-panel active" id="dr-panel-resumo">
+      <div class="dr-row">
+        <div>
+          <div class="dr-label">Cliente</div>
+          <div class="dr-val" id="dr-name">—</div>
+          <div class="dr-val" id="dr-email" style="font-size:12px;color:var(--muted);font-weight:400"></div>
+          <div class="dr-val" id="dr-phone" style="font-size:12px;color:var(--muted);font-weight:400"></div>
+        </div>
+        <div>
+          <div class="dr-label">Valor total</div>
+          <div class="dr-val" style="font-size:20px;font-weight:800;color:var(--green)" id="dr-total">—</div>
+        </div>
+      </div>
+
+      <div class="dr-section">
+        <div class="dr-label">Etapa ao abandonar</div>
+        <div class="step-flow">
+          <div class="sf-step">
+            <div class="sf-dot" id="sf-1">1</div>
+            <div class="sf-lbl">Dados</div>
+          </div>
+          <div class="sf-line" id="sf-l1"></div>
+          <div class="sf-step">
+            <div class="sf-dot" id="sf-2">2</div>
+            <div class="sf-lbl">Entrega</div>
+          </div>
+          <div class="sf-line" id="sf-l2"></div>
+          <div class="sf-step">
+            <div class="sf-dot" id="sf-3">3</div>
+            <div class="sf-lbl">Pagamento</div>
+          </div>
+          <div class="sf-line" id="sf-l3"></div>
+          <div class="sf-step">
+            <div class="sf-dot" id="sf-4">4</div>
+            <div class="sf-lbl">Finalizado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dr-section" id="dr-address-section" style="display:none">
+        <div class="dr-label">Endereço de entrega</div>
+        <div class="dr-val" id="dr-address-line"></div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px">
+        <a class="dr-btn" id="dr-simulate-btn" href="#" target="_blank">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          Simular carrinho
+        </a>
+      </div>
+    </div>
+
+    <!-- PRODUTOS PANEL -->
+    <div class="dr-panel" id="dr-panel-produtos">
+      <div id="dr-products-list" style="padding:4px 0"></div>
+    </div>
+
+    <!-- RECUPERAÇÃO PANEL -->
+    <div class="dr-panel" id="dr-panel-recuperacao">
+      <div class="dr-section">
+        <div class="dr-label">E-mails de recuperação</div>
+        <div id="dr-recovery-list" style="margin-top:8px"></div>
+      </div>
+      <div class="dr-section" id="dr-next-section" style="display:none">
+        <div class="dr-label">Próximo e-mail</div>
+        <div class="dr-val" id="dr-next-email"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ======================== GLOBAL STATE ========================
+let _allCarts   = [];
+let _allTotal   = 0;
+let _filter     = 'todos';
+let _openCart   = null;
+let _activeTab  = 'todos';
+
+function getToken() { return localStorage.getItem('admin_token'); }
+function logout()   { localStorage.removeItem('admin_token'); location.href = '/admin'; }
+function toggleSubmenu(id) { document.getElementById('nav-' + id).classList.toggle('open'); }
+
+function fmtBRL(v) {
+  return 'R$ ' + ((v || 0) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+function stepLabel(step) {
+  const m = { dados_pessoais: 'Dados pessoais', entrega: 'Entrega', pagamento: 'Pagamento', convertido: 'Finalizado' };
+  return m[step] || step || '—';
+}
+function stepIndex(step) {
+  const m = { dados_pessoais: 1, entrega: 2, pagamento: 3, convertido: 4 };
+  return m[step] || 0;
+}
+function escH(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ======================== CART STATUS BADGE ========================
+function cartBadge(cart) {
+  if (cart.cardFailed)  return '<span class="badge badge-red">Pagamento recusado</span>';
+  const idx = stepIndex(cart.step);
+  if (idx >= 3)         return '<span class="badge badge-orange">Abandonou no pagamento</span>';
+  if (idx === 2)        return '<span class="badge badge-blue">Abandonou na entrega</span>';
+  return '<span class="badge badge-gray">Abandonou nos dados</span>';
+}
+
+// ======================== LOAD ========================
+async function loadCarts(forceRefresh) {
+  const icon = document.getElementById('refresh-icon');
+  if (icon) icon.classList.add('spin');
+
+  const token = getToken();
+  if (!token) { location.href = '/admin'; return; }
+
+  // Fetch todos + contagens individuais
+  const [rTodos, rSem, rNao] = await Promise.all([
+    fetch('/api/cart/list',                              { headers: { Authorization: 'Bearer ' + token } }),
+    fetch('/api/cart/list?filter=sem_transacao',         { headers: { Authorization: 'Bearer ' + token } }),
+    fetch('/api/cart/list?filter=nao_aprovado',          { headers: { Authorization: 'Bearer ' + token } }),
+  ]);
+
+  let todos = [], sem = [], nao = [];
+  if (rTodos.ok) { const d = await rTodos.json(); todos = d.carts || []; _allTotal = d.total || 0; }
+  if (rSem.ok)   { const d = await rSem.json();   sem   = d.carts || []; }
+  if (rNao.ok)   { const d = await rNao.json();   nao   = d.carts || []; }
+
+  document.getElementById('badge-todos').textContent       = _allTotal;
+  document.getElementById('badge-sem_transacao').textContent = sem.length;
+  document.getElementById('badge-nao_aprovado').textContent  = nao.length;
+
+  // Store all carts
+  _allCarts = todos;
+
+  // Which set to show?
+  const toShow = _filter === 'sem_transacao' ? sem : (_filter === 'nao_aprovado' ? nao : todos);
+  renderTable(toShow);
+
+  if (icon) icon.classList.remove('spin');
+}
+
+// ======================== RENDER TABLE ========================
+function renderTable(carts) {
+  const tbody = document.getElementById('table-body');
+  document.getElementById('count-label').textContent = `${carts.length} carrinho(s)`;
+
+  if (!carts.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty">
+      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      <p>Nenhum carrinho abandonado</p>
+      <small>Quando clientes preencherem os dados e nao finalizarem, aparecera aqui.</small>
+    </div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = carts.map(c => {
+    const name   = escH(c.customer?.name || 'Desconhecido');
+    const email  = escH(c.customer?.email || '');
+    const sent   = (c.recoveryEmails || []).length;
+    const pills  = [1,2,3].map(n => {
+      const s = c.recoveryEmails?.find(e => e.num === n);
+      return `<div class="epill ${s ? 'sent' : ''}" title="E-mail ${n}${s ? ': enviado em ' + fmtDate(s.sentAt) : ': pendente'}">${n}</div>`;
+    }).join('');
+
+    return `<tr onclick="openCart('${escH(c.id)}')">
+      <td style="font-family:monospace;font-size:12px;color:var(--muted)">#${escH(c.id).slice(-8)}</td>
+      <td style="font-size:12px;color:var(--muted)">${fmtDate(c.createdAt)}</td>
+      <td>
+        <div style="font-weight:600;font-size:13px">${name}</div>
+        <div style="font-size:11.5px;color:var(--muted)">${email}</div>
+      </td>
+      <td><span class="step-label">${stepLabel(c.step)}</span></td>
+      <td><div class="email-pills">${pills}</div></td>
+      <td style="font-weight:700;color:var(--green)">${fmtBRL(c.totalAmount)}</td>
+      <td>${cartBadge(c)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ======================== TABS ========================
+function setTab(t) {
+  _filter = t;
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + t).classList.add('active');
+  loadCarts();
+}
+
+// ======================== DRAWER ========================
+function openCart(cartId) {
+  const cart = _allCarts.find(c => c.id === cartId);
+  if (!cart) return;
+  _openCart = cart;
+  fillDrawer(cart);
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  drTab('resumo');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  _openCart = null;
+}
+
+function drTab(panel) {
+  document.querySelectorAll('.dr-tab').forEach((el, i) => {
+    const panels = ['resumo','produtos','recuperacao'];
+    el.classList.toggle('active', panels[i] === panel);
+  });
+  document.querySelectorAll('.dr-panel').forEach(el => el.classList.remove('active'));
+  document.getElementById('dr-panel-' + panel).classList.add('active');
+}
+
+function fillDrawer(cart) {
+  document.getElementById('dr-cart-id').textContent  = 'Carrinho #' + cart.id.slice(-8);
+  document.getElementById('dr-cart-date').textContent = 'Criado em ' + fmtDate(cart.createdAt);
+
+  // Customer
+  document.getElementById('dr-name').textContent  = cart.customer?.name  || '—';
+  document.getElementById('dr-email').textContent  = cart.customer?.email || '';
+  document.getElementById('dr-phone').textContent  = cart.customer?.phone || '';
+  document.getElementById('dr-total').textContent  = fmtBRL(cart.totalAmount);
+
+  // Step flow
+  const idx = stepIndex(cart.step);
+  const isFail = cart.cardFailed;
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('sf-' + i);
+    dot.className = 'sf-dot';
+    if (i < idx) dot.classList.add('done');
+    else if (i === idx) dot.classList.add(isFail && i === 3 ? 'fail' : 'current');
+    if (i < 4) {
+      const line = document.getElementById('sf-l' + i);
+      line.className = 'sf-line';
+      if (i < idx) line.classList.add('done');
+    }
+  }
+
+  // Address
+  const addr = cart.address;
+  const addrSection = document.getElementById('dr-address-section');
+  if (addr && (addr.street || addr.city)) {
+    const street  = [addr.street, addr.number, addr.complement].filter(Boolean).join(', ');
+    const cityLine = [addr.city, addr.state, addr.zip].filter(Boolean).join(' - ');
+    document.getElementById('dr-address-line').textContent = [street, cityLine].filter(Boolean).join(' / ');
+    addrSection.style.display = '';
+  } else {
+    addrSection.style.display = 'none';
+  }
+
+  // Simulate link
+  const storeUrl = 'https://armazemnatural.vercel.app';
+  document.getElementById('dr-simulate-btn').href = `${storeUrl}/checkout.html?cartId=${encodeURIComponent(cart.id)}`;
+
+  // Products
+  const prodList = document.getElementById('dr-products-list');
+  const items = cart.items || [];
+  if (!items.length) {
+    prodList.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:12px 0">Nenhum produto registrado.</p>';
+  } else {
+    prodList.innerHTML = items.map(i => `
+      <div class="prod-item">
+        <div>
+          <div class="prod-name">${escH(i.description || i.name || 'Produto')}</div>
+          <div class="prod-sub">Qtd: ${i.quantity || 1}</div>
+        </div>
+        <div class="prod-price">${fmtBRL((i.amount || 0) * (i.quantity || 1))}</div>
+      </div>`).join('');
+  }
+
+  // Recovery
+  const recList   = document.getElementById('dr-recovery-list');
+  const emails    = cart.recoveryEmails || [];
+  const EMAIL_LABELS = ['', 'Primeiro contato (5 min)', 'Segundo contato (1 hora)', 'Terceiro contato (24 horas)'];
+
+  const rows = [1,2,3].map(n => {
+    const s = emails.find(e => e.num === n);
+    if (s) {
+      return `<div class="recovery-item sent">
+        <div class="ri-head"><span class="ri-title">${EMAIL_LABELS[n]}</span><span class="ri-time">${fmtDate(s.sentAt)}</span></div>
+        <div class="ri-body">E-mail enviado com sucesso.</div>
+      </div>`;
+    } else {
+      const isPending = n === (cart.nextEmailNum || 1);
+      const nextAt = cart.nextRecoveryAt ? fmtDate(cart.nextRecoveryAt) : '—';
+      return `<div class="recovery-item ${isPending ? 'pending' : ''}">
+        <div class="ri-head"><span class="ri-title">${EMAIL_LABELS[n]}</span><span class="ri-time" style="color:var(--muted)">${isPending ? 'Agendado para ' + nextAt : 'Pendente'}</span></div>
+        <div class="ri-body" style="color:var(--muted)">${isPending ? 'Sera enviado em breve.' : 'Aguardando envios anteriores.'}</div>
+      </div>`;
+    }
+  }).join('');
+
+  recList.innerHTML = rows || '<p style="color:var(--muted);font-size:13px">Nenhum e-mail enviado ainda.</p>';
+
+  const nextSection = document.getElementById('dr-next-section');
+  if (cart.nextRecoveryAt && cart.nextEmailNum <= 3) {
+    document.getElementById('dr-next-email').textContent = `E-mail #${cart.nextEmailNum} - ${fmtDate(cart.nextRecoveryAt)}`;
+    nextSection.style.display = '';
+  } else {
+    nextSection.style.display = 'none';
+  }
+}
+
+// ======================== INIT ========================
+(function() {
+  const t = getToken();
+  if (!t) { location.href = '/admin'; return; }
+  try {
+    const p = JSON.parse(atob(t.split('.')[1]));
+    if (p.exp < Date.now() / 1000) { localStorage.removeItem('admin_token'); location.href = '/admin'; return; }
+  } catch { location.href = '/admin'; return; }
+
+  loadCarts();
+  setInterval(loadCarts, 30000);
+})();
+
+// keyboard close
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+</script>
+</body>
+</html>

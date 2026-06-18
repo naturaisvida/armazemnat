@@ -53,6 +53,7 @@ module.exports = async function handler(req, res) {
     card_token,
     pix_expires_in = 1800,
     observacao = '',
+    utm = {},
   } = input;
 
   if (!amount || parseInt(amount) <= 0) {
@@ -139,8 +140,13 @@ module.exports = async function handler(req, res) {
       address:         addr,
     },
     metadata: {
-      observacao: String(observacao).slice(0, 300),
-      source:     'checkout_html',
+      observacao:    String(observacao).slice(0, 300),
+      source:        'checkout_html',
+      utm_source:    String(utm.source   || '').slice(0, 100),
+      utm_medium:    String(utm.medium   || '').slice(0, 100),
+      utm_campaign:  String(utm.campaign || '').slice(0, 100),
+      utm_content:   String(utm.content  || '').slice(0, 100),
+      utm_term:      String(utm.term     || '').slice(0, 100),
     },
     closed: true,
   };

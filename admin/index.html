@@ -117,7 +117,7 @@ input[type=password]:focus,input[type=text]:focus{
   if (t) {
     try {
       const p = JSON.parse(atob(t.split('.')[1]));
-      if (p.exp > Date.now()/1000) { location.href = '/admin/pedidos'; return; }
+      if (p.exp > Date.now()/1000) { location.href = '/admin/inicio'; return; }
     } catch(e) {}
     localStorage.removeItem('admin_token');
   }
@@ -154,7 +154,7 @@ async function login(e) {
     const d = await r.json();
     if (r.ok && d.token) {
       localStorage.setItem('admin_token', d.token);
-      location.href = '/admin/pedidos';
+      location.href = '/admin/inicio';
     } else {
       showAlert(d.error || 'Erro ao fazer login');
       btn.disabled = false;

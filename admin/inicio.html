@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Início — Armazém Natural</title>
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#15a731;--green-d:#0e8a28;--green-2:#1a3d24;--green-3:#234d2e;
+  --sidebar-w:220px;--font:'Poppins',sans-serif;
+  --bg:#f0f2f5;--card:#fff;--border:#e5e7eb;--text:#1e293b;--muted:#64748b;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--green-2);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sb-nav{flex:1;padding:10px 0}
+.sb-bottom{padding:14px 18px;border-top:1px solid rgba(255,255,255,.1)}
+.sb-logout{display:flex;align-items:center;gap:8px;background:none;border:none;color:rgba(255,255,255,.5);font-family:var(--font);font-size:12.5px;cursor:pointer;padding:6px 0;transition:color .12s;width:100%}
+.sb-logout:hover{color:#fff}
+.nav-section{padding:10px 18px 4px;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:13px;font-weight:500;color:rgba(255,255,255,.75);cursor:pointer;transition:background .12s;text-decoration:none}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.1);color:#fff}
+.nav-item.active{border-left:3px solid var(--green)}
+.nav-icon{width:16px;height:16px;flex-shrink:0}
+.nav-arrow{margin-left:auto;transition:transform .2s;flex-shrink:0}
+.nav-group.open .nav-arrow{transform:rotate(90deg)}
+.nav-submenu{display:none}
+.nav-group.open .nav-submenu{display:block}
+.nav-sub-item{padding:7px 18px 7px 44px;font-size:12px}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.page-title{font-size:16px;font-weight:700;color:var(--text)}
+.content{padding:28px 32px;flex:1}
+
+/* GREETING */
+.greeting{margin-bottom:28px}
+.greeting h1{font-size:26px;font-weight:800;color:var(--text);margin-bottom:4px}
+.greeting p{font-size:13.5px;color:var(--muted)}
+
+/* STAT ROWS */
+.stat-row{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;flex:1;min-width:150px;cursor:default;transition:box-shadow .12s;position:relative;overflow:hidden}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.stat-card a{position:absolute;inset:0;z-index:1}
+.sc-val{font-size:22px;font-weight:800;color:var(--text);line-height:1.1;margin-bottom:3px;display:flex;align-items:baseline;gap:6px}
+.sc-sub{font-size:11.5px;color:var(--muted)}
+.sc-icon{position:absolute;top:14px;right:16px;opacity:.12}
+
+/* COLOR ACCENTS */
+.acc-green .sc-val{color:var(--green)}
+.acc-blue  .sc-val{color:#3b82f6}
+.acc-orange .sc-val{color:#f59e0b}
+.acc-red   .sc-val{color:#ef4444}
+.acc-gray  .sc-val{color:var(--muted)}
+
+/* PULSE DOT */
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;position:relative;flex-shrink:0}
+.live-dot::after{content:'';position:absolute;inset:-3px;border-radius:50%;background:rgba(21,167,49,.3);animation:p 2s ease-out infinite}
+@keyframes p{0%{transform:scale(.8);opacity:1}100%{transform:scale(2);opacity:0}}
+
+/* QUICK LINKS */
+.quick-links{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
+.ql-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text);transition:all .12s}
+.ql-card:hover{border-color:var(--green);box-shadow:0 4px 16px rgba(21,167,49,.1);transform:translateY(-1px)}
+.ql-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ql-info strong{display:block;font-size:13.5px;font-weight:700;margin-bottom:2px}
+.ql-info span{font-size:12px;color:var(--muted)}
+
+/* LOADING */
+.skeleton{background:linear-gradient(90deg,#f0f2f5 25%,#e8eaed 50%,#f0f2f5 75%);background-size:200% 100%;animation:skel 1.4s ease infinite;border-radius:6px;height:24px;width:60px;display:inline-block}
+@keyframes skel{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .main{margin-left:0}
+  .quick-links{grid-template-columns:1fr}
+  .stat-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:9px;height:9px;background:#15a731;border-radius:50%;flex-shrink:0"></div>
+      <span style="font-size:14px;font-weight:700;color:#fff;letter-spacing:.02em">Armazém Natural</span>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-section">Menu</div>
+    <a class="nav-item active" href="/admin/inicio">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Início
+    </a>
+    <div class="nav-group" id="nav-analises">
+      <a class="nav-item" onclick="toggleSubmenu('analises')" style="cursor:pointer;user-select:none">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Análises
+        <svg class="nav-arrow" id="arrow-analises" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <div class="nav-submenu" id="sub-analises">
+        <a class="nav-item nav-sub-item" href="/admin/analises">Métricas</a>
+        <a class="nav-item nav-sub-item" href="/admin/relatorios">Relatórios</a>
+        <a class="nav-item nav-sub-item" href="/admin/ao-vivo">Ao Vivo</a>
+      </div>
+    </div>
+    <div class="nav-section">Vendas</div>
+    <a class="nav-item" href="/admin/pedidos">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Pedidos
+    </a>
+    <a class="nav-item" href="/admin/carrinhos">
+      <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+      Carrinhos Abandonados
+    </a>
+  </nav>
+  <div class="sb-bottom">
+    <button class="sb-logout" onclick="logout()">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Sair
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar">
+    <div class="page-title">Início</div>
+    <div style="font-size:12px;color:var(--muted)" id="last-update"></div>
+  </header>
+
+  <div class="content">
+
+    <!-- GREETING -->
+    <div class="greeting">
+      <h1>Olá, Armazém Natural!</h1>
+      <p id="date-line">Carregando...</p>
+    </div>
+
+    <!-- ROW 1 — live metrics -->
+    <div class="stat-row">
+      <div class="stat-card acc-green">
+        <div class="sc-val"><span class="live-dot"></span><span id="s-online">—</span></div>
+        <div class="sc-sub">Visitante(s) online agora</div>
+        <div class="sc-icon"><svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg></div>
+      </div>
+      <div class="stat-card acc-green">
+        <div class="sc-val" id="s-receita">—</div>
+        <div class="sc-sub">Valor em pedidos hoje (pago)</div>
+        <div class="sc-icon"><svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-val" id="s-pedidos">—</div>
+        <div class="sc-sub">Pedidos hoje</div>
+        <div class="sc-icon"><svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
+      </div>
+    </div>
+
+    <!-- ROW 2 — secondary stats -->
+    <div class="stat-row">
+      <div class="stat-card acc-orange" style="cursor:pointer" onclick="location.href='/admin/carrinhos'">
+        <div class="sc-val" id="s-carrinhos">—</div>
+        <div class="sc-sub">Carrinhos para recuperar</div>
+        <div class="sc-icon"><svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div>
+      </div>
+      <div class="stat-card acc-blue" style="cursor:pointer" onclick="location.href='/admin/pedidos'">
+        <div class="sc-val" id="s-aguardando">—</div>
+        <div class="sc-sub">Pagamentos pendentes</div>
+        <div class="sc-icon"><svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      </div>
+      <div class="stat-card acc-red">
+        <div class="sc-val" id="s-falhas">—</div>
+        <div class="sc-sub">Falhas em pagamentos</div>
+        <div class="sc-icon"><svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+      </div>
+      <div class="stat-card acc-gray">
+        <div class="sc-val" id="s-cancelados">—</div>
+        <div class="sc-sub">Cancelados hoje</div>
+        <div class="sc-icon"><svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></div>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="quick-links">
+      <a class="ql-card" href="/admin/pedidos">
+        <div class="ql-icon" style="background:#f0fdf4">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#15a731" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <div class="ql-info">
+          <strong>Pedidos</strong>
+          <span>Gerenciar pedidos e status</span>
+        </div>
+      </a>
+      <a class="ql-card" href="/admin/analises">
+        <div class="ql-icon" style="background:#eff6ff">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#3b82f6" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </div>
+        <div class="ql-info">
+          <strong>Métricas</strong>
+          <span>Vendas, conversão e relatórios</span>
+        </div>
+      </a>
+      <a class="ql-card" href="/admin/carrinhos">
+        <div class="ql-icon" style="background:#fffbeb">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#f59e0b" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <div class="ql-info">
+          <strong>Carrinhos Abandonados</strong>
+          <span>Recuperar vendas perdidas</span>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function getToken()  { return localStorage.getItem('admin_token'); }
+function logout()    { localStorage.removeItem('admin_token'); location.href = '/admin'; }
+function toggleSubmenu(id) { document.getElementById('nav-' + id).classList.toggle('open'); }
+
+function fmtBRL(v) {
+  return 'R$ ' + ((v || 0) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+async function load() {
+  const token = getToken();
+  if (!token) { location.href = '/admin'; return; }
+
+  const today = new Date().toISOString().slice(0, 10);
+
+  // Set date line
+  const d = new Date();
+  const weekDay = d.toLocaleDateString('pt-BR', { weekday: 'long' });
+  const fullDate = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+  document.getElementById('date-line').textContent = `${weekDay.charAt(0).toUpperCase()+weekDay.slice(1)}, ${fullDate}`;
+
+  // Parallel fetches
+  const [onlineR, analyticsR, cartsR, ordersR] = await Promise.allSettled([
+    fetch('/api/analytics/ping'),
+    fetch(`/api/admin/analytics?date_from=${today}&date_to=${today}`, { headers: { Authorization: 'Bearer ' + token } }),
+    fetch('/api/cart/list', { headers: { Authorization: 'Bearer ' + token } }),
+    fetch(`/api/admin/orders?date_from=${today}&date_to=${today}`, { headers: { Authorization: 'Bearer ' + token } }),
+  ]);
+
+  // Visitors
+  if (onlineR.status === 'fulfilled' && onlineR.value.ok) {
+    const d = await onlineR.value.json();
+    document.getElementById('s-online').textContent = d.online ?? 0;
+  } else {
+    document.getElementById('s-online').textContent = '0';
+  }
+
+  // Today analytics
+  if (analyticsR.status === 'fulfilled' && analyticsR.value.ok) {
+    const m = await analyticsR.value.json();
+    document.getElementById('s-receita').textContent   = fmtBRL(m.receita?.amount || 0);
+    document.getElementById('s-pedidos').textContent   = m.vendas?.count || 0;
+    document.getElementById('s-cancelados').textContent = m.cancelados?.count || 0;
+    // Pending = total - paid - canceled
+    const pending = Math.max(0, (m.total || 0) - (m.receita?.count || 0) - (m.cancelados?.count || 0));
+    document.getElementById('s-aguardando').textContent = pending;
+  } else {
+    ['s-receita','s-pedidos','s-cancelados','s-aguardando'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+    });
+  }
+
+  // Abandoned carts
+  if (cartsR.status === 'fulfilled' && cartsR.value.ok) {
+    const d = await cartsR.value.json();
+    document.getElementById('s-carrinhos').textContent = d.total ?? 0;
+  } else {
+    document.getElementById('s-carrinhos').textContent = '0';
+  }
+
+  // Card failures (carrinhos com cardFailed)
+  if (cartsR.status === 'fulfilled' && cartsR.value.ok) {
+    // Already fetched — reuse
+  }
+  // Count card failures from orders API response
+  if (ordersR.status === 'fulfilled' && ordersR.value.ok) {
+    const od = await ordersR.value.json();
+    const falhas = (od.orders || []).filter(o => o.status === 'aguardando_pagamento' && o.method === 'cartao').length;
+    document.getElementById('s-falhas').textContent = falhas;
+  } else {
+    document.getElementById('s-falhas').textContent = '0';
+  }
+
+  document.getElementById('last-update').textContent = 'Atualizado ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+// Init
+(function() {
+  const t = getToken();
+  if (!t) { location.href = '/admin'; return; }
+  try {
+    const p = JSON.parse(atob(t.split('.')[1]));
+    if (p.exp < Date.now() / 1000) { localStorage.removeItem('admin_token'); location.href = '/admin'; return; }
+  } catch { location.href = '/admin'; return; }
+
+  load();
+  setInterval(load, 60000);
+})();
+</script>
+</body>
+</html>

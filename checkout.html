@@ -556,6 +556,7 @@ function toStep2() {
     `${g('nome').split(' ')[0]} · ${g('email')}`;
   unlock(2);
   scrollTo('s2');
+  _saveCart('dados_pessoais');
 }
 
 function toStep3() {
@@ -566,6 +567,7 @@ function toStep3() {
   unlock(3);
   selPay('pix');
   scrollTo('s3');
+  _saveCart('entrega');
 }
 
 function edit(n, e) {
@@ -788,6 +790,7 @@ async function pay(method) {
       installments: parseInt(g('parc')||'1'),
       pix_expires_in: CFG.pixExpires,
       observacao: g('obs'),
+      utm: _utm,
       customer: {
         name:        g('nome').trim(),
         email:       g('email').trim(),
@@ -857,6 +860,7 @@ function handleResult(method, data, btn, amount) {
   // Cartao: so conta apos aprovacao (pode ser recusado)
   if ((method==='pix' || method==='boleto') && data.id) {
     fireConversion(data.id);
+    _markCartConverted();
   }
 
   if (method==='pix') {
@@ -890,7 +894,8 @@ function handleResult(method, data, btn, amount) {
   else if (method==='cartao') {
     const status = data.charges?.[0]?.status;
     const ok = status==='paid' || status==='authorized_pending_capture';
-    if (ok) fireConversion(data.id);
+    if (ok) { fireConversion(data.id); _markCartConverted(); }
+    else     { _markCartFailed(); }
     document.getElementById('card-btn').style.display = 'none';
     document.getElementById('card-res').innerHTML = ok
       ? `<div class="alert alert-ok" style="text-align:center">
@@ -979,6 +984,7 @@ function cp(inputId, btn) {
 }
 </script>
 <script>
+// ── ANALYTICS PING ─────────────────────────────────────────────────────────
 (function(){
   let sid = sessionStorage.getItem('_asid');
   if (!sid) { sid = Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2); sessionStorage.setItem('_asid', sid); }
@@ -986,6 +992,112 @@ function cp(inputId, btn) {
   ping();
   setInterval(ping, 30000);
 })();
+
+// ── UTM TRACKING ────────────────────────────────────────────────────────────
+const _utm = (function() {
+  const p = new URLSearchParams(location.search);
+  const keys = ['source','medium','campaign','content','term'];
+  const stored = {};
+  try { Object.assign(stored, JSON.parse(sessionStorage.getItem('_utm') || '{}')); } catch {}
+  const fresh = {};
+  keys.forEach(k => { const v = p.get('utm_' + k); if (v) fresh[k] = v; });
+  const merged = Object.keys(fresh).length ? fresh : stored;
+  if (Object.keys(merged).length) sessionStorage.setItem('_utm', JSON.stringify(merged));
+  return merged;
+})();
+
+// ── ABANDONED CART TRACKING ─────────────────────────────────────────────────
+const _cartId = (function(){
+  // Check if coming from a recovery email (cartId in URL)
+  const fromUrl = new URLSearchParams(location.search).get('cartId');
+  if (fromUrl && /^[a-zA-Z0-9_-]{5,80}$/.test(fromUrl)) {
+    localStorage.setItem('armazem_cart_id', fromUrl);
+    // Restore customer data
+    fetch('/api/cart/get?cartId=' + encodeURIComponent(fromUrl))
+      .then(r => r.ok ? r.json() : null)
+      .then(cart => {
+        if (!cart) return;
+        const c = cart.customer || {};
+        if (c.name)  document.getElementById('nome').value  = c.name;
+        if (c.email) document.getElementById('email').value = c.email;
+        if (c.document) {
+          const v = c.document;
+          document.getElementById('cpf').value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+        if (c.phone) {
+          const p = c.phone;
+          document.getElementById('fone').value = p.length > 10
+            ? p.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+            : p.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        }
+      }).catch(() => {});
+    return fromUrl;
+  }
+  let id = localStorage.getItem('armazem_cart_id');
+  if (!id) {
+    id = 'c_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('armazem_cart_id', id);
+  }
+  return id;
+})();
+
+function _cartPayload(step) {
+  const productTotal = P.preco * P.qty;
+  const grand = productTotal + (typeof shippingCost !== 'undefined' ? shippingCost : 0);
+  const payload = {
+    cartId: _cartId,
+    step,
+    totalAmount: grand,
+    checkoutUrl: window.location.href,
+    customer: {
+      name:     (document.getElementById('nome')?.value  || '').trim(),
+      email:    (document.getElementById('email')?.value || '').trim(),
+      phone:    (document.getElementById('fone')?.value  || ''),
+      document: (document.getElementById('cpf')?.value   || ''),
+    },
+    items: [{ description: P.nome + (P.variante ? ' - ' + P.variante : ''), quantity: P.qty, amount: P.preco }],
+  };
+  if (step !== 'dados_pessoais') {
+    payload.address = {
+      cep:   (document.getElementById('cep')?.value    || ''),
+      line1: [(document.getElementById('num')?.value || ''), (document.getElementById('rua')?.value || ''), (document.getElementById('bairro')?.value || '')].filter(Boolean).join(', '),
+      city:  (document.getElementById('cidade')?.value || ''),
+      state: (document.getElementById('estado')?.value || ''),
+    };
+  }
+  return payload;
+}
+
+function _saveCart(step) {
+  try {
+    fetch('/api/cart/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(_cartPayload(step)),
+    }).catch(() => {});
+  } catch(e) {}
+}
+
+function _markCartConverted() {
+  try {
+    fetch('/api/cart/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cartId: _cartId, converted: true }),
+    }).catch(() => {});
+    localStorage.removeItem('armazem_cart_id');
+  } catch(e) {}
+}
+
+function _markCartFailed() {
+  try {
+    fetch('/api/cart/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ..._cartPayload('pagamento'), cardFailed: true }),
+    }).catch(() => {});
+  } catch(e) {}
+}
 </script>
 </body>
 </html>
