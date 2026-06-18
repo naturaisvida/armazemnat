@@ -68,6 +68,19 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .vcard-price{font-size:18px;font-weight:800;color:var(--text);margin-bottom:2px}
 .vcard-compare{font-size:12px;color:#aaa;text-decoration:line-through;margin-bottom:4px}
 .vcard-disc{font-size:11px;font-weight:700;color:var(--green);background:#e8f5e9;border-radius:100px;padding:2px 8px;display:inline-block}
+.vcard-btn{display:block;width:100%;margin-top:10px;padding:9px 4px;background:var(--green);color:#fff;border:none;border-radius:8px;font-family:var(--font);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;transition:background .15s}
+.vcard-btn:hover{background:var(--green-d)}
+/* STICKY BAR */
+.sticky-kit{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid var(--green);padding:10px 16px;display:none;align-items:center;justify-content:space-between;gap:12px;z-index:200;box-shadow:0 -4px 20px rgba(0,0,0,.12)}
+.sticky-kit.show{display:flex}
+.sticky-kit-left{display:flex;flex-direction:column;gap:1px;min-width:0}
+.sticky-kit-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.sticky-kit-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sticky-kit-price{font-size:15px;font-weight:800;color:var(--green)}
+.sticky-kit-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.sticky-back-btn{background:#f5f5f5;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.sticky-buy-btn{background:var(--green);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-family:var(--font);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-block}
+.sticky-buy-btn:hover{background:var(--green-d)}
 
 /* SELECTED PRICE */
 .price-box{background:#f9f9f9;border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:20px}
@@ -197,10 +210,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
       <div class="price-pix" id="price-pix"></div>
     </div>
 
-    <a class="btn-comprar" id="btn-comprar" href="#">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;vertical-align:middle;margin-right:6px"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-      COMPRAR AGORA
-    </a>
+    <a class="btn-comprar" id="btn-comprar" href="#" style="display:none"></a>
     <a class="btn-wpp" href="https://wa.me/5500000000000?text=Olá! Tenho interesse no produto." target="_blank">
       <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;vertical-align:middle;margin-right:6px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.1 1.508 5.834L0 24l6.335-1.484A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.651-.502-5.178-1.381l-.372-.22-3.762.882.936-3.648-.242-.374A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
       Tirar dúvidas pelo WhatsApp
@@ -475,23 +485,42 @@ prod.variantes.forEach((v, i) => {
     <div class="vcard-price">${$$(v.preco)}</div>
     ${v.comparar ? `<div class="vcard-compare">${$$(v.comparar)}</div>` : ''}
     <div class="vcard-disc">${v.desconto}% OFF</div>
+    <button class="vcard-btn" data-idx="${i}">COMPRAR AGORA</button>
   `;
-  el.onclick = () => {
-    document.querySelectorAll('.vcard').forEach(c => c.classList.remove('on'));
-    el.classList.add('on');
-    selectedIdx = i;
-    // Atualizar imagem se disponível
-    if (prod.imagens[i]) {
-      mainPhoto.src = prod.imagens[i];
-      document.querySelectorAll('.thumb').forEach((t, ti) => {
-        t.classList.toggle('on', ti === i);
-      });
-    }
-    updatePrice();
-    updateBtn();
+  el.onclick = (e) => {
+    if (e.target.classList.contains('vcard-btn')) return;
+    selecionarVariante(i);
+  };
+  el.querySelector('.vcard-btn').onclick = (e) => {
+    e.stopPropagation();
+    comprarAgora(i);
   };
   vgrid.appendChild(el);
 });
+
+function checkoutUrl(idx) {
+  const v   = prod.variantes[idx];
+  const img = prod.imagens[Math.min(idx, prod.imagens.length-1)];
+  const params = new URLSearchParams({ nome: prod.titulo, variante: v.titulo, preco: v.preco, qty: 1, img });
+  return '/checkout.html?' + params.toString();
+}
+
+function selecionarVariante(i) {
+  document.querySelectorAll('.vcard').forEach(c => c.classList.remove('on'));
+  document.querySelectorAll('.vcard')[i].classList.add('on');
+  selectedIdx = i;
+  if (prod.imagens[i]) {
+    mainPhoto.src = prod.imagens[i];
+    document.querySelectorAll('.thumb').forEach((t, ti) => t.classList.toggle('on', ti === i));
+  }
+  updatePrice();
+  updateBtn();
+}
+
+function comprarAgora(i) {
+  selecionarVariante(i);
+  window.location.href = checkoutUrl(i);
+}
 
 function updatePrice() {
   const v = prod.variantes[selectedIdx];
@@ -503,19 +532,32 @@ function updatePrice() {
 
 function updateBtn() {
   const v   = prod.variantes[selectedIdx];
-  const img = prod.imagens[Math.min(selectedIdx, prod.imagens.length-1)];
-  const params = new URLSearchParams({
-    nome:     prod.titulo,
-    variante: v.titulo,
-    preco:    v.preco,
-    qty:      1,
-    img:      img,
-  });
-  qs('btn-comprar').href = '/checkout.html?' + params.toString();
+  const url = checkoutUrl(selectedIdx);
+  qs('btn-comprar').href = url;
+  const stickyBtn = document.getElementById('sticky-buy-btn');
+  if (stickyBtn) stickyBtn.href = url;
+  const stickyName  = document.getElementById('sticky-kit-name');
+  const stickyPrice = document.getElementById('sticky-kit-price');
+  if (stickyName)  stickyName.textContent  = v.titulo;
+  if (stickyPrice) stickyPrice.textContent = $$(v.preco);
 }
 
 updatePrice();
 updateBtn();
+
+// Sticky bar — aparece ao rolar abaixo dos cards de kit
+(function(){
+  const bar    = document.getElementById('sticky-kit');
+  const anchor = document.getElementById('variants-grid');
+  if (!bar || !anchor) return;
+  const obs = new IntersectionObserver(entries => {
+    bar.classList.toggle('show', !entries[0].isIntersecting);
+  }, { rootMargin: '0px 0px -40px 0px' });
+  obs.observe(anchor);
+  document.getElementById('sticky-back-btn').onclick = () => {
+    anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+})();
 
 // ─── Avaliações ──────────────────────────────────────────────────────────────
 gerarAvaliacoes(prod);
@@ -580,5 +622,18 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 </script>
+
+<!-- STICKY BAR -->
+<div class="sticky-kit" id="sticky-kit">
+  <div class="sticky-kit-left">
+    <div class="sticky-kit-label">Kit selecionado</div>
+    <div class="sticky-kit-name" id="sticky-kit-name"></div>
+    <div class="sticky-kit-price" id="sticky-kit-price"></div>
+  </div>
+  <div class="sticky-kit-actions">
+    <button class="sticky-back-btn" id="sticky-back-btn">Trocar kit</button>
+    <a class="sticky-buy-btn" id="sticky-buy-btn" href="#">COMPRAR</a>
+  </div>
+</div>
 </body>
 </html>
