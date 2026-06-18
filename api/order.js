@@ -86,17 +86,24 @@ module.exports = async function handler(req, res) {
         area_code:    (customer.phone_area   || '').replace(/\D/g, ''),
         number:       (customer.phone_number || '').replace(/\D/g, ''),
       }
-    }
+    },
+    address: {
+      line_1:   address.line_1   || '',
+      zip_code: (address.zip_code || '').replace(/\D/g, ''),
+      city:     address.city     || '',
+      state:    (address.state   || '').toUpperCase().replace(/[^A-Z]/g, ''),
+      country:  'BR',
+    },
   };
 
   const addr = {
     line_1:   address.line_1   || '',
-    line_2:   address.line_2   || '',
     zip_code: (address.zip_code || '').replace(/\D/g, ''),
     city:     address.city     || '',
     state:    (address.state   || '').toUpperCase().replace(/[^A-Z]/g, ''),
     country:  'BR',
   };
+  if (address.line_2 && address.line_2.trim()) addr.line_2 = address.line_2.trim();
 
   const orderItems = items.map((it, i) => ({
     amount:      parseInt(it.amount) || 0,
@@ -124,9 +131,7 @@ module.exports = async function handler(req, res) {
         installments:         parseInt(installments),
         statement_descriptor: 'ARMAZEM NATURAL',
         card_token:           card_token,
-        card: {
-          billing_address: addr,
-        },
+        billing_address:      addr,
       }
     }];
   } else {
