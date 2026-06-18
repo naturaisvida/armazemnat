@@ -1,5 +1,5 @@
 // Public endpoint — cartId acts as a secret token to access cart data
-const redis = require('../lib/redis');
+const redis = require('../_lib/redis');
 
 module.exports = async function handler(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');

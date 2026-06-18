@@ -1,4 +1,4 @@
-const redis = require('../lib/redis');
+const redis = require('../_lib/redis');
 
 const CART_TTL = 7 * 24 * 60 * 60; // 7 days
 

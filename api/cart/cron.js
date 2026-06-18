@@ -2,8 +2,8 @@
 // Secure with ?secret=CRON_SECRET or X-Cron-Secret header
 // Recommended: cron-job.org (free) → GET https://seu-site.vercel.app/api/cart/cron?secret=CRON_SECRET
 
-const redis       = require('../lib/redis');
-const { sendRaw } = require('../email/send');
+const redis       = require('../_lib/redis');
+const { sendRaw } = require('../_email/send');
 
 const STORE_URL   = process.env.STORE_URL  || 'https://armazemnatural.vercel.app';
 const STORE_EMAIL = process.env.RESEND_FROM_EMAIL || 'Armazém Natural <atendimento@armazemnatural.shop>';

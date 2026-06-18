@@ -1,4 +1,5 @@
 const PAGARME_URL = 'https://api.pagar.me/core/v5';
+const { sendPixEmail, sendBoletoEmail, sendCartaoEmail } = require('./_email/send');
 
 function authHeader() {
   const s = process.env.PAGARME_SECRET;
@@ -156,6 +157,40 @@ module.exports = async function handler(req, res) {
   if ((result._http || 200) >= 400) {
     const msg = result.message || 'Erro ao processar pagamento';
     return res.status(result._http).json({ error: true, message: msg, details: result });
+  }
+
+  // Send order confirmation email (fire-and-forget)
+  try {
+    const charge = (result.charges || [])[0] || {};
+    const tx     = charge.last_transaction || {};
+    const emailOrder = {
+      id:           result.id,
+      code:         result.code || result.id,
+      customer:     { name: cust.name, email: cust.email },
+      amount:       parseInt(amount),
+      installments: parseInt(installments),
+      items:        orderItems,
+      method,
+    };
+
+    if (method === 'pix' && tx.qr_code) {
+      sendPixEmail(emailOrder, {
+        pix_qr_code:         tx.qr_code,
+        pix_expiration_date: tx.expires_at,
+      }).catch(() => {});
+    } else if (method === 'boleto' && (tx.line || tx.pdf)) {
+      sendBoletoEmail(emailOrder, {
+        line:   tx.line,
+        pdf:    tx.pdf,
+        url:    tx.url,
+        due_at: tx.due_at,
+      }).catch(() => {});
+    } else if (method === 'cartao' && charge.status === 'paid') {
+      sendCartaoEmail(emailOrder).catch(() => {});
+    }
+  } catch (e) {
+    // Email failure must NOT block order response
+    console.error('Email send error:', e.message);
   }
 
   return res.status(200).json(result);

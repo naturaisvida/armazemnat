@@ -1,5 +1,5 @@
 const jwt    = require('jsonwebtoken');
-const redis  = require('../lib/redis');
+const redis  = require('../_lib/redis');
 
 function validateAdmin(req, res) {
   const raw    = (req.headers['authorization'] || '').trim();
