@@ -124,7 +124,9 @@ module.exports = async function handler(req, res) {
         installments:         parseInt(installments),
         statement_descriptor: 'ARMAZEM NATURAL',
         card_token:           card_token,
-        billing_address:      addr,
+        card: {
+          billing_address: addr,
+        },
       }
     }];
   } else {
