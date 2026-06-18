@@ -152,7 +152,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
 <header class="hdr">
   <div class="hdr-inner">
-    <a href="/"><img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural" style="height:36px"></a>
+    <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural" style="height:36px">
     <div class="hdr-sec">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -241,20 +241,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
   <div class="rev-grid" id="rev-grid"></div>
 </div>
 
-<!-- MORE PRODUCTS -->
-<section class="more-section">
-  <div class="more-inner">
-    <h2 class="more-title">Você também pode gostar</h2>
-    <div class="more-grid" id="more-grid"></div>
+
+<!-- MODAIS DE POLÍTICAS -->
+<div id="modal-overlay" onclick="closeModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:center;justify-content:center;padding:20px"></div>
+<div id="modal-box" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:14px;width:min(560px,94vw);max-height:80vh;overflow-y:auto;z-index:1001;padding:32px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+    <strong id="modal-title" style="font-size:17px;color:#212121"></strong>
+    <button onclick="closeModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#666;line-height:1">×</button>
   </div>
-</section>
+  <div id="modal-body" style="font-size:14px;color:#444;line-height:1.75"></div>
+</div>
 
 <footer class="ftr">
   <p>
-    <a href="/">Início</a>
-    <a href="#">Política de Privacidade</a>
-    <a href="#">Termos de Uso</a>
-    <a href="#">Devolução</a>
+    <a href="#" onclick="openModal('privacidade');return false">Política de Privacidade</a>
+    <a href="#" onclick="openModal('termos');return false">Termos de Uso</a>
+    <a href="#" onclick="openModal('devolucao');return false">Política de Devolução</a>
   </p>
   <p style="margin-top:10px">© 2025 Armazém Natural · Todos os direitos reservados</p>
 </footer>
@@ -519,23 +521,6 @@ updateBtn();
 // ─── Avaliações ──────────────────────────────────────────────────────────────
 gerarAvaliacoes(prod);
 
-// ─── Mais produtos ────────────────────────────────────────────────────────────
-const mgrid = qs('more-grid');
-PRODUTOS.filter(p => p.slug !== slug).forEach(p => {
-  const minP = Math.min(...p.variantes.map(v => v.preco));
-  const a = document.createElement('a');
-  a.className = 'more-card';
-  a.href = '/products/' + p.slug;
-  a.innerHTML = `
-    <img src="${p.imagens[0]}" alt="${p.nome}" loading="lazy">
-    <div class="more-card-body">
-      <div class="more-card-name">${p.titulo}</div>
-      <div class="more-card-price">A partir de ${$$(minP)}</div>
-      <div class="more-card-cta">Ver oferta →</div>
-    </div>
-  `;
-  mgrid.appendChild(a);
-});
 
 // ─── Zoom ─────────────────────────────────────────────────────────────────────
 function openZoom(src){
@@ -547,7 +532,54 @@ function closeZoom(){
   qs('zoom').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeZoom(); });
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape'){ closeZoom(); closeModal(); }
+});
+
+// ─── Modais de políticas ──────────────────────────────────────────────────────
+const POLITICAS = {
+  privacidade: {
+    titulo: 'Política de Privacidade',
+    corpo: `<p><strong>Armazém Natural</strong> respeita sua privacidade e protege seus dados pessoais conforme a LGPD (Lei 13.709/2018).</p>
+    <p><strong>Dados coletados:</strong> Nome, e-mail, CPF, endereço e telefone, utilizados exclusivamente para processar pedidos e enviar comunicações relacionadas à compra.</p>
+    <p><strong>Compartilhamento:</strong> Seus dados não são vendidos. Compartilhamos apenas com transportadoras e processadores de pagamento, estritamente para a finalidade do pedido.</p>
+    <p><strong>Segurança:</strong> Utilizamos criptografia SSL e sistemas seguros para proteger suas informações.</p>
+    <p><strong>Seus direitos:</strong> Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento pelo nosso canal de atendimento.</p>
+    <p><strong>Contato:</strong> contato@armazemnatural.shop</p>`
+  },
+  termos: {
+    titulo: 'Termos de Uso',
+    corpo: `<p>Ao realizar uma compra no Armazém Natural, você concorda com os seguintes termos:</p>
+    <p><strong>Produtos:</strong> Todos os suplementos são produtos alimentares. Não substituem medicamentos nem tratamento médico. Resultados podem variar.</p>
+    <p><strong>Pedidos:</strong> Após a confirmação do pagamento, o pedido é processado em até 24h úteis e despachado com código de rastreio.</p>
+    <p><strong>Preços:</strong> Os preços podem ser alterados sem aviso prévio. O valor válido é o do momento da compra.</p>
+    <p><strong>Proibições:</strong> É proibida a revenda dos produtos sem autorização prévia por escrito.</p>
+    <p><strong>Foro:</strong> Fica eleito o foro da comarca de domicílio do consumidor para resolução de conflitos.</p>`
+  },
+  devolucao: {
+    titulo: 'Política de Devolução',
+    corpo: `<p><strong>Garantia de 30 dias:</strong> Você tem 30 dias a partir do recebimento para solicitar a devolução, sem precisar justificar o motivo.</p>
+    <p><strong>Como solicitar:</strong> Entre em contato pelo nosso WhatsApp ou e-mail informando o número do pedido. Retornaremos em até 24h com as instruções.</p>
+    <p><strong>Reembolso:</strong> Após recebermos e verificarmos o produto devolvido, o reembolso é processado em até 5 dias úteis pelo mesmo método de pagamento utilizado na compra.</p>
+    <p><strong>Produto com defeito:</strong> Em caso de defeito de fabricação, arcamos com o frete de devolução e enviamos um novo produto sem custo adicional.</p>
+    <p><strong>Contato:</strong> contato@armazemnatural.shop</p>`
+  }
+};
+
+function openModal(tipo) {
+  const pol = POLITICAS[tipo];
+  if (!pol) return;
+  document.getElementById('modal-title').textContent = pol.titulo;
+  document.getElementById('modal-body').innerHTML = pol.corpo;
+  document.getElementById('modal-overlay').style.display = 'block';
+  document.getElementById('modal-box').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none';
+  document.getElementById('modal-box').style.display = 'none';
+  document.body.style.overflow = '';
+}
 </script>
 </body>
 </html>
