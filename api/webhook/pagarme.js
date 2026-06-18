@@ -77,7 +77,13 @@ module.exports = async function handler(req, res) {
 
   const event     = req.body || {};
   const eventType = event.type  || '';
-  const orderId   = event.data?.id;
+  const data      = event.data  || {};
+
+  // Para order.* o ID está em data.id
+  // Para charge.* o ID do pedido está em data.order_id
+  const orderId = eventType.startsWith('charge.')
+    ? (data.order_id || data.order?.id)
+    : data.id;
 
   if (!orderId || (!eventType.startsWith('order.') && !eventType.startsWith('charge.'))) {
     return res.status(200).json({ ok: true, skipped: true });
@@ -89,7 +95,7 @@ module.exports = async function handler(req, res) {
       if (raw.id) await sendStatusEmail(mapOrder(raw), 'faturado', '');
     }
 
-    if (eventType === 'order.canceled') {
+    if (eventType === 'order.canceled' || eventType === 'charge.refunded') {
       const raw = await fetchOrder(orderId);
       if (raw.id) await sendStatusEmail(mapOrder(raw), 'cancelado', '');
     }
