@@ -369,13 +369,42 @@ function gerarSobre(p) {
 }
 
 function gerarComoUsar(p) {
-  const tpl = _getTpl(p.nome, p.tipo);
+  const t = p.tipo || 'geral';
+  const steps = {
+    masc: [
+      { n:'1', titulo:'Tome',        desc:'Use a quantidade indicada no rótulo, com um copo de água — preferencialmente em jejum ou com refeição leve.' },
+      { n:'2', titulo:'Pela manhã',  desc:'De preferência no começo do dia, sempre no mesmo horário, pra criar o hábito e potencializar os resultados.' },
+      { n:'3', titulo:'Continue',    desc:'Use com regularidade. Recomendamos uso contínuo por pelo menos 3 meses para resultados expressivos.' },
+    ],
+    fem: [
+      { n:'1', titulo:'Tome',        desc:'Use a quantidade indicada no rótulo, de preferência com a refeição principal do dia.' },
+      { n:'2', titulo:'Todo dia',    desc:'Sempre no mesmo horário, pra criar o hábito e manter os níveis dos ativos constantes no organismo.' },
+      { n:'3', titulo:'Continue',    desc:'Use com regularidade. Recomendamos uso contínuo por pelo menos 3 meses para resultados expressivos.' },
+    ],
+    geral: [
+      { n:'1', titulo:'Tome',        desc:'Use a quantidade indicada no rótulo, com um copo de água ou conforme orientação do profissional de saúde.' },
+      { n:'2', titulo:'Todo dia',    desc:'Sempre no mesmo horário, pra criar o hábito e manter os níveis dos ativos constantes no organismo.' },
+      { n:'3', titulo:'Continue',    desc:'Use com regularidade. Recomendamos uso contínuo por pelo menos 3 meses para resultados expressivos.' },
+    ],
+  };
+  const lista = steps[t] || steps.geral;
+  const cards = lista.map(s => `
+    <div style="background:#2d5a3e;border-radius:12px;padding:22px 20px;margin-bottom:12px">
+      <div style="font-size:36px;font-weight:800;color:rgba(255,255,255,.22);line-height:1;margin-bottom:6px">${s.n}</div>
+      <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:6px">${s.titulo}</div>
+      <p style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.6;margin:0">${s.desc}</p>
+    </div>`).join('');
   return `
-    <div style="background:linear-gradient(135deg,#f0fbf3,#e8f5e9);border-left:4px solid #15a731;border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:20px">
-      <div style="font-size:14px;font-weight:700;color:#356041;margin-bottom:8px">Modo de Usar</div>
-      <p style="font-size:14px;color:#333;line-height:1.7;margin:0">${tpl.como_usar}</p>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px">Modo de Uso</div>
+      <h3 style="font-size:22px;font-weight:800;color:#212121;margin-bottom:6px">Simples de incluir na rotina</h3>
+      <p style="font-size:14px;color:#777;margin-bottom:16px">Fácil de lembrar, todos os dias.</p>
+      <div style="display:inline-block;background:#f0fbf3;border:1px solid #b8e6c4;border-radius:8px;padding:10px 20px;font-size:14px;color:#356041;font-weight:600">
+        Dose diária: <strong>conforme indicação do rótulo</strong>
+      </div>
     </div>
-    <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:14px 16px;font-size:12px;color:#795548;line-height:1.6">
+    ${cards}
+    <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:14px 16px;font-size:12px;color:#795548;line-height:1.6;margin-top:4px">
       <strong>Aviso:</strong> Suplemento alimentar. Não substitui alimentação equilibrada e hábitos de vida saudáveis. Mantenha fora do alcance de crianças. Consulte um médico se você tiver alguma condição de saúde.
     </div>`;
 }
