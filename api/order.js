@@ -129,7 +129,7 @@ module.exports = async function handler(req, res) {
       amount: parseInt(amount),
       credit_card: {
         installments:         parseInt(installments),
-        statement_descriptor: 'ARMAZEM NAT',
+        statement_descriptor: 'COMPRA SEGURA',
         card_token:           card_token,
         billing_address:      addr,
       }
