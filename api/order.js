@@ -131,7 +131,7 @@ module.exports = async function handler(req, res) {
         installments:         parseInt(installments),
         statement_descriptor: 'COMPRA SEGURA',
         card_token:           card_token,
-        billing_address:      addr,
+        billing:              addr,
       }
     }];
   } else {
