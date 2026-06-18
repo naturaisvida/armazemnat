@@ -113,6 +113,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .desc-tab.on{color:var(--green-2);border-bottom-color:var(--green)}
 .desc-tab:hover{color:var(--green-2)}
 .desc-pane{line-height:1.8;color:#333}
+.desc-pane,.desc-pane *{font-family:var(--font) !important}
+.desc-pane p{font-size:15px;line-height:1.8;color:#444;margin-bottom:16px}
+.desc-pane h1,.desc-pane h2,.desc-pane h3{color:var(--green-2);margin-bottom:12px;line-height:1.3}
+.desc-pane ul,.desc-pane ol{padding-left:20px;margin-bottom:16px}
+.desc-pane li{font-size:14px;color:#444;line-height:1.6;margin-bottom:6px}
+.desc-pane strong{color:#212121}
 
 /* REVIEWS SECTION */
 .rev-section{max-width:1200px;margin:0 auto;padding:0 24px 64px}
@@ -334,19 +340,16 @@ function _getTpl(nome, tipo) {
   const t = tipo || 'geral';
   const map = {
     masc: {
-      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px"><strong>${nome}</strong> é a fórmula desenvolvida para homens que querem recuperar a disposição, a força e o vigor que o dia a dia vai roubando. Com ativos naturais cuidadosamente combinados, age no organismo masculino de forma precisa — apoiando a produção hormonal, combatendo o cansaço crônico e devolvendo a energia que você precisa para render mais em tudo.</p><p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">Sem fórmulas sintéticas, sem estimulantes agressivos. Apenas o poder da natureza, concentrado em cada dose.</p>`,
+      intro: `<p><strong>${nome}</strong> é a fórmula desenvolvida para homens que querem recuperar a disposição, a força e o vigor que o dia a dia vai roubando. Com ativos naturais cuidadosamente combinados, age no organismo masculino de forma precisa — apoiando a produção hormonal, combatendo o cansaço crônico e devolvendo a energia que você precisa para render mais em tudo.</p><p>Sem fórmulas sintéticas, sem estimulantes agressivos. Apenas o poder da natureza, concentrado em cada dose.</p>`,
       beneficios: ['Aumenta a disposição e combate o cansaço crônico','Apoia a produção hormonal natural do organismo masculino','Melhora o foco, clareza mental e desempenho','Contribui para um sono mais profundo e reparador','100% natural, sem conservantes artificiais'],
-      como_usar: 'Tome conforme indicado no rótulo, preferencialmente pela manhã com um copo de água em jejum ou com refeição leve. Para resultados consistentes, use continuamente por pelo menos 30 dias.',
     },
     fem: {
-      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px"><strong>${nome}</strong> foi criado para a mulher que não tem tempo a perder — que quer se sentir bem, bonita e cheia de energia todos os dias. Com ingredientes botânicos de alta biodisponibilidade, atua no equilíbrio do organismo feminino de forma suave e eficaz, trabalhando de dentro para fora para trazer de volta a leveza, a disposição e o brilho que você merece.</p><p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">Formulado com respeito ao ritmo feminino — sem agressões, sem artifícios. Natureza pura a serviço do seu bem-estar.</p>`,
+      intro: `<p><strong>${nome}</strong> foi criado para a mulher que não tem tempo a perder — que quer se sentir bem, bonita e cheia de energia todos os dias. Com ingredientes botânicos de alta biodisponibilidade, atua no equilíbrio do organismo feminino de forma suave e eficaz, trabalhando de dentro para fora para trazer de volta a leveza, a disposição e o brilho que você merece.</p><p>Formulado com respeito ao ritmo feminino — sem agressões, sem artifícios. Natureza pura a serviço do seu bem-estar.</p>`,
       beneficios: ['Apoia o equilíbrio hormonal e o ciclo natural feminino','Promove cabelos mais fortes, pele mais saudável e unhas firmes','Reduz o inchaço, o cansaço e a irritabilidade','Melhora o humor, a energia e a autoestima','Ingredientes naturais com alta absorção e segurança comprovada'],
-      como_usar: 'Tome conforme indicado no rótulo, de preferência com a refeição principal. Para resultados expressivos e duradouros, utilize continuamente por no mínimo 30 dias.',
     },
     geral: {
-      intro: `<p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:20px"><strong>${nome}</strong> é um suplemento natural desenvolvido para quem quer mais saúde, equilíbrio e qualidade de vida — sem complicações. Com uma combinação exclusiva de ingredientes naturais selecionados por sua eficácia e pureza, atua no organismo de forma inteligente, apoiando funções essenciais e ajudando seu corpo a funcionar no seu melhor todos os dias.</p><p style="font-size:15px;line-height:1.8;color:#333;margin-bottom:24px">Simples de tomar, fácil de sentir a diferença. Tecnologia natural a seu favor.</p>`,
+      intro: `<p><strong>${nome}</strong> é um suplemento natural desenvolvido para quem quer mais saúde, equilíbrio e qualidade de vida — sem complicações. Com uma combinação exclusiva de ingredientes naturais selecionados por sua eficácia e pureza, atua no organismo de forma inteligente, apoiando funções essenciais e ajudando seu corpo a funcionar no seu melhor todos os dias.</p><p>Simples de tomar, fácil de sentir a diferença. Tecnologia natural a seu favor.</p>`,
       beneficios: ['Contribui para o equilíbrio natural e bem-estar geral','Melhora a disposição e reduz o cansaço do dia a dia','Ingredientes de alta pureza e biodisponibilidade','Sem conservantes artificiais ou substâncias nocivas','Qualidade verificada, resultado sentido'],
-      como_usar: 'Tome conforme indicado no rótulo, preferencialmente com água. Para melhores resultados, use de forma contínua por pelo menos 30 dias.',
     },
   };
   return map[t] || map.geral;
@@ -358,10 +361,10 @@ function gerarSobre(p) {
   }
   const tpl = _getTpl(p.nome, p.tipo);
   const bens = tpl.beneficios.map(b =>
-    `<li style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;line-height:1.5">${b}</li>`
+    `<li style="padding:10px 0;border-bottom:1px solid #f0f0f0">${b}</li>`
   ).join('');
   return `${tpl.intro}
-    <h3 style="font-size:17px;font-weight:700;color:#356041;margin:0 0 14px;display:flex;align-items:center;gap:8px">
+    <h3 style="font-size:17px;font-weight:700;color:#356041;margin:24px 0 14px;display:flex;align-items:center;gap:8px">
       <span style="background:#15a731;color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">✓</span>
       Principais Benefícios
     </h3>
