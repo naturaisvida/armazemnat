@@ -1,4 +1,5 @@
-const jwt = require('jsonwebtoken');
+const jwt                  = require('jsonwebtoken');
+const { sendStatusEmail }  = require('../email/send');
 
 const PAGARME_URL = 'https://api.pagar.me/core/v5';
 
@@ -100,6 +101,7 @@ function formatOrder(raw) {
     installments: tx.installments || 1,
     createdAt:  raw.created_at,
     updatedAt:  raw.updated_at,
+    emails: (() => { try { return JSON.parse(meta.email_log || '[]'); } catch { return []; } })(),
     items: (raw.items || []).map(i => ({
       description: i.description,
       quantity:    i.quantity,
@@ -268,11 +270,23 @@ module.exports = async function handler(req, res) {
       return res.status(404).json({ error: 'Pedido não encontrado' });
     }
 
+    // Build email log entry optimistically
+    const prevLog = (() => {
+      try { return JSON.parse((current.metadata || {}).email_log || '[]'); } catch { return []; }
+    })();
+    const willSendEmail = ['faturado','em_transporte','entregue','excecao_entrega','cancelado'].includes(status);
+    const logEntry = willSendEmail ? {
+      status,
+      sentAt: new Date().toISOString(),
+      to: current.customer?.email || '',
+    } : null;
+
     const newMeta = {
       ...(current.metadata || {}),
       custom_status:            status,
       custom_status_updated_at: new Date().toISOString(),
       ...(safeTracking ? { tracking_code: safeTracking } : {}),
+      ...(logEntry ? { email_log: JSON.stringify([...prevLog, logEntry].slice(-20)) } : {}),
     };
 
     const updated = await pagarmeReq('PATCH', `/orders/${orderId}`, { metadata: newMeta });
@@ -281,7 +295,19 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: 'Pagar.me não aceitou a atualização. Contate o suporte.' });
     }
 
-    return res.status(200).json({ ok: true, orderId, status });
+    // Send email after successful status update
+    let emailSent  = false;
+    let emailError = null;
+    if (willSendEmail) {
+      try {
+        const emailId = await sendStatusEmail(formatOrder(current), status, safeTracking);
+        emailSent = !!emailId;
+      } catch (e) {
+        emailError = e.message;
+      }
+    }
+
+    return res.status(200).json({ ok: true, orderId, status, emailSent, ...(emailError ? { emailError } : {}) });
   }
 
   return res.status(405).json({ error: 'Método não permitido' });

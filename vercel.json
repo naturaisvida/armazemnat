@@ -1,8 +1,9 @@
 {
   "rewrites": [
-    { "source": "/products/:slug", "destination": "/produto.html?slug=:slug" },
-    { "source": "/admin",          "destination": "/admin/index.html" },
-    { "source": "/admin/pedidos",  "destination": "/admin/pedidos.html" }
+    { "source": "/products/:slug",    "destination": "/produto.html?slug=:slug" },
+    { "source": "/admin",             "destination": "/admin/index.html" },
+    { "source": "/admin/pedidos",     "destination": "/admin/pedidos.html" },
+    { "source": "/webhook/pagarme",   "destination": "/api/webhook/pagarme" }
   ],
   "headers": [
     {
