@@ -602,6 +602,16 @@ prod.variantes.forEach((v, i) => {
   vgrid.appendChild(el);
 });
 
+// Captura UTMs da URL do produto e salva em sessionStorage para o checkout pegar
+(function() {
+  const p = new URLSearchParams(location.search);
+  const fresh = {};
+  ['source','medium','campaign','content','term'].forEach(k => {
+    const v = p.get('utm_' + k); if (v) fresh[k] = v;
+  });
+  if (Object.keys(fresh).length) sessionStorage.setItem('_utm', JSON.stringify(fresh));
+})();
+
 function checkoutUrl(idx) {
   const v   = prod.variantes[idx];
   const img = prod.imagens[Math.min(idx, prod.imagens.length-1)];
