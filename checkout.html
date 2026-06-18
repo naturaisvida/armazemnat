@@ -443,14 +443,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
           </div></div>
           <div id="card-msg"></div>
           <div id="card-res" style="display:none"></div>
-          <div style="margin:12px 0 0;border-radius:8px;border:1px solid #e0ede3;background:#f7fbf8;padding:14px 16px">
-            <div style="font-size:12px;font-weight:700;color:#356041;margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px">Como pagar com cartão:</div>
-            <div style="display:flex;flex-direction:column;gap:7px">
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#444"><span style="background:#15a731;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</span>Digite o número do cartão (sem espaços)</div>
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#444"><span style="background:#15a731;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</span>Nome igual ao impresso no cartão</div>
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#444"><span style="background:#15a731;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</span>Validade MM/AA e CVV (verso do cartão)</div>
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#444"><span style="background:#15a731;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</span>Escolha o parcelamento e clique em Finalizar</div>
-            </div>
+          <div style="margin:12px 0 0;border-radius:8px;overflow:hidden;border:1px solid var(--border-light)">
+            <img src="/img/checkout/ComoComprarGif.gif" alt="Como pagar com cartão" style="width:100%;display:block">
           </div>
           <div id="card-btn">
             <button class="btn" id="btn-card" onclick="pay('cartao')">Finalizar Compra</button>
