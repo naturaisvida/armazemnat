@@ -59,8 +59,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
 /* VARIANTS */
 .variants-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px}
-.variants-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:20px}
-.vcard{border:2px solid var(--border);border-radius:10px;padding:12px 10px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;text-align:center;background:var(--white);position:relative}
+.variants-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:20px}
+.vcard{flex:1 1 150px;max-width:190px;border:2px solid var(--border);border-radius:10px;padding:12px 10px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;text-align:center;background:var(--white);position:relative}
 .vcard:hover{border-color:var(--green);transform:translateY(-1px)}
 .vcard.on{border-color:var(--green);background:#f0fbf3}
 .vcard-pop{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:100px;white-space:nowrap}
