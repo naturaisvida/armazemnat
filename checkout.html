@@ -556,7 +556,7 @@ function toStep2() {
     `${g('nome').split(' ')[0]} · ${g('email')}`;
   unlock(2);
   scrollTo('s2');
-  _saveCart('dados_pessoais');
+  _saveCart('entrega');
 }
 
 function toStep3() {
@@ -567,7 +567,7 @@ function toStep3() {
   unlock(3);
   selPay('pix');
   scrollTo('s3');
-  _saveCart('entrega');
+  _saveCart('pagamento');
 }
 
 function edit(n, e) {
@@ -650,6 +650,11 @@ function cpfOk(c) {
 // ══════════════════════════════════════════
 // MASKS
 // ══════════════════════════════════════════
+// Captura abandono cedo: salva quando email valido e preenchido (sem precisar clicar Continuar)
+document.getElementById('email').addEventListener('blur', function() {
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value.trim())) _saveCart('dados_pessoais');
+});
+
 document.getElementById('cpf').addEventListener('input', function() {
   let v = this.value.replace(/\D/g,'').slice(0,11);
   v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1-$2');
