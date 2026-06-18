@@ -92,12 +92,16 @@ module.exports = async function handler(req, res) {
   try {
     if (eventType === 'order.paid' || eventType === 'charge.paid') {
       const raw = await fetchOrder(orderId);
-      if (raw.id) await sendStatusEmail(mapOrder(raw), 'faturado', '');
+      if (!raw.id) return res.status(200).json({ ok: true, skipped: true });
+      if ((raw.metadata || {}).source !== 'checkout_html') return res.status(200).json({ ok: true, skipped: 'not_checkout_html' });
+      await sendStatusEmail(mapOrder(raw), 'faturado', '');
     }
 
     if (eventType === 'order.canceled' || eventType === 'charge.refunded') {
       const raw = await fetchOrder(orderId);
-      if (raw.id) await sendStatusEmail(mapOrder(raw), 'cancelado', '');
+      if (!raw.id) return res.status(200).json({ ok: true, skipped: true });
+      if ((raw.metadata || {}).source !== 'checkout_html') return res.status(200).json({ ok: true, skipped: 'not_checkout_html' });
+      await sendStatusEmail(mapOrder(raw), 'cancelado', '');
     }
   } catch (e) {
     console.error('Webhook email error:', e.message);
