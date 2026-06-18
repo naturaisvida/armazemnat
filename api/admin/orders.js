@@ -1,5 +1,5 @@
 const jwt                  = require('jsonwebtoken');
-const { sendStatusEmail }  = require('../email/send');
+const { sendStatusEmail }  = require('../_email/send');
 
 const PAGARME_URL = 'https://api.pagar.me/core/v5';
 
