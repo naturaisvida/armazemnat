@@ -767,9 +767,18 @@ async function pay(method) {
 
     const productTotal = P.preco * P.qty;
     const grandTotal   = productTotal + shippingCost;
-    const amount = method==='pix' && CFG.pixDiscount>0
-      ? Math.round(grandTotal*(1-CFG.pixDiscount/100))
-      : grandTotal;
+    const parcelas     = parseInt(g('parc') || '1');
+
+    let amount;
+    if (method === 'pix' && CFG.pixDiscount > 0) {
+      amount = Math.round(grandTotal * (1 - CFG.pixDiscount / 100));
+    } else if (method === 'cartao' && parcelas > CFG.maxParcelsSemJuros) {
+      const r = CFG.jurosMes / 100;
+      const pmt = (grandTotal * r * Math.pow(1+r, parcelas)) / (Math.pow(1+r, parcelas) - 1);
+      amount = Math.round(pmt * parcelas);
+    } else {
+      amount = grandTotal;
+    }
 
     const phone = g('fone').replace(/\D/g,'');
     const payload = {
