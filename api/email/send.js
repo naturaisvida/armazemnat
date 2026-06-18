@@ -168,7 +168,7 @@ function buildHtml(order, statusKey, trackingCode) {
     <tr>
       <td style="padding:20px 40px;border-top:2px solid #f0f0f0;text-align:center">
         <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a2e22;font-family:Arial,sans-serif">Armazém Natural</p>
-        <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif">Dúvidas? Fale conosco &mdash; estamos aqui para ajudar!</p>
+        <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif">Dúvidas? Responda este e-mail ou fale conosco:<br><a href="mailto:atendimento@armazemnatural.shop" style="color:#15a731;text-decoration:none">atendimento@armazemnatural.shop</a></p>
       </td>
     </tr>
 
@@ -185,7 +185,7 @@ function buildHtml(order, statusKey, trackingCode) {
 async function sendRaw(to, subject, html) {
   const key  = process.env.RESEND_API_KEY;
   if (!key) throw new Error('RESEND_API_KEY não configurado');
-  const from = process.env.RESEND_FROM_EMAIL || 'Armazém Natural <noreply@armazemnatural.com.br>';
+  const from = process.env.RESEND_FROM_EMAIL || 'Armazém Natural <atendimento@armazemnatural.shop>';
 
   const r = await fetch(RESEND_API, {
     method: 'POST',
