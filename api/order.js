@@ -141,10 +141,7 @@ module.exports = async function handler(req, res) {
   const orderData = {
     items:    orderItems,
     customer: cust,
-    billing: {
-      name:    customer.name,
-      address: addr,
-    },
+    ...(method === 'cartao' ? { billing: { name: customer.name, address: addr } } : {}),
     payments: payment,
     shipping: {
       amount:          parseInt(shipping_amount) || 0,
