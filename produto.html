@@ -167,7 +167,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .ftr-col a:hover{color:#fff}
 .ftr-bottom{border-top:1px solid rgba(255,255,255,.18);padding-top:20px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
 .ftr-pay{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center}
-.ftr-pay img{height:24px;object-fit:contain;opacity:.85;filter:brightness(0) invert(1)}
+.ftr-pay img{height:24px;object-fit:contain;opacity:.9}
 .ftr-copy{font-size:12px;color:rgba(255,255,255,.55)}
 @media(max-width:768px){.ftr-grid{grid-template-columns:1fr}}
 
@@ -248,8 +248,16 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
     <div id="price-inst" style="display:none"></div>
     <div id="price-pix" style="display:none"></div>
     <div class="checkout-note" style="text-align:center;margin-top:12px">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Métodos de Pagamento Aceitos:</div>
-      <img src="/img/pagamento-seguro.png" alt="PIX, Boleto e Cartão" style="max-width:180px;height:auto;display:block;margin:0 auto">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Métodos de Pagamento Aceitos:</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap">
+        <img src="/img/pagamentos/card-pix.svg" alt="PIX" style="height:24px;object-fit:contain">
+        <img src="/img/pagamentos/card-billet.svg" alt="Boleto" style="height:24px;object-fit:contain">
+        <img src="/img/pagamentos/card-visa.svg" alt="Visa" style="height:24px;object-fit:contain">
+        <img src="/img/pagamentos/card-mastercard.svg" alt="Mastercard" style="height:24px;object-fit:contain">
+        <img src="/img/pagamentos/card-elo.svg" alt="Elo" style="height:24px;object-fit:contain">
+        <img src="/img/pagamentos/card-hiper.svg" alt="Hipercard" style="height:24px;object-fit:contain">
+        <img src="/img/pagamentos/card-amex.svg" alt="Amex" style="height:24px;object-fit:contain">
+      </div>
     </div>
   </div>
 </div>
@@ -320,7 +328,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
     </div>
     <div class="ftr-bottom">
       <div class="ftr-pay">
-        <img src="/img/pagamento-seguro.png" alt="Formas de pagamento aceitas" style="height:28px;filter:none;opacity:.9">
+        <img src="/img/pagamentos/card-pix.svg" alt="PIX">
+        <img src="/img/pagamentos/card-billet.svg" alt="Boleto">
+        <img src="/img/pagamentos/card-visa.svg" alt="Visa">
+        <img src="/img/pagamentos/card-mastercard.svg" alt="Mastercard">
+        <img src="/img/pagamentos/card-elo.svg" alt="Elo">
+        <img src="/img/pagamentos/card-hiper.svg" alt="Hipercard">
+        <img src="/img/pagamentos/card-amex.svg" alt="Amex">
       </div>
       <p class="ftr-copy">© 2025 Armazém Natural · Todos os direitos reservados · Produtos naturais para sua saúde e bem-estar.</p>
     </div>

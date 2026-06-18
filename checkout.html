@@ -142,7 +142,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 @media(max-width:720px){
   .hdr{padding:12px 16px}
   .wrap{grid-template-columns:1fr;padding:14px}
-  .sidebar{order:-1}
+  .sidebar{order:-1;position:static}
   .row.c2{grid-template-columns:1fr}
 }
 </style>
@@ -267,11 +267,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
         <div class="ptabs">
           <button class="ptab" id="tab-pix" onclick="selPay('pix')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg/512px-Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg.png" alt="PIX">
+            <img src="/img/pagamentos/card-pix.svg" alt="PIX">
             <span>PIX</span>
           </button>
           <button class="ptab" id="tab-boleto" onclick="selPay('boleto')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Logomarca_do_boleto_bancário.svg/320px-Logomarca_do_boleto_bancário.svg.png" alt="Boleto">
+            <img src="/img/pagamentos/card-billet.svg" alt="Boleto">
             <span>Boleto</span>
           </button>
           <button class="ptab" id="tab-cartao" onclick="selPay('cartao')">
@@ -315,7 +315,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
         <!-- BOLETO -->
         <div class="pcont" id="pc-boleto">
           <div class="blt-box">
-            <strong>⚠️ Atenção:</strong> O boleto pode levar até <strong>3 dias úteis</strong> para ser compensado.
+            <strong>Atenção:</strong> O boleto pode levar até <strong>3 dias úteis</strong> para ser compensado.
             Seu pedido será separado somente após a confirmação do pagamento.<br><br>
             <strong>Vencimento:</strong> 3 dias úteis após a emissão.
           </div>
@@ -403,12 +403,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 <footer class="ftr">
   <p>Formas de pagamento</p>
   <div class="badges">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo.svg/200px-American_Express_logo.svg.png" alt="Amex">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Elo_logo.svg/200px-Elo_logo.svg.png" alt="Elo">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg/200px-Logo%E2%80%94pix_powered_by_Banco_Central_%28Brazil%2C_2020%29.svg.png" alt="PIX" style="height:18px">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Logomarca_do_boleto_bancário.svg/200px-Logomarca_do_boleto_bancário.svg.png" alt="Boleto" style="height:18px">
+    <img src="/img/pagamentos/card-pix.svg" alt="PIX">
+    <img src="/img/pagamentos/card-billet.svg" alt="Boleto">
+    <img src="/img/pagamentos/card-visa.svg" alt="Visa">
+    <img src="/img/pagamentos/card-mastercard.svg" alt="Mastercard">
+    <img src="/img/pagamentos/card-elo.svg" alt="Elo">
+    <img src="/img/pagamentos/card-hiper.svg" alt="Hipercard">
+    <img src="/img/pagamentos/card-amex.svg" alt="Amex">
   </div>
 </footer>
 
