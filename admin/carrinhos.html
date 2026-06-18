@@ -99,6 +99,7 @@ tbody td{padding:13px 14px;font-size:13px;color:var(--text)}
 .dr-btn:hover{border-color:var(--green);color:var(--green)}
 .dr-btn.primary{background:var(--green);border-color:var(--green);color:#fff}
 .dr-btn.primary:hover{background:var(--green-d)}
+.dr-btn.wpp{background:#25D366;border-color:#25D366;color:#fff}.dr-btn.wpp:hover{background:#1dae52;border-color:#1dae52;color:#fff}
 .step-flow{display:flex;align-items:center;gap:0;margin-bottom:16px}
 .sf-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
 .sf-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);position:relative;z-index:1}
@@ -292,6 +293,10 @@ tbody td{padding:13px 14px;font-size:13px;color:var(--text)}
           <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
           Simular carrinho
         </a>
+        <a class="dr-btn wpp" id="dr-wpp-btn" href="#" target="_blank" style="display:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.121 1.533 5.851L0 24l6.335-1.56A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.006-1.37l-.36-.213-3.727.917.962-3.635-.234-.374A9.818 9.818 0 1112 21.818z"/></svg>
+          WhatsApp
+        </a>
       </div>
     </div>
 
@@ -309,6 +314,12 @@ tbody td{padding:13px 14px;font-size:13px;color:var(--text)}
       <div class="dr-section" id="dr-next-section" style="display:none">
         <div class="dr-label">Próximo e-mail</div>
         <div class="dr-val" id="dr-next-email"></div>
+      </div>
+      <div style="margin-top:8px">
+        <button class="dr-btn primary" id="dr-send-email-btn" onclick="sendCartEmailNow()" style="border:none;cursor:pointer">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Enviar e-mail agora
+        </button>
       </div>
     </div>
 
@@ -488,18 +499,31 @@ function fillDrawer(cart) {
   // Address
   const addr = cart.address;
   const addrSection = document.getElementById('dr-address-section');
-  if (addr && (addr.street || addr.city)) {
-    const street  = [addr.street, addr.number, addr.complement].filter(Boolean).join(', ');
-    const cityLine = [addr.city, addr.state, addr.zip].filter(Boolean).join(' - ');
-    document.getElementById('dr-address-line').textContent = [street, cityLine].filter(Boolean).join(' / ');
+  if (addr && (addr.line1 || addr.city)) {
+    const cepFmt = addr.cep ? addr.cep.replace(/(\d{5})(\d{3})/, '$1-$2') : '';
+    const cityLine = [addr.city, addr.state, cepFmt].filter(Boolean).join(' - ');
+    document.getElementById('dr-address-line').textContent = [addr.line1, cityLine].filter(Boolean).join(' | ');
     addrSection.style.display = '';
   } else {
     addrSection.style.display = 'none';
   }
 
   // Simulate link
-  const storeUrl = 'https://armazemnatural.vercel.app';
+  const storeUrl = 'https://armazemnat-lfw7.vercel.app';
   document.getElementById('dr-simulate-btn').href = `${storeUrl}/checkout.html?cartId=${encodeURIComponent(cart.id)}`;
+
+  // WhatsApp button
+  const phone = (cart.customer?.phone || '').replace(/\D/g, '');
+  const wppBtn = document.getElementById('dr-wpp-btn');
+  if (phone.length >= 10) {
+    const firstName = (cart.customer?.name || 'voce').split(' ')[0];
+    const cartLink = `${storeUrl}/checkout.html?cartId=${encodeURIComponent(cart.id)}`;
+    const msg = encodeURIComponent(`Ola ${firstName}! Vi que voce deixou produtos no carrinho da Armazem Natural. Posso te ajudar a finalizar? Seu carrinho ainda esta aqui: ${cartLink}`);
+    wppBtn.href = `https://wa.me/55${phone}?text=${msg}`;
+    wppBtn.style.display = '';
+  } else {
+    wppBtn.style.display = 'none';
+  }
 
   // Products
   const prodList = document.getElementById('dr-products-list');
@@ -547,6 +571,31 @@ function fillDrawer(cart) {
     nextSection.style.display = '';
   } else {
     nextSection.style.display = 'none';
+  }
+}
+
+async function sendCartEmailNow() {
+  if (!_openCart) return;
+  const btn = document.getElementById('dr-send-email-btn');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  try {
+    const r = await fetch('/api/cart/cron', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+      body: JSON.stringify({ cartId: _openCart.id }),
+    });
+    const d = await r.json();
+    if (r.ok && d.ok) {
+      btn.textContent = 'E-mail enviado!';
+      setTimeout(() => { loadCarts(); openDrawer(_openCart.id); }, 1200);
+    } else {
+      btn.textContent = d.error || 'Erro ao enviar';
+      setTimeout(() => { btn.disabled = false; btn.textContent = 'Enviar e-mail agora'; }, 2500);
+    }
+  } catch {
+    btn.textContent = 'Erro de conexao';
+    setTimeout(() => { btn.disabled = false; btn.textContent = 'Enviar e-mail agora'; }, 2500);
   }
 }
 

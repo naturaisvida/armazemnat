@@ -2,6 +2,7 @@
 // Secure with ?secret=CRON_SECRET or X-Cron-Secret header
 // Recommended: cron-job.org (free) → GET https://seu-site.vercel.app/api/cart/cron?secret=CRON_SECRET
 
+const jwt         = require('jsonwebtoken');
 const redis       = require('../_lib/redis');
 const { sendRaw } = require('../_email/send');
 
@@ -126,6 +127,41 @@ function buildEmail(cart, emailNum) {
 module.exports = async function handler(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Cache-Control', 'no-store');
+
+  // POST — force-send next recovery email to a specific cart (admin only)
+  if (req.method === 'POST') {
+    const raw    = (req.headers['authorization'] || '').trim();
+    const token  = raw.startsWith('Bearer ') ? raw.slice(7).trim() : raw;
+    const secret = process.env.ADMIN_JWT_SECRET;
+    if (!token || !secret) return res.status(401).json({ error: 'Não autorizado' });
+    try {
+      const p = jwt.verify(token, secret, { algorithms: ['HS256'] });
+      if (p.role !== 'admin') throw new Error();
+    } catch { return res.status(401).json({ error: 'Token inválido' }); }
+
+    const { cartId } = req.body || {};
+    if (!cartId) return res.status(400).json({ error: 'cartId obrigatório' });
+
+    const cart = await redis.get(`cart:${cartId}`);
+    if (!cart || !cart.customer?.email) return res.status(404).json({ error: 'Carrinho não encontrado ou sem e-mail' });
+    if (cart.converted) return res.status(400).json({ error: 'Carrinho já convertido' });
+
+    const emailNum = Math.min(cart.nextEmailNum || 1, 3);
+    const emailContent = buildEmail(cart, emailNum);
+    if (!emailContent) return res.status(400).json({ error: 'Nenhum e-mail disponível' });
+
+    await sendRaw(cart.customer.email, emailContent.subject, emailContent.html);
+
+    cart.recoveryEmails = cart.recoveryEmails || [];
+    cart.recoveryEmails.push({ num: emailNum, sentAt: new Date().toISOString(), manual: true });
+    cart.nextEmailNum = emailNum + 1;
+    cart.nextRecoveryAt = emailNum < 3
+      ? new Date(Date.now() + GAPS[emailNum]).toISOString()
+      : null;
+
+    await redis.set(`cart:${cartId}`, cart, 7 * 24 * 60 * 60);
+    return res.status(200).json({ ok: true, emailNum, to: cart.customer.email });
+  }
 
   if (req.method !== 'GET') return res.status(405).end();
 
