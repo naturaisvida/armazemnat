@@ -46,7 +46,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
 /* PRODUCT INFO */
 .prod-info{}
-.prod-badge{display:inline-block;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.prod-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.prod-badge{display:inline-flex;align-items:center;padding:5px 14px;border-radius:100px;font-size:11px;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.6px}
+.badge-brand{background:linear-gradient(135deg,#1b5e20,#43a047)}
+.badge-oferta{background:linear-gradient(135deg,#2e7d32,#66bb6a)}
+.badge-frete{background:linear-gradient(135deg,#b8860b,#ffd700);color:#1a1a1a}
+.badge-lancamento{background:linear-gradient(135deg,#1565c0,#42a5f5)}
+.badge-novidade{background:linear-gradient(135deg,#6a1b9a,#ab47bc)}
 .prod-title{font-size:clamp(20px,3vw,28px);font-weight:800;color:var(--text);line-height:1.25;margin-bottom:6px}
 .prod-sub{font-size:14px;color:var(--muted);margin-bottom:16px}
 
@@ -68,7 +74,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .vcard{flex:1 1 150px;max-width:190px;border:2px solid var(--border);border-radius:10px;padding:12px 10px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;text-align:center;background:var(--white);position:relative}
 .vcard:hover{border-color:var(--green);transform:translateY(-1px)}
 .vcard.on{border-color:var(--green);background:#f0fbf3}
-.vcard-pop{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:100px;white-space:nowrap}
+.vcard-pop{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#b8860b,#ffd700);color:#1a1a1a;font-size:10px;font-weight:800;padding:3px 12px;border-radius:100px;white-space:nowrap;letter-spacing:.3px}
 .vcard-title{font-size:12px;font-weight:700;color:var(--green-2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .vcard-price{font-size:18px;font-weight:800;color:var(--text);margin-bottom:2px}
 .vcard-compare{font-size:12px;color:#aaa;text-decoration:line-through;margin-bottom:4px}
@@ -190,7 +196,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 
   <!-- INFO -->
   <div class="prod-info">
-    <span class="prod-badge" id="prod-badge"></span>
+    <div class="prod-tags">
+      <span class="prod-badge badge-oferta">Oferta do Dia</span>
+      <span class="prod-badge badge-frete">Frete Grátis</span>
+      <span class="prod-badge" id="prod-badge" style="display:none"></span>
+    </div>
     <h1 class="prod-title" id="prod-title"></h1>
     <p class="prod-sub" id="prod-sub"></p>
 
@@ -226,7 +236,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
     <div id="price-inst" style="display:none"></div>
     <div id="price-pix" style="display:none"></div>
     <div class="checkout-note" style="text-align:center;margin-top:12px">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Pagamento 100% seguro</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Métodos de Pagamento Aceitos:</div>
       <img src="/img/pagamento-seguro.png" alt="PIX, Boleto e Cartão" style="max-width:180px;height:auto;display:block;margin:0 auto">
     </div>
   </div>
@@ -454,10 +464,16 @@ if (!prod) {
 document.getElementById('pg-title').textContent = prod.titulo + ' — Armazém Natural';
 document.getElementById('pg-desc').setAttribute('content', prod.subtitulo);
 
-// ─── Badge ────────────────────────────────────────────────────────────────────
+// ─── Badge do produto (LANÇAMENTO, NOVIDADE etc.) ────────────────────────────
 const badge = qs('prod-badge');
-badge.textContent = prod.badge;
-badge.style.background = prod.badgeColor;
+if (prod.badge) {
+  badge.textContent = prod.badge;
+  badge.style.display = '';
+  const badgeMap = { 'LANÇAMENTO':'badge-lancamento','NOVIDADE':'badge-novidade','DESTAQUE':'badge-brand' };
+  const cls = badgeMap[prod.badge.toUpperCase()];
+  if (cls) badge.classList.add(cls);
+  else badge.style.background = prod.badgeColor || '#2e7d32';
+}
 
 qs('prod-title').textContent = prod.titulo;
 qs('prod-sub').textContent   = prod.subtitulo;
