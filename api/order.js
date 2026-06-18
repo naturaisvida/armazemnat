@@ -74,6 +74,7 @@ module.exports = async function handler(req, res) {
   }
 
   const doc = (customer.document || '').replace(/\D/g, '');
+
   const cust = {
     name:          customer.name,
     email:         customer.email,
@@ -87,23 +88,27 @@ module.exports = async function handler(req, res) {
         number:       (customer.phone_number || '').replace(/\D/g, ''),
       }
     },
-    address: {
-      line_1:   address.line_1   || '',
-      zip_code: (address.zip_code || '').replace(/\D/g, ''),
-      city:     address.city     || '',
-      state:    (address.state   || '').toUpperCase().replace(/[^A-Z]/g, ''),
-      country:  'BR',
-    },
   };
 
-  const addr = {
-    line_1:   address.line_1   || '',
+  // billing_address vai dentro de credit_card.card (per Pagar.me v5 SDK: CreateCardRequest.billing_address)
+  const billingAddr = {
+    line_1:   (address.line_1  || '').trim(),
+    line_2:   (address.line_2  || '').trim(),
     zip_code: (address.zip_code || '').replace(/\D/g, ''),
-    city:     address.city     || '',
+    city:     (address.city    || '').trim(),
     state:    (address.state   || '').toUpperCase().replace(/[^A-Z]/g, ''),
     country:  'BR',
   };
-  if (address.line_2 && address.line_2.trim()) addr.line_2 = address.line_2.trim();
+
+  // endereco para shipping (mesmo formato)
+  const shippingAddr = {
+    line_1:   billingAddr.line_1,
+    line_2:   billingAddr.line_2,
+    zip_code: billingAddr.zip_code,
+    city:     billingAddr.city,
+    state:    billingAddr.state,
+    country:  'BR',
+  };
 
   const orderItems = items.map((it, i) => ({
     amount:      parseInt(it.amount) || 0,
@@ -114,14 +119,21 @@ module.exports = async function handler(req, res) {
 
   let payment;
   if (method === 'pix') {
-    payment = [{ payment_method: 'pix', amount: parseInt(amount), pix: { expires_in: parseInt(pix_expires_in) } }];
+    payment = [{
+      payment_method: 'pix',
+      amount: parseInt(amount),
+      pix: { expires_in: parseInt(pix_expires_in) },
+    }];
   } else if (method === 'boleto') {
     const due = new Date();
     due.setDate(due.getDate() + 3);
     payment = [{
       payment_method: 'boleto',
       amount: parseInt(amount),
-      boleto: { instructions: 'Não receber após o vencimento.', due_at: due.toISOString() }
+      boleto: {
+        instructions: 'Nao receber apos o vencimento.',
+        due_at: due.toISOString(),
+      },
     }];
   } else if (method === 'cartao') {
     payment = [{
@@ -131,8 +143,10 @@ module.exports = async function handler(req, res) {
         installments:         parseInt(installments),
         statement_descriptor: 'COMPRA SEGURA',
         card_token:           card_token,
-        billing:              addr,
-      }
+        card: {
+          billing_address: billingAddr,
+        },
+      },
     }];
   } else {
     return res.status(400).json({ error: true, message: 'Método de pagamento inválido' });
@@ -141,23 +155,22 @@ module.exports = async function handler(req, res) {
   const orderData = {
     items:    orderItems,
     customer: cust,
-    ...(method === 'cartao' ? { billing: { name: customer.name, address: addr } } : {}),
     payments: payment,
     shipping: {
       amount:          parseInt(shipping_amount) || 0,
-      description:     shipping_amount > 0 ? `Frete ${shipping_label}` : 'Frete Grátis',
+      description:     parseInt(shipping_amount) > 0 ? `Frete ${shipping_label}` : 'Frete Gratis',
       recipient_name:  cust.name,
       recipient_phone: '55' + cust.phones.mobile_phone.area_code + cust.phones.mobile_phone.number,
-      address:         addr,
+      address:         shippingAddr,
     },
     metadata: {
-      observacao:    String(observacao).slice(0, 300),
-      source:        'checkout_html',
-      utm_source:    String(utm.source   || '').slice(0, 100),
-      utm_medium:    String(utm.medium   || '').slice(0, 100),
-      utm_campaign:  String(utm.campaign || '').slice(0, 100),
-      utm_content:   String(utm.content  || '').slice(0, 100),
-      utm_term:      String(utm.term     || '').slice(0, 100),
+      observacao:   String(observacao).slice(0, 300),
+      source:       'checkout_html',
+      utm_source:   String(utm.source   || '').slice(0, 100),
+      utm_medium:   String(utm.medium   || '').slice(0, 100),
+      utm_campaign: String(utm.campaign || '').slice(0, 100),
+      utm_content:  String(utm.content  || '').slice(0, 100),
+      utm_term:     String(utm.term     || '').slice(0, 100),
     },
     closed: true,
   };
@@ -165,7 +178,7 @@ module.exports = async function handler(req, res) {
   console.error('[order] PAYLOAD:', JSON.stringify(orderData));
   const result = await pagarmeReq('POST', '/orders', orderData);
   if ((result._http || 200) >= 400) {
-    console.error('[order] pagarme error:', JSON.stringify(result));
+    console.error('[order] ERROR:', JSON.stringify(result));
   }
 
   if ((result._http || 200) >= 400) {
@@ -173,7 +186,6 @@ module.exports = async function handler(req, res) {
     return res.status(result._http).json({ error: true, message: msg, details: result });
   }
 
-  // Send order confirmation email (fire-and-forget)
   try {
     const charge = (result.charges || [])[0] || {};
     const tx     = charge.last_transaction || {};
@@ -203,7 +215,6 @@ module.exports = async function handler(req, res) {
       sendCartaoEmail(emailOrder).catch(() => {});
     }
   } catch (e) {
-    // Email failure must NOT block order response
     console.error('Email send error:', e.message);
   }
 
