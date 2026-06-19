@@ -859,8 +859,17 @@ async function tokenize() {
   return d.id;
 }
 
+function navigateTo(url) {
+  _markCartConverted();
+  location.href = url;
+}
+
 function fireAndNavigate(orderId, url) {
   _markCartConverted();
+  sessionStorage.setItem('armazem_conversion', JSON.stringify({
+    orderId: orderId,
+    valor:   (P.preco * P.qty) / 100,
+  }));
   let done = false;
   function go() { if (!done) { done = true; location.href = url; } }
   setTimeout(go, 400);
@@ -889,7 +898,7 @@ function handleResult(method, data, btn, amount) {
       expira:  CFG.pixExpires,
       valor:   amount,
     }));
-    fireAndNavigate(data.id, '/pix.html');
+    navigateTo('/pix.html');
   }
   else if (method==='boleto') {
     const tx = data.charges?.[0]?.last_transaction;
@@ -899,7 +908,7 @@ function handleResult(method, data, btn, amount) {
       orderId: data.id,
       valor:   amount,
     }));
-    fireAndNavigate(data.id, '/boleto.html');
+    navigateTo('/boleto.html');
   }
   else if (method==='cartao') {
     const status = data.charges?.[0]?.status;

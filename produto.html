@@ -616,11 +616,19 @@ qs('tab-nome').textContent   = prod.nome;
 qs('desc-sobre').innerHTML   = gerarSobre(prod);
 qs('desc-como-usar').innerHTML = gerarComoUsar(prod);
 
-// Oculta secao de kits da copy (links Yampi) — CTA nativo no sticky bar abaixo
+// Oculta secao de kits da copy (links Yampi) e redireciona botoes CTA para o seletor nativo
 (function(){
   const sobreEl = qs('desc-sobre');
   if (!sobreEl) return;
   sobreEl.querySelectorAll('[class*="-kits"]').forEach(function(el){ el.style.display='none'; });
+  sobreEl.querySelectorAll('a[class*="-btn"]').forEach(function(el){
+    el.href = '#';
+    el.onclick = function(e){
+      e.preventDefault();
+      var vg = document.getElementById('variants-grid');
+      if (vg) vg.scrollIntoView({behavior:'smooth', block:'center'});
+    };
+  });
 })();
 
 // ─── Gallery ─────────────────────────────────────────────────────────────────
