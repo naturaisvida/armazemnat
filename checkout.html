@@ -797,6 +797,7 @@ async function pay(method) {
       pix_expires_in: CFG.pixExpires,
       observacao: g('obs'),
       utm: _utm,
+      gclid: _gclid || undefined,
       customer: {
         name:        g('nome').trim(),
         email:       g('email').trim(),
@@ -1012,6 +1013,23 @@ const _utm = (function() {
   const merged = Object.keys(fresh).length ? fresh : stored;
   if (Object.keys(merged).length) sessionStorage.setItem('_utm', JSON.stringify(merged));
   return merged;
+})();
+
+// ── GCLID TRACKING (Google Ads click ID) ────────────────────────────────────
+const _gclid = (function() {
+  const p = new URLSearchParams(location.search);
+  const fromUrl = p.get('gclid');
+  if (fromUrl) { sessionStorage.setItem('_gclid', fromUrl); return fromUrl; }
+  // Fallback: cookie _gcl_aw que o gtag.js define automaticamente
+  try {
+    const ck = document.cookie.split(';').find(c => c.trim().startsWith('_gcl_aw='));
+    if (ck) {
+      const parts = ck.split('=')[1].split('.');
+      const id = parts[parts.length - 1];
+      if (id) { sessionStorage.setItem('_gclid', id); return id; }
+    }
+  } catch(e) {}
+  return sessionStorage.getItem('_gclid') || '';
 })();
 
 // ── ABANDONED CART TRACKING ─────────────────────────────────────────────────

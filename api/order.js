@@ -55,6 +55,7 @@ module.exports = async function handler(req, res) {
     pix_expires_in = 1800,
     observacao = '',
     utm = {},
+    gclid = '',
   } = input;
 
   if (!amount || parseInt(amount) <= 0) {
@@ -171,6 +172,7 @@ module.exports = async function handler(req, res) {
       utm_campaign: String(utm.campaign || '').slice(0, 100),
       utm_content:  String(utm.content  || '').slice(0, 100),
       utm_term:     String(utm.term     || '').slice(0, 100),
+      gclid:        String(gclid        || '').slice(0, 200),
     },
     closed: true,
   };

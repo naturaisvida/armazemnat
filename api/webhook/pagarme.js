@@ -1,6 +1,24 @@
 const { sendStatusEmail } = require('../_email/send');
 
-const PAGARME_URL = 'https://api.pagar.me/core/v5';
+const PAGARME_URL           = 'https://api.pagar.me/core/v5';
+const GADS_CONVERSION_ID    = '18164681866';
+const GADS_CONVERSION_LABEL = '9Wc0CM6w3LAcEIqZzNVD';
+
+async function sendGoogleConversion(gclid, amountCents, orderId) {
+  if (!gclid) return;
+  const value = (amountCents / 100).toFixed(2);
+  const url = 'https://www.googleadservices.com/pagead/conversion/' + GADS_CONVERSION_ID + '/'
+    + '?gclid=' + encodeURIComponent(gclid)
+    + '&value=' + value + '&currency_code=BRL'
+    + '&label=' + GADS_CONVERSION_LABEL
+    + '&guid=ON&script=0';
+  try {
+    await fetch(url);
+    console.log('[gads] conversion sent orderId=' + orderId + ' gclid=' + gclid.slice(0,8) + '... value=R$' + value);
+  } catch (e) {
+    console.error('[gads] error:', e.message);
+  }
+}
 
 function pagarmeAuth() {
   const s = process.env.PAGARME_SECRET;
@@ -94,7 +112,14 @@ module.exports = async function handler(req, res) {
       const raw = await fetchOrder(orderId);
       if (!raw.id) return res.status(200).json({ ok: true, skipped: true });
       if ((raw.metadata || {}).source !== 'checkout_html') return res.status(200).json({ ok: true, skipped: 'not_checkout_html' });
-      await sendStatusEmail(mapOrder(raw), 'faturado', '');
+      const mapped = mapOrder(raw);
+      // Dispara conversao Google Ads apenas para PIX e boleto confirmados
+      // (cartao ja e rastreado pelo frontend no sucesso.html)
+      if (mapped.method === 'pix' || mapped.method === 'boleto') {
+        const gclid = (raw.metadata || {}).gclid || '';
+        await sendGoogleConversion(gclid, raw.amount || 0, raw.id);
+      }
+      await sendStatusEmail(mapped, 'faturado', '');
     }
 
     if (eventType === 'order.canceled' || eventType === 'charge.refunded') {
