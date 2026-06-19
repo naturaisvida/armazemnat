@@ -617,6 +617,24 @@ qs('tab-nome').textContent   = prod.nome;
 qs('desc-sobre').innerHTML   = gerarSobre(prod);
 qs('desc-como-usar').innerHTML = gerarComoUsar(prod);
 
+// Substitui secao de kits da copy (links Yampi) por CTA que rola ate o seletor nativo
+(function(){
+  const sobreEl = qs('desc-sobre');
+  if (!sobreEl) return;
+  sobreEl.querySelectorAll('[class*="-kits"]').forEach(function(kitsEl){
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'text-align:center;padding:28px 16px 4px';
+    const btn = document.createElement('button');
+    btn.textContent = 'Escolher meu kit';
+    btn.style.cssText = 'background:#15a731;color:#fff;border:none;border-radius:10px;padding:14px 40px;font-family:Poppins,sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:background .15s';
+    btn.onmouseenter = function(){ btn.style.background='#0e8a28'; };
+    btn.onmouseleave = function(){ btn.style.background='#15a731'; };
+    btn.onclick = function(){ document.getElementById('variants-grid').scrollIntoView({behavior:'smooth'}); };
+    wrap.appendChild(btn);
+    kitsEl.parentNode.replaceChild(wrap, kitsEl);
+  });
+})();
+
 // ─── Gallery ─────────────────────────────────────────────────────────────────
 const mainPhoto = qs('main-photo');
 mainPhoto.src = prod.imagens[0];
