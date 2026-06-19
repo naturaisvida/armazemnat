@@ -1,6 +1,9 @@
 {
+  "functions": {
+    "api/produto.js": { "includeFiles": "produto.html" }
+  },
   "rewrites": [
-    { "source": "/products/:slug",    "destination": "/produto.html?slug=:slug" },
+    { "source": "/products/:slug",    "destination": "/api/produto?slug=:slug" },
     { "source": "/admin",             "destination": "/admin/index.html" },
     { "source": "/admin/pedidos",     "destination": "/admin/pedidos.html" },
     { "source": "/admin/analises",    "destination": "/admin/analises.html" },
