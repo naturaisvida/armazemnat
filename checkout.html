@@ -858,6 +858,24 @@ async function tokenize() {
   return d.id;
 }
 
+function fireAndNavigate(orderId, url) {
+  _markCartConverted();
+  let done = false;
+  function go() { if (!done) { done = true; location.href = url; } }
+  setTimeout(go, 400);
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', {
+      send_to:        'AW-18164681866/9Wc0CM6w3LAcEIqZzNVD',
+      value:          (P.preco * P.qty) / 100,
+      currency:       'BRL',
+      transaction_id: orderId,
+      event_callback: go,
+    });
+  } else {
+    go();
+  }
+}
+
 function handleResult(method, data, btn, amount) {
   btn.classList.remove('spin'); btn.disabled = false;
 
@@ -870,9 +888,7 @@ function handleResult(method, data, btn, amount) {
       expira:  CFG.pixExpires,
       valor:   amount,
     }));
-    fireConversion(data.id);
-    _markCartConverted();
-    location.href = '/pix.html';
+    fireAndNavigate(data.id, '/pix.html');
   }
   else if (method==='boleto') {
     const tx = data.charges?.[0]?.last_transaction;
@@ -882,17 +898,13 @@ function handleResult(method, data, btn, amount) {
       orderId: data.id,
       valor:   amount,
     }));
-    fireConversion(data.id);
-    _markCartConverted();
-    location.href = '/boleto.html';
+    fireAndNavigate(data.id, '/boleto.html');
   }
   else if (method==='cartao') {
     const status = data.charges?.[0]?.status;
     const ok = status==='paid' || status==='authorized_pending_capture';
     if (ok) {
-      fireConversion(data.id);
-      _markCartConverted();
-      location.href = '/sucesso.html?pedido=' + encodeURIComponent(data.id);
+      fireAndNavigate(data.id, '/sucesso.html?pedido=' + encodeURIComponent(data.id));
     } else {
       _markCartFailed();
       document.getElementById('card-btn').style.display = 'none';
@@ -943,15 +955,6 @@ async function pollOrder(orderId) {
   }, 5000);
 }
 
-function fireConversion(orderId) {
-  if (typeof gtag === 'undefined') return;
-  gtag('event', 'conversion', {
-    send_to:        'AW-18164681866/9Wc0CM6w3LAcEIqZzNVD',
-    value:          (P.preco * P.qty) / 100,
-    currency:       'BRL',
-    transaction_id: orderId,
-  });
-}
 
 function showSuccess(id) {
   document.getElementById('steps').innerHTML = `
