@@ -861,13 +861,6 @@ async function tokenize() {
 function handleResult(method, data, btn, amount) {
   btn.classList.remove('spin'); btn.disabled = false;
 
-  // PIX e boleto: pedido criado = contar como conversao (igual Yampi)
-  // Cartao: so conta apos aprovacao (pode ser recusado)
-  if ((method==='pix' || method==='boleto') && data.id) {
-    fireConversion(data.id);
-    _markCartConverted();
-  }
-
   if (method==='pix') {
     const tx = data.charges?.[0]?.last_transaction;
     sessionStorage.setItem('armazem_pix', JSON.stringify({

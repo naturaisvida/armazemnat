@@ -175,7 +175,6 @@ module.exports = async function handler(req, res) {
     closed: true,
   };
 
-  console.error('[order] PAYLOAD:', JSON.stringify(orderData));
   const result = await pagarmeReq('POST', '/orders', orderData);
   if ((result._http || 200) >= 400) {
     console.error('[order] ERROR:', JSON.stringify(result));
