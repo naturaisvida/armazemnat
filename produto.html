@@ -617,22 +617,11 @@ qs('tab-nome').textContent   = prod.nome;
 qs('desc-sobre').innerHTML   = gerarSobre(prod);
 qs('desc-como-usar').innerHTML = gerarComoUsar(prod);
 
-// Substitui secao de kits da copy (links Yampi) por CTA que rola ate o seletor nativo
+// Oculta secao de kits da copy (links Yampi) — CTA nativo no sticky bar abaixo
 (function(){
   const sobreEl = qs('desc-sobre');
   if (!sobreEl) return;
-  sobreEl.querySelectorAll('[class*="-kits"]').forEach(function(kitsEl){
-    const wrap = document.createElement('div');
-    wrap.style.cssText = 'text-align:center;padding:28px 16px 4px';
-    const btn = document.createElement('button');
-    btn.textContent = 'Escolher meu kit';
-    btn.style.cssText = 'background:#15a731;color:#fff;border:none;border-radius:10px;padding:14px 40px;font-family:Poppins,sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:background .15s';
-    btn.onmouseenter = function(){ btn.style.background='#0e8a28'; };
-    btn.onmouseleave = function(){ btn.style.background='#15a731'; };
-    btn.onclick = function(){ document.getElementById('variants-grid').scrollIntoView({behavior:'smooth'}); };
-    wrap.appendChild(btn);
-    kitsEl.parentNode.replaceChild(wrap, kitsEl);
-  });
+  sobreEl.querySelectorAll('[class*="-kits"]').forEach(function(el){ el.style.display='none'; });
 })();
 
 // ─── Gallery ─────────────────────────────────────────────────────────────────
@@ -834,6 +823,25 @@ function closeModal() {
   function ping() { fetch('/api/analytics/ping',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sid})}).catch(()=>{}); }
   ping();
   setInterval(ping, 30000);
+})();
+</script>
+
+<!-- Sticky CTA mobile: aparece quando variants-grid nao esta visivel -->
+<div id="sticky-kit-cta" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:900;background:#fff;padding:12px 16px 16px;box-shadow:0 -3px 20px rgba(0,0,0,.13);border-top:1px solid #e5e5e5">
+  <button onclick="document.getElementById('variants-grid').scrollIntoView({behavior:'smooth'})" style="width:100%;background:#15a731;color:#fff;border:none;border-radius:10px;padding:15px;font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:.01em">
+    Escolher meu kit
+  </button>
+</div>
+<script>
+(function(){
+  var bar = document.getElementById('sticky-kit-cta');
+  var grid = document.getElementById('variants-grid');
+  if (!bar || !grid || !window.IntersectionObserver) return;
+  if (window.innerWidth > 900) return; // desktop: grid ja fica visivel na coluna lateral
+  var obs = new IntersectionObserver(function(entries){
+    bar.style.display = entries[0].isIntersecting ? 'none' : 'block';
+  }, { threshold: 0.1 });
+  obs.observe(grid);
 })();
 </script>
 </body>
