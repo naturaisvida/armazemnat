@@ -330,15 +330,19 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
         <p style="display:flex;align-items:center;gap:7px"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;opacity:.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Seg–Sex, 9h–18h</p>
       </div>
       <div class="ftr-col">
-        <h4>Endereço</h4>
-        <p>Armazém Natural LTDA</p>
-        <p>Brasil</p>
+        <h4>Suporte</h4>
+        <a href="https://wa.me/5511970111782" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:7px">
+          <svg width="14" height="14" fill="#25d366" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.878-1.42A9.952 9.952 0 0011.998 22c5.523 0 10-4.477 10-10S17.521 2 11.998 2z" fill="none" stroke="#25d366" stroke-width="1.5"/></svg>
+          WhatsApp
+        </a>
       </div>
       <div class="ftr-col">
-        <h4>Políticas</h4>
-        <a href="#" onclick="openModal('privacidade');return false">Política de Privacidade</a>
+        <h4>Politicas</h4>
+        <a href="#" onclick="openModal('privacidade');return false">Politica de Privacidade e Cookies</a>
         <a href="#" onclick="openModal('termos');return false">Termos de Uso</a>
-        <a href="#" onclick="openModal('devolucao');return false">Política de Devolução</a>
+        <a href="#" onclick="openModal('devolucao');return false">Politicas de Reembolso e Devolucao</a>
+        <a href="#" onclick="openModal('frete');return false">Politicas de Frete</a>
+        <a href="#" onclick="openModal('aviso');return false">Aviso Legal</a>
       </div>
     </div>
     <div class="ftr-bottom">
@@ -779,12 +783,28 @@ const POLITICAS = {
     <p><strong>Foro:</strong> Fica eleito o foro da comarca de domicílio do consumidor para resolução de conflitos.</p>`
   },
   devolucao: {
-    titulo: 'Política de Devolução',
-    corpo: `<p><strong>Garantia de 30 dias:</strong> Você tem 30 dias a partir do recebimento para solicitar a devolução, sem precisar justificar o motivo.</p>
-    <p><strong>Como solicitar:</strong> Entre em contato pelo nosso WhatsApp ou e-mail informando o número do pedido. Retornaremos em até 24h com as instruções.</p>
-    <p><strong>Reembolso:</strong> Após recebermos e verificarmos o produto devolvido, o reembolso é processado em até 5 dias úteis pelo mesmo método de pagamento utilizado na compra.</p>
-    <p><strong>Produto com defeito:</strong> Em caso de defeito de fabricação, arcamos com o frete de devolução e enviamos um novo produto sem custo adicional.</p>
+    titulo: 'Politicas de Reembolso e Devolucao',
+    corpo: `<p><strong>Garantia de 30 dias:</strong> Voce tem 30 dias a partir do recebimento para solicitar a devolucao, sem precisar justificar o motivo.</p>
+    <p><strong>Como solicitar:</strong> Entre em contato pelo WhatsApp (55 11 97011-1782) ou e-mail informando o numero do pedido. Retornaremos em ate 24h com as instrucoes.</p>
+    <p><strong>Reembolso:</strong> Apos recebermos e verificarmos o produto devolvido, o reembolso e processado em ate 5 dias uteis pelo mesmo metodo de pagamento utilizado na compra.</p>
+    <p><strong>Produto com defeito:</strong> Em caso de defeito de fabricacao, arcamos com o frete de devolucao e enviamos um novo produto sem custo adicional.</p>
     <p><strong>Contato:</strong> atendimento@armazemnatural.shop</p>`
+  },
+  frete: {
+    titulo: 'Politicas de Frete',
+    corpo: `<p><strong>Frete Gratis:</strong> Todas as compras no Armazem Natural tem frete gratis para todo o Brasil, sem valor minimo de pedido.</p>
+    <p><strong>Prazo de envio:</strong> O pedido e despachado em ate 1 dia util apos a confirmacao do pagamento.</p>
+    <p><strong>Prazo de entrega:</strong> De 5 a 12 dias uteis apos o envio, dependendo da regiao. Regioes metropolitanas costumam receber em 3 a 7 dias uteis.</p>
+    <p><strong>Rastreamento:</strong> Voce recebera o codigo de rastreio por e-mail assim que o pedido for despachado.</p>
+    <p><strong>Extravio:</strong> Em caso de nao recebimento em ate 20 dias uteis, entre em contato para abrirmos uma investigacao com a transportadora.</p>`
+  },
+  aviso: {
+    titulo: 'Aviso Legal',
+    corpo: `<p>Os produtos comercializados pelo Armazem Natural sao suplementos alimentares e nao substituem medicamentos, tratamento medico ou dieta prescrita por profissional de saude.</p>
+    <p>Os resultados podem variar de pessoa para pessoa. As descricoes dos produtos sao baseadas nos beneficios dos ingredientes e nao constituem alegacao de cura, prevencao ou tratamento de doencas.</p>
+    <p>Consulte sempre um medico ou nutricionista antes de iniciar o uso de qualquer suplemento, especialmente se voce tiver condicoes de saude preexistentes, estiver gravida, amamentando ou em uso de medicamentos.</p>
+    <p>O Armazem Natural cumpre integralmente as normas da ANVISA para comercializacao de suplementos alimentares no Brasil.</p>
+    <p><strong>CNPJ:</strong> a ser inserido &nbsp;|&nbsp; <strong>Contato:</strong> atendimento@armazemnatural.shop</p>`
   }
 };
 
@@ -826,23 +846,5 @@ function closeModal() {
 })();
 </script>
 
-<!-- Sticky CTA mobile: aparece quando variants-grid nao esta visivel -->
-<div id="sticky-kit-cta" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:900;background:#fff;padding:12px 16px 16px;box-shadow:0 -3px 20px rgba(0,0,0,.13);border-top:1px solid #e5e5e5">
-  <button onclick="document.getElementById('variants-grid').scrollIntoView({behavior:'smooth'})" style="width:100%;background:#15a731;color:#fff;border:none;border-radius:10px;padding:15px;font-family:'Poppins',sans-serif;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:.01em">
-    Escolher meu kit
-  </button>
-</div>
-<script>
-(function(){
-  var bar = document.getElementById('sticky-kit-cta');
-  var grid = document.getElementById('variants-grid');
-  if (!bar || !grid || !window.IntersectionObserver) return;
-  if (window.innerWidth > 900) return; // desktop: grid ja fica visivel na coluna lateral
-  var obs = new IntersectionObserver(function(entries){
-    bar.style.display = entries[0].isIntersecting ? 'none' : 'block';
-  }, { threshold: 0.1 });
-  obs.observe(grid);
-})();
-</script>
 </body>
 </html>
