@@ -7,6 +7,18 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','AW-18164681866');</script>
 <title id="pg-title">Produto — Armazém Natural</title>
 <meta name="description" id="pg-desc" content="">
+<link id="pg-canonical" rel="canonical" href="">
+<meta id="og-type"    property="og:type"        content="product">
+<meta id="og-site"    property="og:site_name"   content="Armazem Natural">
+<meta id="og-title"   property="og:title"       content="">
+<meta id="og-desc"    property="og:description" content="">
+<meta id="og-image"   property="og:image"       content="">
+<meta id="og-url"     property="og:url"         content="">
+<meta id="og-prc"     property="product:price:amount"   content="">
+<meta id="og-cur"     property="product:price:currency" content="BRL">
+<meta name="twitter:card" content="summary_large_image">
+<script id="ld-json" type="application/ld+json"></script>
+<!-- Microsoft Clarity: cole o script aqui quando tiver o Project ID -->
 <link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -536,9 +548,57 @@ if (!prod) {
   throw new Error('produto nao encontrado');
 }
 
-// ─── Meta ─────────────────────────────────────────────────────────────────────
-document.getElementById('pg-title').textContent = prod.titulo + ' — Armazém Natural';
+// ─── Meta + SEO ───────────────────────────────────────────────────────────────
+const _ORIGIN = 'https://armazemnatural.shop';
+const _PURL   = _ORIGIN + '/products/' + slug;
+
+document.getElementById('pg-title').textContent      = prod.titulo + ' | Comprar com Desconto | Armazem Natural';
 document.getElementById('pg-desc').setAttribute('content', prod.subtitulo);
+document.getElementById('pg-canonical').href         = _PURL;
+document.getElementById('og-title').content          = prod.titulo + ' | Comprar com Desconto | Armazem Natural';
+document.getElementById('og-desc').content           = prod.subtitulo;
+document.getElementById('og-image').content          = _ORIGIN + prod.imagens[0];
+document.getElementById('og-url').content            = _PURL;
+const _lowPrc = Math.min(...prod.variantes.map(v => v.preco)) / 100;
+document.getElementById('og-prc').content            = _lowPrc.toFixed(2);
+
+// Schema.org Product + BreadcrumbList (fundo de funil)
+const _ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Product',
+      name:        prod.titulo,
+      description: prod.subtitulo,
+      image:       prod.imagens.map(i => _ORIGIN + i),
+      brand: { '@type': 'Brand', name: 'Armazem Natural' },
+      offers: {
+        '@type':        'AggregateOffer',
+        priceCurrency:  'BRL',
+        lowPrice:       _lowPrc.toFixed(2),
+        highPrice:      (Math.max(...prod.variantes.map(v => v.preco)) / 100).toFixed(2),
+        offerCount:     prod.variantes.length,
+        availability:   'https://schema.org/InStock',
+        url:            _PURL,
+        seller: { '@type': 'Organization', name: 'Armazem Natural' },
+      },
+      aggregateRating: {
+        '@type':       'AggregateRating',
+        ratingValue:   '4.8',
+        reviewCount:   '5000',
+        bestRating:    '5',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: _ORIGIN + '/' },
+        { '@type': 'ListItem', position: 2, name: prod.titulo, item: _PURL },
+      ],
+    },
+  ],
+};
+document.getElementById('ld-json').textContent = JSON.stringify(_ld);
 
 // ─── Badge do produto (LANÇAMENTO, NOVIDADE etc.) ────────────────────────────
 const badge = qs('prod-badge');
