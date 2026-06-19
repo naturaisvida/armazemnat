@@ -92,7 +92,7 @@ module.exports = (req, res) => {
 
   const html = base()
     .replace(/<title id="pg-title">[^<]*<\/title>/,
-      `<title>${esc(title)}</title>`)
+      `<title id="pg-title">${esc(title)}</title>`)
     .replace(/(<meta\s+name="description"\s+id="pg-desc"\s+content=")[^"]*(")/,
       `$1${esc(desc)}$2`)
     .replace(/(<link\s+id="pg-canonical"\s+rel="canonical"\s+href=")[^"]*(")/,
