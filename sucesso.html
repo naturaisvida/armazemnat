@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedido Confirmado — Armazém Natural</title>
+<link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#f5f5f5;color:#212121;min-height:100vh;display:flex;flex-direction:column}
+
+.hdr{background:#fff;border-bottom:1px solid #e5e5e5;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr img{height:36px}
+.hdr-sec{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#356041;text-transform:uppercase;letter-spacing:.04em}
+.hdr-sec svg{width:15px;height:15px;flex-shrink:0}
+
+.page{max-width:520px;margin:60px auto;padding:0 16px;flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+
+.card{background:#fff;border-radius:16px;padding:48px 40px;box-shadow:0 2px 16px rgba(0,0,0,.07);text-align:center;width:100%}
+
+.check-wrap{margin-bottom:24px}
+.check-circle{width:72px;height:72px;background:#e8f5e9;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;border:3px solid #15a731}
+.check-circle svg{width:36px;height:36px;color:#15a731}
+
+.card h1{font-size:26px;font-weight:800;color:#1a2e22;margin-bottom:10px}
+.card .sub{font-size:14px;color:#555;line-height:1.65;margin-bottom:28px}
+.card .sub strong{color:#1a2e22}
+
+.pedido-id{background:#f5f5f5;border-radius:8px;padding:10px 18px;font-size:12px;color:#888;margin-bottom:28px;display:inline-block}
+.pedido-id strong{color:#1a2e22;font-size:13px}
+
+.btn-loja{display:inline-block;background:#15a731;color:#fff;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;transition:background .15s}
+.btn-loja:hover{background:#0e8a28}
+
+.ftr{text-align:center;padding:24px;font-size:12px;color:#aaa}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazem Natural">
+  <div class="hdr-sec">
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+    PAGAMENTO SEGURO
+  </div>
+</header>
+
+<div class="page">
+  <div class="card">
+    <div class="check-wrap">
+      <div class="check-circle">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </div>
+    </div>
+    <h1>Pagamento aprovado!</h1>
+    <p class="sub">
+      Obrigado pela sua compra.<br>
+      Em breve voce receberá um e-mail com todos os detalhes do pedido e o prazo de entrega.
+    </p>
+    <div class="pedido-id" id="pedido-id" style="display:none">
+      Pedido: <strong id="pedido-num"></strong>
+    </div>
+    <a href="/" class="btn-loja">Voltar a loja</a>
+  </div>
+</div>
+
+<div class="ftr">Armazem Natural — Pagamento 100% seguro</div>
+
+<script>
+const params  = new URLSearchParams(location.search);
+const pedido  = params.get('pedido');
+if (pedido) {
+  document.getElementById('pedido-num').textContent = '#' + pedido;
+  document.getElementById('pedido-id').style.display = 'inline-block';
+}
+</script>
+</body>
+</html>

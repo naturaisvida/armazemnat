@@ -870,47 +870,44 @@ function handleResult(method, data, btn, amount) {
 
   if (method==='pix') {
     const tx = data.charges?.[0]?.last_transaction;
-    localStorage.setItem('armazem_pix', JSON.stringify({
+    sessionStorage.setItem('armazem_pix', JSON.stringify({
       qrImg:   tx?.qr_code_url || '',
       qrCode:  tx?.qr_code    || '',
       orderId: data.id,
       expira:  CFG.pixExpires,
       valor:   amount,
     }));
-    window.open('/pix.html', '_blank');
-    document.getElementById('pix-btn').style.display = 'none';
-    document.getElementById('pix-res').innerHTML =
-      '<p style="text-align:center;color:var(--green-2);font-size:14px;padding:16px 0">'+
-      '✓ PIX gerado! A página de pagamento foi aberta em uma nova aba.</p>';
-    document.getElementById('pix-res').style.display = '';
-    pollOrder(data.id);
-    lockPayTabs();
+    fireConversion(data.id);
+    _markCartConverted();
+    location.href = '/pix.html';
   }
   else if (method==='boleto') {
     const tx = data.charges?.[0]?.last_transaction;
-    const bltUrl = tx?.url || tx?.pdf || '#';
-    window.open(bltUrl, '_blank');
-    document.getElementById('blt-btn').style.display = 'none';
-    document.getElementById('blt-res').style.display = '';
-    document.getElementById('blt-link').href = bltUrl;
-    document.getElementById('blt-code').value = tx?.line || '';
-    lockPayTabs();
+    sessionStorage.setItem('armazem_boleto', JSON.stringify({
+      line:    tx?.line || '',
+      pdf:     tx?.url  || tx?.pdf || '',
+      orderId: data.id,
+      valor:   amount,
+    }));
+    fireConversion(data.id);
+    _markCartConverted();
+    location.href = '/boleto.html';
   }
   else if (method==='cartao') {
     const status = data.charges?.[0]?.status;
     const ok = status==='paid' || status==='authorized_pending_capture';
-    if (ok) { fireConversion(data.id); _markCartConverted(); }
-    else     { _markCartFailed(); }
-    document.getElementById('card-btn').style.display = 'none';
-    document.getElementById('card-res').innerHTML = ok
-      ? `<div class="alert alert-ok" style="text-align:center">
-           <strong>Pagamento Aprovado!</strong><br>
-           Em breve você receberá a confirmação por e-mail.<br>
-           <small style="color:#888">Pedido: #${data.id}</small>
-         </div>`
-      : `<div class="alert alert-err">Pagamento não aprovado. Verifique os dados do cartão e tente novamente.</div>`;
-    document.getElementById('card-res').style.display = '';
-    if (!ok) document.getElementById('card-btn').style.display = '';
+    if (ok) {
+      fireConversion(data.id);
+      _markCartConverted();
+      location.href = '/sucesso.html?pedido=' + encodeURIComponent(data.id);
+    } else {
+      _markCartFailed();
+      document.getElementById('card-btn').style.display = 'none';
+      document.getElementById('card-res').innerHTML =
+        '<div class="alert alert-err">Pagamento nao aprovado. Verifique os dados do cartao e tente novamente.</div>';
+      document.getElementById('card-res').style.display = '';
+      document.getElementById('card-btn').style.display = '';
+    }
   }
 }
 

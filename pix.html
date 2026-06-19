@@ -5,113 +5,214 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pagar com PIX — Armazém Natural</title>
 <link rel="icon" href="https://armazemnatural.shop/cdn/shop/files/faviconarmazem_96x96.png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Poppins',sans-serif;background:#f5f5f5;color:#212121;min-height:100vh;display:flex;flex-direction:column}
-.hdr{background:#fff;border-bottom:1px solid #e0e0e0;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+
+.hdr{background:#fff;border-bottom:1px solid #e5e5e5;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
 .hdr img{height:36px}
-.hdr-sec{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#356041;text-transform:uppercase}
-.wrap{max-width:480px;margin:32px auto;padding:0 16px;flex:1}
-.card{background:#fff;border-radius:14px;padding:28px 24px;box-shadow:0 2px 16px rgba(0,0,0,.08)}
-.title{font-size:20px;font-weight:800;color:#356041;text-align:center;margin-bottom:6px}
-.sub{font-size:13px;color:#666;text-align:center;margin-bottom:20px}
-.qr-box{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:20px}
-.qr-box img{width:220px;height:220px;border-radius:10px;border:1px solid #e0e0e0}
-.timer-box{background:#fff5f5;border:1px solid #f5c6c6;border-radius:10px;padding:12px;text-align:center;margin-bottom:18px}
-.timer-box p{font-size:13px;color:#c0392b;font-weight:600}
-.timer-box b{font-size:22px;font-weight:800;color:#e53935}
-.copy-row{display:flex;gap:8px;margin-bottom:18px}
-.copy-row input{flex:1;padding:11px 13px;border:1px solid #e0e0e0;border-radius:8px;font-size:12px;font-family:'Poppins',sans-serif;color:#444;background:#f9f9f9;min-width:0}
-.copybtn{background:#15a731;color:#fff;border:none;border-radius:8px;padding:11px 16px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s}
+.hdr-sec{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#356041;text-transform:uppercase;letter-spacing:.04em}
+.hdr-sec svg{width:15px;height:15px;flex-shrink:0}
+
+.page{max-width:880px;margin:40px auto;padding:0 16px;flex:1;width:100%}
+
+/* Layout desktop: 2 colunas */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+
+/* Coluna esquerda */
+.col-left{background:#fff;border-radius:16px;padding:36px 32px;box-shadow:0 2px 16px rgba(0,0,0,.07)}
+.quase{font-size:28px;font-weight:800;color:#1a2e22;margin-bottom:20px}
+.timer-label{font-size:14px;color:#555;margin-bottom:6px}
+.timer-val{font-size:36px;font-weight:800;color:#1a2e22;margin-bottom:6px;letter-spacing:.02em}
+.timer-sub{font-size:13px;color:#666;margin-bottom:32px}
+
+.status-pill{display:inline-flex;align-items:center;gap:10px;background:#fffbea;border:1px solid #f0c040;border-radius:50px;padding:10px 20px;font-size:13px;font-weight:600;color:#7a5c00}
+.dots span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#f0c040;animation:pulse 1.2s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{opacity:.3}40%{opacity:1}}
+
+.paid-box{display:none;background:#e8f5e9;border:2px solid #15a731;border-radius:12px;padding:24px;text-align:center}
+.paid-box h2{font-size:20px;font-weight:800;color:#15a731;margin-bottom:6px}
+.paid-box p{font-size:13px;color:#356041}
+
+/* Coluna direita */
+.col-right{background:#fff;border-radius:16px;padding:32px 28px;box-shadow:0 2px 16px rgba(0,0,0,.07)}
+
+/* QR code — desktop visivel, mobile oculto */
+.qr-section{text-align:center;margin-bottom:24px}
+.qr-section p{font-size:12px;color:#888;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+.qr-section img{width:200px;height:200px;border-radius:10px;border:1px solid #e5e5e5}
+.qr-valor{font-size:14px;color:#444;margin-top:10px}
+.qr-valor strong{color:#15a731}
+
+/* Divisor */
+.divider{border:none;border-top:1px solid #e5e5e5;margin:20px 0}
+.divider-label{text-align:center;font-size:11px;color:#aaa;margin:-10px 0 20px;background:#fff;display:inline-block;padding:0 10px;position:relative;left:50%;transform:translateX(-50%)}
+
+/* Copia e cola */
+.cpc-title{font-size:15px;font-weight:700;color:#1a2e22;margin-bottom:6px}
+.cpc-desc{font-size:12px;color:#666;margin-bottom:14px;line-height:1.5}
+.cpc-desc strong{color:#1a2e22}
+.cpc-aviso{font-size:11px;color:#888;background:#f9f9f9;border-radius:6px;padding:8px 10px;margin-bottom:14px;line-height:1.5}
+
+.copy-input{display:flex;gap:8px;margin-bottom:8px}
+.copy-input input{flex:1;padding:11px 13px;border:1px solid #d5d5d5;border-radius:8px;font-size:11px;font-family:'Poppins',sans-serif;color:#555;background:#f9f9f9;min-width:0}
+.copybtn{background:#15a731;color:#fff;border:none;border-radius:8px;padding:11px 18px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s}
 .copybtn:hover{background:#0e8a28}
-.steps{background:#f9f9f9;border-radius:10px;padding:16px;margin-bottom:20px}
-.steps p{font-size:13px;font-weight:700;color:#356041;margin-bottom:10px}
-.steps ul{list-style:none;padding:0}
-.steps li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#444;margin-bottom:8px}
-.n{background:#15a731;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
-.success{display:none;background:#e8f5e9;border:2px solid #15a731;border-radius:12px;padding:24px;text-align:center;margin-bottom:16px}
-.success h2{font-size:18px;font-weight:800;color:#15a731;margin-bottom:6px}
-.success p{font-size:13px;color:#356041}
-.ftr{text-align:center;padding:20px;font-size:12px;color:#aaa}
+.copybtn.copied{background:#0e8a28}
+
+/* Botao copiar grande — mobile */
+.copybtn-big{display:none;width:100%;padding:15px;background:#15a731;color:#fff;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;margin-bottom:12px}
+.copybtn-big:hover{background:#0e8a28}
+
+.cpc-logo{text-align:center;margin-top:16px;font-size:11px;color:#bbb}
+.cpc-logo img{height:20px;vertical-align:middle;margin-left:4px;opacity:.5}
+
+.ftr{text-align:center;padding:24px;font-size:12px;color:#aaa}
+
+/* MOBILE */
+@media(max-width:640px){
+  .cols{grid-template-columns:1fr}
+  .page{margin:20px auto}
+  .col-left{padding:24px 20px}
+  .col-right{padding:24px 20px}
+  .quase{font-size:22px}
+  .timer-val{font-size:28px}
+  /* No mobile: QR code fica abaixo, copia e cola em destaque */
+  .qr-section{order:2;display:none}
+  .copybtn-big{display:block}
+  .copy-input .copybtn{display:none}
+}
 </style>
 </head>
 <body>
+
 <header class="hdr">
-  <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazém Natural">
+  <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazem Natural">
   <div class="hdr-sec">
-    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
     PAGAMENTO SEGURO
   </div>
 </header>
 
-<div class="wrap">
-  <div class="card">
-    <div class="success" id="success-box">
-      <h2>✓ Pagamento Confirmado!</h2>
-      <p>Seu pedido foi processado com sucesso. Em breve você receberá a confirmação por e-mail.</p>
+<div class="page">
+  <div class="cols">
+
+    <!-- Coluna esquerda: status e timer -->
+    <div class="col-left">
+      <div id="waiting-area">
+        <div class="quase">Quase la...</div>
+        <div class="timer-label">Pague seu PIX dentro de</div>
+        <div class="timer-val" id="timer">30:00</div>
+        <div class="timer-sub">para garantir sua compra.</div>
+        <div class="status-pill">
+          Aguardando pagamento
+          <span class="dots"><span></span><span></span><span></span></span>
+        </div>
+      </div>
+      <div class="paid-box" id="paid-box">
+        <h2>Pagamento Confirmado!</h2>
+        <p>Seu pedido foi processado com sucesso.<br>Redirecionando...</p>
+      </div>
     </div>
-    <div id="pix-box">
-      <div class="title">Pague com PIX</div>
-      <div class="sub">Escaneie o QR Code ou copie o código abaixo</div>
-      <div class="qr-box">
+
+    <!-- Coluna direita: QR + copia e cola -->
+    <div class="col-right">
+
+      <!-- QR Code (desktop) -->
+      <div class="qr-section" id="qr-section">
+        <p>
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="15" y="2" width="7" height="7" rx="1"/><rect x="2" y="15" width="7" height="7" rx="1"/><path d="M15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"/></svg>
+          Abra seu app do banco, escolha Pagar com PIX e leia o QR Code
+        </p>
         <img id="qr-img" src="" alt="QR Code PIX">
+        <div class="qr-valor">Valor do PIX: <strong id="qr-valor-txt">--</strong></div>
       </div>
-      <div class="timer-box">
-        <p>Expira em:</p>
-        <b id="timer">30:00</b>
+
+      <!-- Copia e Cola -->
+      <p class="cpc-title">Pague com PIX Copia e Cola</p>
+      <p class="cpc-desc">
+        No seu app do banco, escolha <strong>Pagar com PIX</strong> e depois a opcao
+        <strong>Copia e Cola</strong> (ou "PIX Copia e Cola"). Cole o codigo abaixo.
+      </p>
+      <p class="cpc-aviso">
+        Este nao e uma chave PIX para transferencia. E um codigo de pagamento especifico para este pedido — use sempre a opcao "Copia e Cola" ou "PIX" dentro do seu app bancario.
+      </p>
+
+      <!-- Botao grande (mobile) -->
+      <button class="copybtn-big" id="copybtn-big" onclick="copiarCodigo()">Copiar codigo PIX</button>
+
+      <!-- Input + botao (desktop) -->
+      <div class="copy-input">
+        <input type="text" id="pix-code" readonly placeholder="Carregando codigo PIX...">
+        <button class="copybtn" onclick="copiarCodigo()">Copiar</button>
       </div>
-      <div class="copy-row">
-        <input type="text" id="pix-code" readonly>
-        <button class="copybtn" onclick="cp()">Copiar</button>
-      </div>
-      <div class="steps">
-        <p>Como pagar:</p>
-        <ul>
-          <li><span class="n">1</span>Abra o app do seu banco</li>
-          <li><span class="n">2</span>Escolha pagar via PIX → "Copia e Cola" ou QR Code</li>
-          <li><span class="n">3</span>Cole o código ou escaneie o QR Code</li>
-          <li><span class="n">4</span>Confirme o pagamento</li>
-        </ul>
-      </div>
+
+      <div class="cpc-logo">Pix processado por pagar.me</div>
     </div>
+
   </div>
 </div>
 
-<div class="ftr">© 2025 Armazém Natural · Pagamento 100% seguro</div>
+<div class="ftr">Armazem Natural &mdash; Pagamento 100% seguro</div>
 
 <script>
-const data = JSON.parse(localStorage.getItem('armazem_pix') || '{}');
-if (!data.qrCode) {
-  document.querySelector('.wrap').innerHTML =
-    '<div class="card" style="text-align:center;padding:40px"><p style="color:#666">Nenhuma cobrança PIX ativa.<br><a href="/" style="color:#15a731">← Voltar à loja</a></p></div>';
+const data = JSON.parse(sessionStorage.getItem('armazem_pix') || 'null');
+
+if (!data || !data.qrCode) {
+  document.querySelector('.page').innerHTML =
+    '<div style="background:#fff;border-radius:16px;padding:48px;text-align:center;max-width:400px;margin:0 auto;box-shadow:0 2px 16px rgba(0,0,0,.07)">' +
+    '<p style="color:#666;font-size:14px">Nenhuma cobranca PIX ativa.<br><a href="/" style="color:#15a731;font-weight:600">Voltar a loja</a></p>' +
+    '</div>';
 } else {
-  document.getElementById('qr-img').src       = data.qrImg  || '';
-  document.getElementById('pix-code').value   = data.qrCode || '';
+  const imgEl   = document.getElementById('qr-img');
+  const codeEl  = document.getElementById('pix-code');
+  const valorEl = document.getElementById('qr-valor-txt');
+
+  if (data.qrImg) imgEl.src = data.qrImg;
+  else document.getElementById('qr-section').style.display = 'none';
+
+  codeEl.value = data.qrCode;
+
+  if (data.valor) {
+    valorEl.textContent = 'R$ ' + (data.valor / 100).toFixed(2).replace('.', ',');
+  }
+
   startTimer(data.expira || 1800);
   if (data.orderId) pollOrder(data.orderId);
 }
 
-function cp() {
-  const el = document.getElementById('pix-code');
-  el.select();
-  navigator.clipboard?.writeText(el.value).catch(() => document.execCommand('copy'));
-  const btn = document.querySelector('.copybtn');
-  btn.textContent = 'Copiado!';
-  setTimeout(() => btn.textContent = 'Copiar', 2000);
+function copiarCodigo() {
+  const code = document.getElementById('pix-code').value;
+  if (!code) return;
+  navigator.clipboard?.writeText(code).catch(() => {
+    const el = document.getElementById('pix-code');
+    el.select();
+    document.execCommand('copy');
+  });
+  const btn1 = document.querySelector('.copybtn');
+  const btn2 = document.getElementById('copybtn-big');
+  if (btn1) { btn1.textContent = 'Copiado!'; btn1.classList.add('copied'); setTimeout(() => { btn1.textContent = 'Copiar'; btn1.classList.remove('copied'); }, 2500); }
+  if (btn2) { btn2.textContent = 'Codigo copiado!'; setTimeout(() => { btn2.textContent = 'Copiar codigo PIX'; }, 2500); }
 }
 
 let _timer;
 function startTimer(secs) {
   clearInterval(_timer);
   let t = secs;
-  _timer = setInterval(() => {
-    t--;
+  function tick() {
     const el = document.getElementById('timer');
-    if (!el) { clearInterval(_timer); return; }
-    el.textContent = `${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`;
-    if (t <= 0) { clearInterval(_timer); el.textContent = 'Expirado'; }
-  }, 1000);
+    if (!el) return;
+    const m = Math.floor(t / 60);
+    const s = t % 60;
+    el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if (t <= 0) { el.textContent = 'Expirado'; return; }
+    t--;
+    _timer = setTimeout(tick, 1000);
+  }
+  tick();
 }
 
 let _poll;
@@ -119,14 +220,17 @@ function pollOrder(orderId) {
   clearInterval(_poll);
   _poll = setInterval(async () => {
     try {
-      const r = await fetch(`/api/order?status=${orderId}`);
+      const r = await fetch('/api/order?status=' + encodeURIComponent(orderId));
       const d = await r.json();
       if (d.status === 'paid') {
         clearInterval(_poll);
-        clearInterval(_timer);
-        localStorage.removeItem('armazem_pix');
-        document.getElementById('pix-box').style.display   = 'none';
-        document.getElementById('success-box').style.display = 'block';
+        clearTimeout(_timer);
+        sessionStorage.removeItem('armazem_pix');
+        document.getElementById('waiting-area').style.display = 'none';
+        document.getElementById('paid-box').style.display = 'block';
+        setTimeout(() => {
+          location.href = '/sucesso.html?pedido=' + encodeURIComponent(orderId);
+        }, 2000);
       }
     } catch(e) {}
   }, 5000);
