@@ -140,12 +140,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text)}
   </div>
 </div>
 
-<section class="section" id="produtos">
-  <h2 class="section-title">Nossos Produtos</h2>
-  <p class="section-sub">Qualidade natural entregue na sua porta</p>
-  <div class="grid" id="grid"></div>
-</section>
-
 <footer class="ftr" id="contato">
   <div class="ftr-inner">
     <div class="ftr-top">
@@ -175,43 +169,5 @@ body{font-family:var(--font);background:var(--bg);color:var(--text)}
   </div>
 </footer>
 
-<script src="js/produtos.js"></script>
-<script>
-const grid = document.getElementById('grid');
-
-PRODUTOS.forEach(p => {
-  const minPreco = Math.min(...p.variantes.map(v => v.preco));
-  const maxDesc  = Math.max(...p.variantes.map(v => v.desconto));
-  const varLabel = p.variantes.length > 1
-    ? `${p.variantes.length} kits disponíveis`
-    : '1 opção disponível';
-
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = `
-    <div class="card-img">
-      <img src="${p.imagens[0]}" alt="${p.nome}" loading="lazy">
-      <span class="badge" style="background:${p.badgeColor}">${p.badge}</span>
-      <div class="disc-badge">ATÉ<br>${maxDesc}%<br>OFF</div>
-    </div>
-    <div class="card-body">
-      <div class="card-name">${p.nome}</div>
-      <div class="card-title">${p.titulo}</div>
-      <div class="card-price-row">
-        <span class="card-price">${$$(minPreco)}</span>
-        <span class="card-compare">${$$(Math.min(...p.variantes.map(v => v.comparar)))}</span>
-      </div>
-      <div class="card-frete">✓ FRETE GRÁTIS · Garantia 30 dias</div>
-      <div class="card-variants">${varLabel}</div>
-      <a class="card-cta" href="/products/${p.slug}">Ver Oferta →</a>
-    </div>
-  `;
-  grid.appendChild(card);
-});
-
-function $$(c){
-  return 'R$ '+(c/100).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
-}
-</script>
 </body>
 </html>
