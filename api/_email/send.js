@@ -45,7 +45,7 @@ function buildStatusHtml(order, statusKey, trackingCode) {
   const cfg = STATUS_CONFIG[statusKey];
   if (!cfg) return null;
 
-  const storeUrl  = process.env.STORE_URL || 'https://armazemnatural.vercel.app';
+  const storeUrl  = process.env.STORE_URL || 'https://armazemnatural.shop';
   const firstName = escH((order.customer.name || 'Cliente').split(' ')[0]);
   const code      = escH(order.code || order.id || '');
   const a         = order.shipping?.address || {};
@@ -262,7 +262,7 @@ function wrapEmail(title, body) {
 <tr><td align="center" style="padding:32px 16px">
   <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#fff;border-radius:14px;overflow:hidden">
     <tr><td style="padding:20px 40px 18px;text-align:center;border-bottom:2px solid #f0f0f0">
-      <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazem Natural" width="140" style="height:auto;display:block;margin:0 auto">
+      <img src="${process.env.STORE_URL || 'https://armazemnatural.shop'}/img/logoarmazem.png" alt="Armazem Natural" width="140" style="height:auto;display:block;margin:0 auto">
     </td></tr>
     <tr><td style="padding:28px 40px 24px">${body}</td></tr>
     <tr><td style="padding:20px 40px;border-top:2px solid #f0f0f0;text-align:center">

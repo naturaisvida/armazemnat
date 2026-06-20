@@ -6,7 +6,7 @@ const jwt         = require('jsonwebtoken');
 const redis       = require('../_lib/redis');
 const { sendRaw } = require('../_email/send');
 
-const STORE_URL   = process.env.STORE_URL  || 'https://armazemnatural.vercel.app';
+const STORE_URL   = process.env.STORE_URL  || 'https://armazemnatural.shop';
 const STORE_EMAIL = process.env.RESEND_FROM_EMAIL || 'Armazém Natural <atendimento@armazemnatural.shop>';
 
 // Gaps AFTER each email before next email
@@ -82,7 +82,7 @@ function buildEmail(cart, emailNum) {
 <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden">
 
 <tr><td style="padding:20px 40px 18px;text-align:center;border-bottom:2px solid #f0f0f0">
-  <img src="https://armazemnatural.shop/cdn/shop/files/NATURAL_225x@2x.png" alt="Armazem Natural" width="140" style="height:auto;display:block;margin:0 auto">
+  <img src="${STORE_URL}/img/logoarmazem.png" alt="Armazem Natural" width="140" style="height:auto;display:block;margin:0 auto">
 </td></tr>
 
 <tr><td style="padding:32px 40px 28px">

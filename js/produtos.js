@@ -386,7 +386,7 @@ const PRODUTOS = [
     titulo:"Produto Teste",
     subtitulo:"Produto interno para testes de pagamento",
     variantes:[
-      { titulo:"TESTE R$2", preco:200, comparar:1000, desconto:80 },
+      { titulo:"TESTE R$10", preco:1000, comparar:2000, desconto:50 },
     ],
     imagens:[
       "/img/produtos/glicofit/1.png",
