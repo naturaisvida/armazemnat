@@ -1,10 +1,10 @@
 ﻿// Variantes padrão (mesma para quase todos os suplementos)
 const _STD = () => [
-  { titulo:"COMPRE 1 LEVE 2",  preco:14990, comparar:29990, desconto:50 },
-  { titulo:"COMPRE 2 LEVE 4",  preco:26990, comparar:59990, desconto:55 },
-  { titulo:"COMPRE 3 LEVE 6",  preco:35990, comparar:89990, desconto:60, popular:true },
-  { titulo:"COMPRE 4 LEVE 8",  preco:44990, comparar:119990, desconto:62 },
-  { titulo:"COMPRE 5 LEVE 10", preco:53990, comparar:149990, desconto:64 },
+  { titulo:"COMPRE 1 LEVE 2",  preco:18990, comparar:37990,  desconto:50 },
+  { titulo:"COMPRE 2 LEVE 4",  preco:31990, comparar:75990,  desconto:58 },
+  { titulo:"COMPRE 3 LEVE 6",  preco:41990, comparar:113990, desconto:63, popular:true },
+  { titulo:"COMPRE 4 LEVE 8",  preco:48990, comparar:151990, desconto:68 },
+  { titulo:"COMPRE 5 LEVE 10", preco:58990, comparar:189990, desconto:69 },
 ];
 
 // tipo → define qual template de copy usa em produto.html

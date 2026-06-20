@@ -10,31 +10,31 @@ function base() {
 const ORIGIN = 'https://armazemnatural.shop';
 
 const META = [
-  { slug:'glicofit',          titulo:'Glicofit',                         desc:'Suplemento natural em gotas para equilibrio glicemico',               img:'/img/produtos/glicofit/1.png',           preco:'149.90' },
-  { slug:'insufree',          titulo:'Insufree',                         desc:'Formula natural para suporte metabolico e glicemico',                  img:'/img/produtos/insufree/1.png',           preco:'149.90' },
-  { slug:'purenex-glico',     titulo:'Purenex Glico',                    desc:'Controle glicemico com ingredientes da natureza',                      img:'/img/produtos/purenex-glico/1.png',      preco:'149.90' },
-  { slug:'pulmoclean',        titulo:'Pulmoclean',                       desc:'Suporte respiratorio com ingredientes naturais',                       img:'/img/produtos/pulmoclean/1.png',         preco:'149.90' },
-  { slug:'dht-blocker',       titulo:'DHT Blocker',                      desc:'Bloqueador natural de DHT para saude capilar masculina',               img:'/img/produtos/dht-blocker/1.png',        preco:'149.90' },
-  { slug:'hair-fortin',       titulo:'Hair Fortin',                      desc:'Nutricao capilar intensiva de dentro para fora',                       img:'/img/produtos/hair-fortin/1.png',        preco:'149.90' },
-  { slug:'long-beauty',       titulo:'Long Beauty',                      desc:'Beleza e vitalidade capilar com a forca da natureza',                  img:'/img/produtos/long-beauty/1.png',        preco:'149.90' },
-  { slug:'rosa-oriental',     titulo:'Rosa Oriental',                    desc:'Beleza e bem-estar feminino com ervas do Oriente',                     img:'/img/produtos/rosa-oriental/1.png',      preco:'149.90' },
-  { slug:'rejuvita',          titulo:'Rejuvita',                         desc:'Antienvelhecimento e rejuvenescimento com ativos naturais',             img:'/img/produtos/rejuvita/1.png',           preco:'149.90' },
-  { slug:'meno-care',         titulo:'Meno Care',                        desc:'Suporte natural para os sintomas da menopausa',                        img:'/img/produtos/meno-care/1.png',          preco:'149.90' },
+  { slug:'glicofit',          titulo:'Glicofit',                         desc:'Suplemento natural em gotas para equilibrio glicemico',               img:'/img/produtos/glicofit/1.png',           preco:'189.90' },
+  { slug:'insufree',          titulo:'Insufree',                         desc:'Formula natural para suporte metabolico e glicemico',                  img:'/img/produtos/insufree/1.png',           preco:'189.90' },
+  { slug:'purenex-glico',     titulo:'Purenex Glico',                    desc:'Controle glicemico com ingredientes da natureza',                      img:'/img/produtos/purenex-glico/1.png',      preco:'189.90' },
+  { slug:'pulmoclean',        titulo:'Pulmoclean',                       desc:'Suporte respiratorio com ingredientes naturais',                       img:'/img/produtos/pulmoclean/1.png',         preco:'189.90' },
+  { slug:'dht-blocker',       titulo:'DHT Blocker',                      desc:'Bloqueador natural de DHT para saude capilar masculina',               img:'/img/produtos/dht-blocker/1.png',        preco:'189.90' },
+  { slug:'hair-fortin',       titulo:'Hair Fortin',                      desc:'Nutricao capilar intensiva de dentro para fora',                       img:'/img/produtos/hair-fortin/1.png',        preco:'189.90' },
+  { slug:'long-beauty',       titulo:'Long Beauty',                      desc:'Beleza e vitalidade capilar com a forca da natureza',                  img:'/img/produtos/long-beauty/1.png',        preco:'189.90' },
+  { slug:'rosa-oriental',     titulo:'Rosa Oriental',                    desc:'Beleza e bem-estar feminino com ervas do Oriente',                     img:'/img/produtos/rosa-oriental/1.png',      preco:'189.90' },
+  { slug:'rejuvita',          titulo:'Rejuvita',                         desc:'Antienvelhecimento e rejuvenescimento com ativos naturais',             img:'/img/produtos/rejuvita/1.png',           preco:'189.90' },
+  { slug:'meno-care',         titulo:'Meno Care',                        desc:'Suporte natural para os sintomas da menopausa',                        img:'/img/produtos/meno-care/1.png',          preco:'189.90' },
   { slug:'dura-max',          titulo:'DuraMax',                          desc:'Formula masculina para disposicao e vitalidade',                       img:'/img/produtos/dura-max/1.png',           preco:'109.90' },
-  { slug:'viriforte',         titulo:'Viriforte',                        desc:'Forca e vitalidade masculina com a natureza',                          img:'/img/produtos/viriforte/1.png',          preco:'149.90' },
-  { slug:'elefantol',         titulo:'Elefantol',                        desc:'Potencia e resistencia com ativos naturais',                           img:'/img/produtos/elefantol/1.png',          preco:'149.90' },
-  { slug:'mounjax',           titulo:'Mounjax',                          desc:'Suporte ao emagrecimento com ingredientes naturais',                   img:'/img/produtos/mounjax/1.png',            preco:'149.90' },
-  { slug:'burnzine',          titulo:'Burnzine',                         desc:'Termogenico natural para acelerar o metabolismo',                      img:'/img/produtos/burnzine/1.png',           preco:'149.90' },
-  { slug:'neurovex',          titulo:'Neurovex',                         desc:'Suporte cognitivo e neurologico com nootropicos naturais',              img:'/img/produtos/neurovex/1.png',           preco:'149.90' },
-  { slug:'memoralis',         titulo:'Memoralis',                        desc:'Memoria e concentracao com nootropicos naturais',                      img:'/img/produtos/memoralis/1.png',          preco:'149.90' },
-  { slug:'nervomax',          titulo:'Nervomax',                         desc:'Saude do sistema nervoso com ingredientes naturais',                   img:'/img/produtos/nervomax/1.png',           preco:'149.90' },
-  { slug:'vision-x',          titulo:'Vision-X',                         desc:'Saude ocular com luteina e zeaxantina naturais',                       img:'/img/produtos/vision-x/1.png',           preco:'149.90' },
-  { slug:'articuly',          titulo:'Articuly',                         desc:'Articulacoes flexiveis com colageno e ativos naturais',                 img:'/img/produtos/articuly/1.png',           preco:'149.90' },
-  { slug:'hemo-gotas',        titulo:'Hemo Gotas',                       desc:'Suporte ao sangue e circulacao com ferro natural',                     img:'/img/produtos/hemo-gotas/1.png',         preco:'149.90' },
-  { slug:'prostavex',         titulo:'Prostavex',                        desc:'Saude da prostata com saw palmetto e zinco',                           img:'/img/produtos/prostavex/1.png',          preco:'149.90' },
-  { slug:'mitocondril',       titulo:'Mitocondril',                      desc:'Energia celular profunda com CoQ10 e ativos mitocondriais',             img:'/img/produtos/mitocondril/1.png',        preco:'149.90' },
-  { slug:'akkermat',          titulo:'Akkermat',                         desc:'Microbiota intestinal com Akkermansia e probioticos naturais',          img:'/img/produtos/akkermat/1.png',           preco:'149.90' },
-  { slug:'naturion',          titulo:'Naturion',                         desc:'Equilibrio mineral e vital com eletrolitos naturais',                  img:'/img/produtos/naturion/1.png',           preco:'149.90' },
+  { slug:'viriforte',         titulo:'Viriforte',                        desc:'Forca e vitalidade masculina com a natureza',                          img:'/img/produtos/viriforte/1.png',          preco:'189.90' },
+  { slug:'elefantol',         titulo:'Elefantol',                        desc:'Potencia e resistencia com ativos naturais',                           img:'/img/produtos/elefantol/1.png',          preco:'189.90' },
+  { slug:'mounjax',           titulo:'Mounjax',                          desc:'Suporte ao emagrecimento com ingredientes naturais',                   img:'/img/produtos/mounjax/1.png',            preco:'189.90' },
+  { slug:'burnzine',          titulo:'Burnzine',                         desc:'Termogenico natural para acelerar o metabolismo',                      img:'/img/produtos/burnzine/1.png',           preco:'189.90' },
+  { slug:'neurovex',          titulo:'Neurovex',                         desc:'Suporte cognitivo e neurologico com nootropicos naturais',              img:'/img/produtos/neurovex/1.png',           preco:'189.90' },
+  { slug:'memoralis',         titulo:'Memoralis',                        desc:'Memoria e concentracao com nootropicos naturais',                      img:'/img/produtos/memoralis/1.png',          preco:'189.90' },
+  { slug:'nervomax',          titulo:'Nervomax',                         desc:'Saude do sistema nervoso com ingredientes naturais',                   img:'/img/produtos/nervomax/1.png',           preco:'189.90' },
+  { slug:'vision-x',          titulo:'Vision-X',                         desc:'Saude ocular com luteina e zeaxantina naturais',                       img:'/img/produtos/vision-x/1.png',           preco:'189.90' },
+  { slug:'articuly',          titulo:'Articuly',                         desc:'Articulacoes flexiveis com colageno e ativos naturais',                 img:'/img/produtos/articuly/1.png',           preco:'189.90' },
+  { slug:'hemo-gotas',        titulo:'Hemo Gotas',                       desc:'Suporte ao sangue e circulacao com ferro natural',                     img:'/img/produtos/hemo-gotas/1.png',         preco:'189.90' },
+  { slug:'prostavex',         titulo:'Prostavex',                        desc:'Saude da prostata com saw palmetto e zinco',                           img:'/img/produtos/prostavex/1.png',          preco:'189.90' },
+  { slug:'mitocondril',       titulo:'Mitocondril',                      desc:'Energia celular profunda com CoQ10 e ativos mitocondriais',             img:'/img/produtos/mitocondril/1.png',        preco:'189.90' },
+  { slug:'akkermat',          titulo:'Akkermat',                         desc:'Microbiota intestinal com Akkermansia e probioticos naturais',          img:'/img/produtos/akkermat/1.png',           preco:'189.90' },
+  { slug:'naturion',          titulo:'Naturion',                         desc:'Equilibrio mineral e vital com eletrolitos naturais',                  img:'/img/produtos/naturion/1.png',           preco:'189.90' },
   { slug:'corretor-postural', titulo:'Corretor Postural Ombro e Lombar', desc:'Corretor postural 3 em 1 para coluna, ombros e lombar',                img:'/img/produtos/corretor-postural/1.webp', preco:'129.90' },
   { slug:'teste',             titulo:'Produto Teste',                    desc:'Produto interno para testes de pagamento',                             img:'/img/produtos/glicofit/1.png',           preco:'10.00' },
 ];
@@ -54,7 +54,7 @@ module.exports = (req, res) => {
 
   const url    = ORIGIN + '/products/' + slug;
   const title  = prod.titulo + ' | Comprar com Desconto | Armazem Natural';
-  const desc   = prod.desc + ' | Frete Gratis | Ate 64% OFF';
+  const desc   = prod.desc + ' | Frete Gratis | Ate 69% OFF';
   const imgUrl = ORIGIN + prod.img;
 
   const ldJson = JSON.stringify({
