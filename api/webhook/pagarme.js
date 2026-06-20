@@ -107,11 +107,13 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, skipped: true });
   }
 
+  console.log('[webhook] recebido event=' + eventType + ' orderId=' + orderId);
+
   try {
     if (eventType === 'order.paid' || eventType === 'charge.paid') {
       const raw = await fetchOrder(orderId);
-      if (!raw.id) return res.status(200).json({ ok: true, skipped: true });
-      if ((raw.metadata || {}).source !== 'checkout_html') return res.status(200).json({ ok: true, skipped: 'not_checkout_html' });
+      if (!raw.id) { console.warn('[webhook] order nao encontrada na Pagar.me id=' + orderId); return res.status(200).json({ ok: true, skipped: true }); }
+      if ((raw.metadata || {}).source !== 'checkout_html') { console.warn('[webhook] ignorado source=' + (raw.metadata || {}).source + ' (esperado checkout_html)'); return res.status(200).json({ ok: true, skipped: 'not_checkout_html' }); }
       const mapped = mapOrder(raw);
       // Dispara conversao Google Ads apenas para PIX e boleto confirmados
       // (cartao ja e rastreado pelo frontend no sucesso.html)
@@ -119,7 +121,8 @@ module.exports = async function handler(req, res) {
         const gclid = (raw.metadata || {}).gclid || '';
         await sendGoogleConversion(gclid, raw.amount || 0, raw.id);
       }
-      await sendStatusEmail(mapped, 'faturado', '');
+      const emailId = await sendStatusEmail(mapped, 'faturado', '');
+      console.log('[webhook] email confirmacao enviado order=' + mapped.code + ' to=' + mapped.customer.email + ' resendId=' + emailId);
     }
 
     if (eventType === 'order.canceled' || eventType === 'charge.refunded') {
@@ -129,7 +132,7 @@ module.exports = async function handler(req, res) {
       await sendStatusEmail(mapOrder(raw), 'cancelado', '');
     }
   } catch (e) {
-    console.error('Webhook email error:', e.message);
+    console.error('[webhook] FALHA ao processar/enviar email event=' + eventType + ' orderId=' + orderId + ':', e.message);
   }
 
   return res.status(200).json({ ok: true });

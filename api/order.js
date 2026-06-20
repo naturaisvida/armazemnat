@@ -204,16 +204,22 @@ module.exports = async function handler(req, res) {
       sendPixEmail(emailOrder, {
         pix_qr_code:         tx.qr_code,
         pix_expiration_date: tx.expires_at,
-      }).catch(() => {});
+      })
+        .then(id => console.log('[email] PIX gerado enviado order=' + emailOrder.code + ' to=' + emailOrder.customer.email + ' resendId=' + id))
+        .catch(e => console.error('[email] FALHA PIX gerado order=' + emailOrder.code + ':', e.message));
     } else if (method === 'boleto' && (tx.line || tx.pdf)) {
       sendBoletoEmail(emailOrder, {
         line:   tx.line,
         pdf:    tx.pdf,
         url:    tx.url,
         due_at: tx.due_at,
-      }).catch(() => {});
+      })
+        .then(id => console.log('[email] Boleto enviado order=' + emailOrder.code + ' resendId=' + id))
+        .catch(e => console.error('[email] FALHA Boleto order=' + emailOrder.code + ':', e.message));
     } else if (method === 'cartao' && charge.status === 'paid') {
-      sendCartaoEmail(emailOrder).catch(() => {});
+      sendCartaoEmail(emailOrder)
+        .then(id => console.log('[email] Cartao confirmado enviado order=' + emailOrder.code + ' resendId=' + id))
+        .catch(e => console.error('[email] FALHA Cartao order=' + emailOrder.code + ':', e.message));
     }
   } catch (e) {
     console.error('Email send error:', e.message);
