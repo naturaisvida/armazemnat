@@ -613,8 +613,13 @@ if (prod.badge) {
 qs('prod-title').textContent = prod.titulo;
 qs('prod-sub').textContent   = prod.subtitulo;
 qs('tab-nome').textContent   = prod.nome;
-qs('desc-sobre').innerHTML   = gerarSobre(prod);
-qs('desc-como-usar').innerHTML = gerarComoUsar(prod);
+if (prod.semCopy) {
+  const ds = document.querySelector('.desc-section');
+  if (ds) ds.style.display = 'none';
+} else {
+  qs('desc-sobre').innerHTML   = gerarSobre(prod);
+  qs('desc-como-usar').innerHTML = gerarComoUsar(prod);
+}
 
 // Oculta secao de kits da copy (links Yampi) e redireciona botoes CTA para o seletor nativo
 (function(){
