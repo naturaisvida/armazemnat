@@ -12,7 +12,7 @@ const _OFERTA_VX = () => [
   { titulo:"COMPRE 2 LEVE 3",  preco:20990, comparar:41990,  desconto:50 },
   { titulo:"COMPRE 3 LEVE 5",  preco:31990, comparar:74990,  desconto:57, popular:true },
   { titulo:"COMPRE 4 LEVE 10", preco:53990, comparar:154990, desconto:65 },
-  { titulo:"1 UNIDADE",        preco:14990, comparar:0,       desconto:0 },
+  { titulo:"1 UNIDADE",        preco:13990, comparar:0,       desconto:0 },
 ];
 
 // tipo → define qual template de copy usa em produto.html
@@ -402,6 +402,25 @@ const PRODUTOS = [
       "/img/produtos/artivita/3.png",
       "/img/produtos/artivita/4.png",
       "/img/produtos/artivita/5.png",
+    ],
+  },
+  {
+    slug:"tirze-gotas", nome:"Tirze Gotas", tipo:"geral",
+    titulo:"Tirze Gotas",
+    subtitulo:"Suporte natural ao emagrecimento em gotas",
+    badge:"MAIS VENDIDO", badgeColor:"#15a731",
+    variantes:[
+      { titulo:"COMPRE 1 LEVE 2",  preco:16990, comparar:33990,  desconto:50 },
+      { titulo:"COMPRE 2 LEVE 4",  preco:28990, comparar:64990,  desconto:55 },
+      { titulo:"COMPRE 3 LEVE 6",  preco:37990, comparar:94990,  desconto:60, popular:true },
+      { titulo:"COMPRE 5 LEVE 10", preco:50990, comparar:145990, desconto:65 },
+    ],
+    imagens:[
+      "/img/produtos/tirze-gotas/1.png",
+      "/img/produtos/tirze-gotas/2.png",
+      "/img/produtos/tirze-gotas/3.png",
+      "/img/produtos/tirze-gotas/4.png",
+      "/img/produtos/tirze-gotas/5.png",
     ],
   },
   {

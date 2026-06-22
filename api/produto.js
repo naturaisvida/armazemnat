@@ -28,7 +28,7 @@ const META = [
   { slug:'neurovex',          titulo:'Neurovex',                         desc:'Suporte cognitivo e neurologico com nootropicos naturais',              img:'/img/produtos/neurovex/1.png',           preco:'189.90' },
   { slug:'memoralis',         titulo:'Memoralis',                        desc:'Memoria e concentracao com nootropicos naturais',                      img:'/img/produtos/memoralis/1.png',          preco:'189.90' },
   { slug:'nervomax',          titulo:'Nervomax',                         desc:'Saude do sistema nervoso com ingredientes naturais',                   img:'/img/produtos/nervomax/1.png',           preco:'189.90' },
-  { slug:'vision-x',          titulo:'Vision-X',                         desc:'Saude ocular com luteina e zeaxantina naturais',                       img:'/img/produtos/vision-x/1.png',           preco:'189.90' },
+  { slug:'vision-x',          titulo:'Vision-X',                         desc:'Saude ocular com luteina e zeaxantina naturais',                       img:'/img/produtos/vision-x/1.png',           preco:'139.90' },
   { slug:'articuly',          titulo:'Articuly',                         desc:'Articulacoes flexiveis com colageno e ativos naturais',                 img:'/img/produtos/articuly/1.png',           preco:'189.90' },
   { slug:'hemo-gotas',        titulo:'Hemo Gotas',                       desc:'Suporte ao sangue e circulacao com ferro natural',                     img:'/img/produtos/hemo-gotas/1.png',         preco:'189.90' },
   { slug:'prostavex',         titulo:'Prostavex',                        desc:'Saude da prostata com saw palmetto e zinco',                           img:'/img/produtos/prostavex/1.png',          preco:'189.90' },
@@ -36,7 +36,8 @@ const META = [
   { slug:'akkermat',          titulo:'Akkermat',                         desc:'Microbiota intestinal com Akkermansia e probioticos naturais',          img:'/img/produtos/akkermat/1.png',           preco:'189.90' },
   { slug:'naturion',          titulo:'Naturion',                         desc:'Equilibrio mineral e vital com eletrolitos naturais',                  img:'/img/produtos/naturion/1.png',           preco:'189.90' },
   { slug:'urocianina',        titulo:'Urocianina',                       desc:'Suporte natural para o trato urinario com cranberry',                  img:'/img/produtos/urocianina/1.png',         preco:'189.90' },
-  { slug:'artivita',          titulo:'Artivita',                         desc:'Suporte natural para articulacoes e mobilidade',                       img:'/img/produtos/artivita/1.png',           preco:'149.90' },
+  { slug:'artivita',          titulo:'Artivita',                         desc:'Suporte natural para articulacoes e mobilidade',                       img:'/img/produtos/artivita/1.png',           preco:'139.90' },
+  { slug:'tirze-gotas',       titulo:'Tirze Gotas',                      desc:'Suporte natural ao emagrecimento em gotas',                            img:'/img/produtos/tirze-gotas/1.png',        preco:'169.90' },
   { slug:'corretor-postural', titulo:'Corretor Postural Ombro e Lombar', desc:'Corretor postural 3 em 1 para coluna, ombros e lombar',                img:'/img/produtos/corretor-postural/1.webp', preco:'129.90' },
   { slug:'teste',             titulo:'Produto Teste',                    desc:'Produto interno para testes de pagamento',                             img:'/img/produtos/glicofit/1.png',           preco:'10.00' },
 ];
