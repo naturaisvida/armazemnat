@@ -616,6 +616,8 @@ qs('tab-nome').textContent   = prod.nome;
 if (prod.semCopy) {
   const ds = document.querySelector('.desc-section');
   if (ds) ds.style.display = 'none';
+  const ps = qs('prod-sub');
+  if (ps) ps.style.display = 'none';
 } else {
   qs('desc-sobre').innerHTML   = gerarSobre(prod);
   qs('desc-como-usar').innerHTML = gerarComoUsar(prod);
