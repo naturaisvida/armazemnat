@@ -470,8 +470,6 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
         <label class="form-label">Novo Status <span>*</span></label>
         <select id="modal-status">
           <option value="">Selecione...</option>
-          <option value="aguardando_pagamento">Aguardando Pagamento</option>
-          <option value="faturado">Pago</option>
           <option value="em_separacao">Em Separação</option>
           <option value="pronto_envio">Pronto para Envio</option>
           <option value="em_transporte">Em Transporte</option>
@@ -932,10 +930,11 @@ async function saveStatus() {
   let errors = 0, emailsSent = 0;
   for (const orderId of ids) {
     try {
+      const ord = _orders.find(o => o.id === orderId) || null;
       const r = await authFetch('/api/admin/orders', {
         method:  'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ orderId, status, ...(tracking ? { trackingCode: tracking } : {}) }),
+        body:    JSON.stringify({ orderId, status, ...(tracking ? { trackingCode: tracking } : {}), order: ord }),
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) errors++;
@@ -1241,7 +1240,7 @@ async function resendEmailFromDetail(status) {
     const r = await authFetch('/api/admin/orders', {
       method: 'PATCH',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({orderId:_detailOrder.id, status, trackingCode:tracking}),
+      body: JSON.stringify({orderId:_detailOrder.id, status, trackingCode:tracking, order:_detailOrder}),
     });
     const d = await r.json().catch(()=>({}));
     if (r.ok && d.emailSent) {

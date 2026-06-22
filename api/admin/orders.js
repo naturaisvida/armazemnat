@@ -1,11 +1,12 @@
 const jwt                  = require('jsonwebtoken');
 const { sendStatusEmail }  = require('../_email/send');
+const redis                = require('../_lib/redis');
 
 const PAGARME_URL = 'https://api.pagar.me/core/v5';
 
-const VALID_STATUSES = [
-  'aguardando_pagamento',
-  'faturado',
+// Status de fulfillment definidos manualmente pelo admin (guardados no Redis,
+// NÃO no Pagar.me). Pagamento (aguardando_pagamento/faturado) é automático.
+const MANUAL_STATUSES = [
   'em_separacao',
   'pronto_envio',
   'em_transporte',
@@ -14,6 +15,9 @@ const VALID_STATUSES = [
   'cancelado',
   'nao_integrado',
 ];
+
+// Statuses que disparam e-mail ao cliente
+const EMAIL_STATUSES = ['em_separacao','pronto_envio','em_transporte','entregue','excecao_entrega','cancelado'];
 
 // --- Helpers ---------------------------------------------------------------
 
@@ -237,6 +241,25 @@ module.exports = async function handler(req, res) {
       .filter(o => (o.metadata || {}).source === 'checkout_html')
       .map(formatOrder);
 
+    // Mescla o status de fulfillment do Redis (fonte de verdade; metadata = legado).
+    // Em try/catch: se o Redis falhar, a lista continua funcionando com o status base.
+    if (orders.length) {
+      try {
+        const recs = await redis.pipeline(...orders.map(o => ['GET', 'ostatus:' + o.id]));
+        orders.forEach((o, i) => {
+          let rec = recs[i];
+          if (rec && typeof rec === 'string') { try { rec = JSON.parse(rec); } catch { rec = null; } }
+          if (rec && rec.status) {
+            o.status = rec.status;
+            if (rec.trackingCode) o.shipping.trackingCode = rec.trackingCode;
+            if (Array.isArray(rec.emailLog)) o.emails = rec.emailLog;
+          }
+        });
+      } catch (e) {
+        console.error('[orders] merge de status do Redis falhou:', e.message);
+      }
+    }
+
     // Name search (client-side, Pagar.me doesn't support name search)
     if (search && !search.includes('@') && !/^\d+$/.test(search)) {
       const q2 = search.toLowerCase();
@@ -308,56 +331,55 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ ok: true, editType });
     }
 
-    const { status, trackingCode } = body;
+    // ── Status de fulfillment (Redis, NÃO toca no Pagar.me) ─────────────────
+    const { status, trackingCode, order: snapshot } = body;
 
-    if (!VALID_STATUSES.includes(status)) {
+    if (!MANUAL_STATUSES.includes(status)) {
       return res.status(400).json({ error: 'Status inválido' });
     }
     const safeTracking = trackingCode
       ? String(trackingCode).replace(/[^a-zA-Z0-9]/g, '').slice(0, 40)
       : '';
 
-    // Fetch current order to merge metadata
-    const current = await pagarmeReq('GET', `/orders/${orderId}`);
-    if (current._http >= 400) {
-      return res.status(404).json({ error: 'Pedido não encontrado' });
-    }
+    const willSendEmail = EMAIL_STATUSES.includes(status);
 
-    // Build email log entry optimistically
-    const prevLog = (() => {
-      try { return JSON.parse((current.metadata || {}).email_log || '[]'); } catch { return []; }
-    })();
-    const willSendEmail = ['faturado','em_separacao','pronto_envio','em_transporte','entregue','excecao_entrega','cancelado'].includes(status);
-    const logEntry = willSendEmail ? {
-      status,
-      sentAt: new Date().toISOString(),
-      to: current.customer?.email || '',
-    } : null;
+    // Registro atual no Redis (preserva rastreio e log de e-mail)
+    let rec = {};
+    try { rec = (await redis.get('ostatus:' + orderId)) || {}; } catch { rec = {}; }
+    if (typeof rec !== 'object' || rec === null) rec = {};
+    const prevLog = Array.isArray(rec.emailLog) ? rec.emailLog : [];
 
-    const newMeta = {
-      ...(current.metadata || {}),
-      custom_status:            status,
-      custom_status_updated_at: new Date().toISOString(),
-      ...(safeTracking ? { tracking_code: safeTracking } : {}),
-      ...(logEntry ? { email_log: JSON.stringify([...prevLog, logEntry].slice(-20)) } : {}),
-    };
-
-    const updated = await pagarmeReq('PATCH', `/orders/${orderId}`, { metadata: newMeta });
-
-    if (updated._http >= 400) {
-      return res.status(502).json({ error: 'Pagar.me não aceitou a atualização. Contate o suporte.' });
-    }
-
-    // Send email after successful status update
+    // Envia o e-mail usando o snapshot do pedido enviado pelo dashboard
+    // (assim não precisa consultar o Pagar.me).
     let emailSent  = false;
     let emailError = null;
-    if (willSendEmail) {
+    const emailTo  = snapshot?.customer?.email || '';
+    if (willSendEmail && snapshot && emailTo) {
       try {
-        const emailId = await sendStatusEmail(formatOrder(current), status, safeTracking);
+        const emailId = await sendStatusEmail(snapshot, status, safeTracking);
         emailSent = !!emailId;
       } catch (e) {
         emailError = e.message;
       }
+    } else if (willSendEmail && !emailTo) {
+      emailError = 'Pedido sem e-mail do cliente';
+    }
+
+    const logEntry = willSendEmail ? {
+      status, sentAt: new Date().toISOString(), to: emailTo, ok: emailSent,
+    } : null;
+
+    const newRec = {
+      status,
+      trackingCode: safeTracking || rec.trackingCode || '',
+      updatedAt:    new Date().toISOString(),
+      emailLog:     logEntry ? [...prevLog, logEntry].slice(-20) : prevLog,
+    };
+
+    try {
+      await redis.set('ostatus:' + orderId, newRec);
+    } catch (e) {
+      return res.status(502).json({ error: 'Erro ao salvar status', detail: e.message });
     }
 
     return res.status(200).json({ ok: true, orderId, status, emailSent, ...(emailError ? { emailError } : {}) });
