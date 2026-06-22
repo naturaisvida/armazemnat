@@ -55,7 +55,9 @@ async function pagarmeReq(method, path, body) {
   };
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(PAGARME_URL + path, opts);
-  const data = await r.json();
+  const _t = await r.text();
+  let data;
+  try { data = _t ? JSON.parse(_t) : {}; } catch { data = {}; }
   data._http = r.status;
   return data;
 }

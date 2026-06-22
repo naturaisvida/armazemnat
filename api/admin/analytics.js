@@ -29,7 +29,9 @@ async function fetchAll(dateFrom, dateTo) {
     if (dateFrom) pm.set('created_since', new Date(dateFrom).toISOString());
     if (dateTo)   pm.set('created_until', new Date(dateTo + 'T23:59:59').toISOString());
     const r    = await fetch(`${PAGARME_URL}/orders?${pm}`, { headers });
-    const data = await r.json();
+    const _t   = await r.text();
+    let data;
+    try { data = _t ? JSON.parse(_t) : {}; } catch { data = {}; }
     if (!r.ok || !Array.isArray(data.data)) break;
     data.data.filter(o => (o.metadata || {}).source === 'checkout_html').forEach(o => all.push(o));
     if (!data.paging?.next) break;

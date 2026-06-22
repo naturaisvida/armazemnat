@@ -298,7 +298,9 @@ async function sendRaw(to, subject, html) {
     headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
     body:    JSON.stringify({ from, to, subject, html }),
   });
-  const data = await r.json();
+  const _t = await r.text();
+  let data;
+  try { data = _t ? JSON.parse(_t) : {}; } catch { data = {}; }
   if (!r.ok) throw new Error((data.message || data.name || 'Resend error') + ' ' + r.status);
   return data.id;
 }
