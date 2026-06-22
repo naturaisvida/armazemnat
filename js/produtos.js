@@ -7,6 +7,14 @@ const _STD = () => [
   { titulo:"COMPRE 5 LEVE 10", preco:58990, comparar:189990, desconto:69 },
 ];
 
+// Oferta especial (Vision-X / Artivita): kits maiores + 1 unidade avulsa
+const _OFERTA_VX = () => [
+  { titulo:"COMPRE 2 LEVE 3",  preco:20990, comparar:41990,  desconto:50 },
+  { titulo:"COMPRE 3 LEVE 5",  preco:31990, comparar:74990,  desconto:57, popular:true },
+  { titulo:"COMPRE 4 LEVE 10", preco:53990, comparar:154990, desconto:65 },
+  { titulo:"1 UNIDADE",        preco:14990, comparar:0,       desconto:0 },
+];
+
 // tipo → define qual template de copy usa em produto.html
 // "geral" | "masc" | "fem"
 
@@ -275,7 +283,7 @@ const PRODUTOS = [
     titulo:"Vision-X",
     subtitulo:"Saúde ocular com luteína e zeaxantina naturais",
     badge:"OFERTA DO DIA", badgeColor:"#2980b9",
-    variantes:_STD(),
+    variantes:_OFERTA_VX(),
     imagens:[
       "/img/produtos/vision-x/1.png",
       "/img/produtos/vision-x/2.png",
@@ -366,6 +374,34 @@ const PRODUTOS = [
       "/img/produtos/naturion/3.png",
       "/img/produtos/naturion/4.png",
       "/img/produtos/naturion/5.png",
+    ],
+  },
+  {
+    slug:"urocianina", nome:"Urocianina", tipo:"geral",
+    titulo:"Urocianina",
+    subtitulo:"Suporte natural para o trato urinário com cranberry",
+    badge:"LANÇAMENTO", badgeColor:"#8e44ad",
+    variantes:_STD(),
+    imagens:[
+      "/img/produtos/urocianina/1.png",
+      "/img/produtos/urocianina/2.png",
+      "/img/produtos/urocianina/3.png",
+      "/img/produtos/urocianina/4.png",
+      "/img/produtos/urocianina/5.png",
+    ],
+  },
+  {
+    slug:"artivita", nome:"Artivita", tipo:"geral",
+    titulo:"Artivita",
+    subtitulo:"Suporte natural para articulações e mobilidade",
+    badge:"LANÇAMENTO", badgeColor:"#c0392b",
+    variantes:_OFERTA_VX(),
+    imagens:[
+      "/img/produtos/artivita/1.png",
+      "/img/produtos/artivita/2.png",
+      "/img/produtos/artivita/3.png",
+      "/img/produtos/artivita/4.png",
+      "/img/produtos/artivita/5.png",
     ],
   },
   {

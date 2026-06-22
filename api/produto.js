@@ -35,6 +35,8 @@ const META = [
   { slug:'mitocondril',       titulo:'Mitocondril',                      desc:'Energia celular profunda com CoQ10 e ativos mitocondriais',             img:'/img/produtos/mitocondril/1.png',        preco:'189.90' },
   { slug:'akkermat',          titulo:'Akkermat',                         desc:'Microbiota intestinal com Akkermansia e probioticos naturais',          img:'/img/produtos/akkermat/1.png',           preco:'189.90' },
   { slug:'naturion',          titulo:'Naturion',                         desc:'Equilibrio mineral e vital com eletrolitos naturais',                  img:'/img/produtos/naturion/1.png',           preco:'189.90' },
+  { slug:'urocianina',        titulo:'Urocianina',                       desc:'Suporte natural para o trato urinario com cranberry',                  img:'/img/produtos/urocianina/1.png',         preco:'189.90' },
+  { slug:'artivita',          titulo:'Artivita',                         desc:'Suporte natural para articulacoes e mobilidade',                       img:'/img/produtos/artivita/1.png',           preco:'149.90' },
   { slug:'corretor-postural', titulo:'Corretor Postural Ombro e Lombar', desc:'Corretor postural 3 em 1 para coluna, ombros e lombar',                img:'/img/produtos/corretor-postural/1.webp', preco:'129.90' },
   { slug:'teste',             titulo:'Produto Teste',                    desc:'Produto interno para testes de pagamento',                             img:'/img/produtos/glicofit/1.png',           preco:'10.00' },
 ];

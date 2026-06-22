@@ -662,7 +662,7 @@ prod.variantes.forEach((v, i) => {
     <div class="vcard-title">${v.titulo}</div>
     <div class="vcard-price">${$$(v.preco)}</div>
     ${v.comparar ? `<div class="vcard-compare">${$$(v.comparar)}</div>` : ''}
-    <div class="vcard-disc">${v.desconto}% OFF</div>
+    ${v.desconto ? `<div class="vcard-disc">${v.desconto}% OFF</div>` : ''}
     <button class="vcard-btn" data-idx="${i}">COMPRAR AGORA</button>
   `;
   el.onclick = (e) => {
@@ -713,7 +713,7 @@ function comprarAgora(i) {
 function updatePrice() {
   const v = prod.variantes[selectedIdx];
   qs('price-main').textContent = $$(v.preco);
-  qs('price-old').textContent  = `De ${$$(v.comparar)}`;
+  qs('price-old').textContent  = v.comparar ? `De ${$$(v.comparar)}` : '';
   qs('price-inst').textContent = `ou 12x de ${$$( Math.ceil(v.preco / 12) )} no cartão`;
   qs('price-pix').textContent  = `No PIX: ${$$( Math.round(v.preco * 0.95) )} (5% OFF)`;
 }
