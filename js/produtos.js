@@ -289,7 +289,6 @@ const PRODUTOS = [
       "/img/produtos/vision-x/2.png",
       "/img/produtos/vision-x/3.png",
       "/img/produtos/vision-x/4.png",
-      "/img/produtos/vision-x/5.png",
     ],
   },
   {
@@ -387,7 +386,6 @@ const PRODUTOS = [
       "/img/produtos/urocianina/2.png",
       "/img/produtos/urocianina/3.png",
       "/img/produtos/urocianina/4.png",
-      "/img/produtos/urocianina/5.png",
     ],
   },
   {
@@ -420,7 +418,6 @@ const PRODUTOS = [
       "/img/produtos/tirze-gotas/2.png",
       "/img/produtos/tirze-gotas/3.png",
       "/img/produtos/tirze-gotas/4.png",
-      "/img/produtos/tirze-gotas/5.png",
     ],
   },
   {
