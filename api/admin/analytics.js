@@ -58,7 +58,7 @@ function processOrders(raws) {
       else                                                            status = 'aguardando_pagamento';
     }
 
-    const isPaid     = ['faturado','em_transporte','entregue','excecao_entrega'].includes(status);
+    const isPaid     = ['faturado','em_separacao','pronto_envio','em_transporte','entregue','excecao_entrega'].includes(status);
     const isCanceled = status === 'cancelado';
 
     return {

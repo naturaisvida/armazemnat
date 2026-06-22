@@ -15,6 +15,18 @@ const STATUS_CONFIG = {
     message: 'O pagamento da sua compra foi aprovado. Agradecemos sua preferência pela Armazém Natural! Você receberá atualizações por e-mail sobre o andamento da sua compra até o momento de entrega.',
     accent:  '#15a731',
   },
+  em_separacao: {
+    subject: 'Seu pedido está em separação — #{code}',
+    title:   'Pedido em Separação!',
+    message: 'Boas notícias! Seu pedido já está sendo separado com todo cuidado pela nossa equipe. Em breve estará pronto para envio.',
+    accent:  '#8b5cf6',
+  },
+  pronto_envio: {
+    subject: 'Seu pedido está pronto para envio — #{code}',
+    title:   'Pronto para Envio!',
+    message: 'Seu pedido já foi separado e embalado, e está pronto para ser despachado. Logo logo ele estará a caminho!',
+    accent:  '#0891b2',
+  },
   em_transporte: {
     subject: 'Seu pedido está a caminho — #{code}',
     title:   'Pedido a Caminho!',

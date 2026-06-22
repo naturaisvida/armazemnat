@@ -403,11 +403,12 @@ function renderPedidos(pedidos) {
   if (!pedidos.length) { el.innerHTML = '<div class="empty-state">Nenhum pedido hoje</div>'; return; }
 
   const STATUS_LABELS = {
-    aguardando_pagamento:'Aguardando',faturado:'Pago',em_transporte:'Em transporte',
+    aguardando_pagamento:'Aguardando',faturado:'Pago',em_separacao:'Em separação',
+    pronto_envio:'Pronto p/ envio',em_transporte:'Em transporte',
     entregue:'Entregue',cancelado:'Cancelado',nao_integrado:'N integrado',
   };
   const STATUS_COLORS = {
-    faturado:'#15a731',em_transporte:'#3b82f6',entregue:'#10b981',
+    faturado:'#15a731',em_separacao:'#8b5cf6',pronto_envio:'#0891b2',em_transporte:'#3b82f6',entregue:'#10b981',
     cancelado:'#ef4444',aguardando_pagamento:'#f59e0b',
   };
 

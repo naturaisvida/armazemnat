@@ -58,6 +58,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .stab[data-s="todos"]     {color:#6b7280}.stab[data-s="todos"].active{color:#6b7280}
 .stab[data-s="aguardando_pagamento"]{color:#f59e0b}.stab[data-s="aguardando_pagamento"].active{color:#f59e0b}
 .stab[data-s="faturado"]  {color:#15a731}.stab[data-s="faturado"].active{color:#15a731}
+.stab[data-s="em_separacao"]{color:#8b5cf6}.stab[data-s="em_separacao"].active{color:#8b5cf6}
+.stab[data-s="pronto_envio"]{color:#0891b2}.stab[data-s="pronto_envio"].active{color:#0891b2}
 .stab[data-s="em_transporte"]{color:#3b82f6}.stab[data-s="em_transporte"].active{color:#3b82f6}
 .stab[data-s="entregue"]  {color:#10b981}.stab[data-s="entregue"].active{color:#10b981}
 .stab[data-s="excecao_entrega"]{color:#ef4444}.stab[data-s="excecao_entrega"].active{color:#ef4444}
@@ -95,6 +97,8 @@ tr:hover td{background:#fafafa}
 .badge{display:inline-block;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:700;white-space:nowrap}
 .s-aguardando_pagamento{background:#fef3c7;color:#92400e}
 .s-faturado{background:#dcfce7;color:#15803d}
+.s-em_separacao{background:#ede9fe;color:#6d28d9}
+.s-pronto_envio{background:#cffafe;color:#0e7490}
 .s-em_transporte{background:#dbeafe;color:#1d4ed8}
 .s-entregue{background:#dcfce7;color:#15803d}
 .s-excecao_entrega{background:#fee2e2;color:#dc2626}
@@ -341,6 +345,8 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
     <button class="stab active" data-s="todos"                onclick="setStatus('todos',this)">Todos</button>
     <button class="stab" data-s="aguardando_pagamento"        onclick="setStatus('aguardando_pagamento',this)">Aguardando Pagamento</button>
     <button class="stab" data-s="faturado"                    onclick="setStatus('faturado',this)">Pago</button>
+    <button class="stab" data-s="em_separacao"                onclick="setStatus('em_separacao',this)">Em Separação</button>
+    <button class="stab" data-s="pronto_envio"                onclick="setStatus('pronto_envio',this)">Pronto para Envio</button>
     <button class="stab" data-s="em_transporte"               onclick="setStatus('em_transporte',this)">Em Transporte</button>
     <button class="stab" data-s="entregue"                    onclick="setStatus('entregue',this)">Entregue</button>
     <button class="stab" data-s="excecao_entrega"             onclick="setStatus('excecao_entrega',this)">Exceção de Entrega</button>
@@ -434,6 +440,8 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
       <div class="check-group">
         <label class="check-item"><input type="checkbox" value="aguardando_pagamento"> Aguardando Pagamento</label>
         <label class="check-item"><input type="checkbox" value="faturado">             Pago</label>
+        <label class="check-item"><input type="checkbox" value="em_separacao">         Em Separação</label>
+        <label class="check-item"><input type="checkbox" value="pronto_envio">         Pronto para Envio</label>
         <label class="check-item"><input type="checkbox" value="em_transporte">        Em Transporte</label>
         <label class="check-item"><input type="checkbox" value="entregue">             Entregue</label>
         <label class="check-item"><input type="checkbox" value="excecao_entrega">      Exceção de Entrega</label>
@@ -464,6 +472,8 @@ select:focus,input[type=text]:focus{border-color:var(--green)}
           <option value="">Selecione...</option>
           <option value="aguardando_pagamento">Aguardando Pagamento</option>
           <option value="faturado">Pago</option>
+          <option value="em_separacao">Em Separação</option>
+          <option value="pronto_envio">Pronto para Envio</option>
           <option value="em_transporte">Em Transporte</option>
           <option value="entregue">Entregue</option>
           <option value="excecao_entrega">Exceção de Entrega</option>
@@ -655,6 +665,8 @@ let _fMethods  = new Set();
 const STATUS_LABELS = {
   aguardando_pagamento: 'Aguardando Pagamento',
   faturado:             'Pago',
+  em_separacao:         'Em Separação',
+  pronto_envio:         'Pronto para Envio',
   em_transporte:        'Em Transporte',
   entregue:             'Entregue',
   excecao_entrega:      'Exceção de Entrega',
@@ -761,7 +773,7 @@ function renderTable() {
         <span style="display:block;font-size:11px;font-weight:400;color:var(--text)">${fmtDate(o.createdAt)}</span>
         <span style="display:block;font-size:10px;color:var(--muted);margin-top:2px">${relDate(o.createdAt)}</span>
       </td>
-      <td><div class="amount">${fmtBRL(o.amount)}</div></td>
+      <td><div class="amount">${fmtBRL(o.amountPaid ?? o.amount)}</div></td>
       <td><span class="badge s-${o.status}">${STATUS_LABELS[o.status] || o.status}</span></td>
       <td>
         <div style="font-size:12px;color:var(--muted);margin-bottom:4px">${escH(o.shipping.carrier)}</div>
@@ -1084,13 +1096,14 @@ function openDetail(orderId) {
   // Pagamento
   const mLabel = {pix:'Pix',boleto:'Boleto Bancário',cartao:'Cartão de Crédito',outro:'Outro'};
   const mClass = {pix:'method-pix',boleto:'method-boleto',cartao:'method-cartao',outro:'method-outro'};
+  const paid = o.amountPaid ?? o.amount;
   const parcel = o.installments > 1
-    ? `${o.installments}x de ${fmtBRL(Math.round(o.amount/o.installments))}`
-    : `1x de ${fmtBRL(o.amount)}`;
+    ? `${o.installments}x de ${fmtBRL(Math.round(paid/o.installments))}`
+    : `1x de ${fmtBRL(paid)}`;
   document.getElementById('d-payment').innerHTML =
     `<div style="margin-bottom:6px"><span class="order-method ${mClass[o.method]||'method-outro'}">${escH(mLabel[o.method]||'Outro')}</span></div>` +
     `<div class="di-muted">Valor pago</div>` +
-    `<div class="di-name" style="font-size:18px">${fmtBRL(o.amount)}</div>` +
+    `<div class="di-name" style="font-size:18px">${fmtBRL(paid)}</div>` +
     `<div class="di-muted">${escH(parcel)}</div>`;
 
   // Entrega
@@ -1099,13 +1112,15 @@ function openDetail(orderId) {
 
   // Total
   const itemsSum = o.items.reduce((s,i) => s + (i.amount||0)*(i.quantity||1), 0);
-  const interest = Math.max(0, o.amount - itemsSum);
-  document.getElementById('d-total-main').textContent = fmtBRL(o.amount);
+  // o.amount = principal (itens + frete, sem juros) | paid = valor cobrado (com juros)
+  const interest = Math.max(0, paid - o.amount);
+  const shippingVal = Math.max(0, o.amount - itemsSum);
+  document.getElementById('d-total-main').textContent = fmtBRL(paid);
   const tRows = [
     ['Produtos', fmtBRL(itemsSum)],
     ...(interest > 0 ? [['Juros', fmtBRL(interest)]] : []),
     ['Desconto', '- R$ 0,00'],
-    ['Frete', 'R$ 0,00'],
+    ['Frete', shippingVal > 0 ? fmtBRL(shippingVal) : 'Grátis'],
   ];
   document.getElementById('d-total-rows').innerHTML = tRows
     .map(([k,v]) => `<div class="dtr"><span class="dtr-k">${k}</span><span class="dtr-v">${v}</span></div>`)

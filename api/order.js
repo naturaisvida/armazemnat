@@ -167,6 +167,8 @@ module.exports = async function handler(req, res) {
     metadata: {
       observacao:   String(observacao).slice(0, 300),
       source:       'checkout_html',
+      installments:    String(method === 'cartao' ? (parseInt(installments) || 1) : 1),
+      amount_charged:  String(parseInt(amount) || 0),
       utm_source:   String(utm.source   || '').slice(0, 100),
       utm_medium:   String(utm.medium   || '').slice(0, 100),
       utm_campaign: String(utm.campaign || '').slice(0, 100),

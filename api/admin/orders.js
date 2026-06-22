@@ -6,6 +6,8 @@ const PAGARME_URL = 'https://api.pagar.me/core/v5';
 const VALID_STATUSES = [
   'aguardando_pagamento',
   'faturado',
+  'em_separacao',
+  'pronto_envio',
   'em_transporte',
   'entregue',
   'excecao_entrega',
@@ -88,6 +90,18 @@ function formatOrder(raw) {
 
   const basePhone = (cust.phones?.mobile_phone?.area_code || '') + (cust.phones?.mobile_phone?.number || '');
 
+  // Parcelas: metadata (novo, confiável) → last_transaction → 1
+  const metaInst = parseInt(meta.installments, 10);
+  const installments = (Number.isFinite(metaInst) && metaInst > 0)
+    ? metaInst
+    : (tx.installments || charge.installments || 1);
+
+  // Valor cobrado (COM juros): metadata → charge.amount → order.amount
+  const metaCharged = parseInt(meta.amount_charged, 10);
+  const amountPaid = (Number.isFinite(metaCharged) && metaCharged > 0)
+    ? metaCharged
+    : (charge.amount || raw.amount || 0);
+
   return {
     id:         raw.id,
     code:       raw.code || raw.id,
@@ -98,9 +112,10 @@ function formatOrder(raw) {
       phone:    meta.edit_customer_phone    || basePhone,
     },
     amount:      raw.amount   || 0,
+    amountPaid,
     status,
     method,
-    installments: tx.installments || 1,
+    installments,
     createdAt:  raw.created_at,
     updatedAt:  raw.updated_at,
     emails: (() => { try { return JSON.parse(meta.email_log || '[]'); } catch { return []; } })(),
@@ -157,7 +172,7 @@ function buildCsv(orders) {
       esc(o.customer.email),
       esc(o.customer.document),
       esc(o.customer.phone),
-      fmt(o.amount),
+      fmt(o.amountPaid),
       esc(o.status),
       esc(o.method),
       o.installments,
@@ -310,7 +325,7 @@ module.exports = async function handler(req, res) {
     const prevLog = (() => {
       try { return JSON.parse((current.metadata || {}).email_log || '[]'); } catch { return []; }
     })();
-    const willSendEmail = ['faturado','em_transporte','entregue','excecao_entrega','cancelado'].includes(status);
+    const willSendEmail = ['faturado','em_separacao','pronto_envio','em_transporte','entregue','excecao_entrega','cancelado'].includes(status);
     const logEntry = willSendEmail ? {
       status,
       sentAt: new Date().toISOString(),
