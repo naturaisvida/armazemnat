@@ -119,7 +119,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"rosa-oriental", nome:"Rosa Oriental", tipo:"fem", semCopy:true,
+    slug:"rosa-oriental", nome:"Rosa Oriental", tipo:"fem",
     titulo:"Rosa Oriental",
     subtitulo:"Beleza e bem-estar feminino com ervas do Oriente",
     badge:"OFERTA DO DIA", badgeColor:"#e91e8c",
@@ -251,7 +251,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"memoralis", nome:"Memoralis", tipo:"geral", semCopy:true,
+    slug:"memoralis", nome:"Memoralis", tipo:"geral",
     titulo:"Memoralis",
     subtitulo:"Memória e concentração com nootrópicos naturais",
     badge:"OFERTA DO DIA", badgeColor:"#8e44ad",
@@ -279,7 +279,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"vision-x", nome:"Vision-X", tipo:"geral", semCopy:true,
+    slug:"vision-x", nome:"Vision-X", tipo:"geral",
     titulo:"Vision-X",
     subtitulo:"Saúde ocular com luteína e zeaxantina naturais",
     badge:"OFERTA DO DIA", badgeColor:"#2980b9",
@@ -376,7 +376,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"urocianina", nome:"Urocianina", tipo:"geral", semCopy:true,
+    slug:"urocianina", nome:"Urocianina", tipo:"geral",
     titulo:"Urocianina",
     subtitulo:"Suporte natural para o trato urinário com cranberry",
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
@@ -403,7 +403,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"tirze-gotas", nome:"Tirze Gotas", tipo:"geral", semCopy:true,
+    slug:"tirze-gotas", nome:"Tirze Gotas", tipo:"geral",
     titulo:"Tirze Gotas",
     subtitulo:"Suporte natural ao emagrecimento em gotas",
     badge:"MAIS VENDIDO", badgeColor:"#15a731",
