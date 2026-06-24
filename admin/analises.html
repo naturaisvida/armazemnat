@@ -483,26 +483,49 @@ function renderDaily(dias) {
     wrap.innerHTML = '<div class="empty-state">Sem dados no período</div>';
     return;
   }
-  const W = wrap.offsetWidth || 600;
-  const H = 120;
-  const pad = { t: 10, b: 24, l: 8, r: 8 };
+  const W    = wrap.offsetWidth || 600;
+  const many = dias.length > 15;
+  const H    = many ? 155 : 145;
+  const pad  = { t: many ? 36 : 26, b: 28, l: 8, r: 8 };
   const maxAmt = Math.max(...dias.map(d => d.paidAmount), 1);
   const colW   = (W - pad.l - pad.r) / dias.length;
-  const barW   = Math.max(4, colW * 0.55);
+  const barW   = Math.max(4, Math.min(colW * 0.65, 48));
 
-  let bars = '', labels = '';
+  function shortVal(cents) {
+    const n = cents / 100;
+    if (n <= 0) return '';
+    if (n >= 1000) return 'R$' + (n / 1000).toFixed(1).replace('.', ',') + 'k';
+    return 'R$' + Math.round(n);
+  }
+  function fullVal(cents) {
+    return 'R$ ' + (cents / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  let bars = '', labels = '', values = '';
   dias.forEach((d, i) => {
-    const bH  = ((d.paidAmount / maxAmt) * (H - pad.t - pad.b));
+    const bH  = Math.max(0, (d.paidAmount / maxAmt) * (H - pad.t - pad.b));
     const x   = pad.l + i * colW + (colW - barW) / 2;
     const y   = H - pad.b - bH;
-    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${bH.toFixed(1)}" fill="${bH > 0 ? 'var(--green-2)' : '#f1f5f9'}" rx="2"/>`;
-    if (dias.length <= 14 || i % Math.ceil(dias.length / 10) === 0) {
+    const cx  = x + barW / 2;
+
+    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${bH.toFixed(1)}" fill="${bH > 0 ? 'var(--green-2)' : '#f1f5f9'}" rx="2"><title>${fullVal(d.paidAmount)} em ${d.date.slice(5).replace('-','/')}</title></rect>`;
+
+    if (!many || i % Math.ceil(dias.length / 10) === 0) {
       const label = d.date.slice(5).replace('-', '/');
-      labels += `<text x="${(x + barW/2).toFixed(1)}" y="${H - 6}" text-anchor="middle" font-size="9" fill="var(--muted)">${label}</text>`;
+      labels += `<text x="${cx.toFixed(1)}" y="${H - 8}" text-anchor="middle" font-size="9" fill="var(--muted)">${label}</text>`;
+    }
+
+    if (d.paidAmount > 0) {
+      const val = shortVal(d.paidAmount);
+      if (many) {
+        values += `<text font-size="8" font-weight="600" fill="var(--green-2)" text-anchor="end" transform="rotate(-45,${cx.toFixed(1)},${(y - 3).toFixed(1)}) translate(${cx.toFixed(1)},${(y - 3).toFixed(1)})">${val}</text>`;
+      } else {
+        values += `<text x="${cx.toFixed(1)}" y="${(y - 5).toFixed(1)}" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--green-2)">${val}</text>`;
+      }
     }
   });
 
-  wrap.innerHTML = `<svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${bars}${labels}</svg>`;
+  wrap.innerHTML = `<svg width="100%" height="${H}" viewBox="0 0 ${W} ${H}">${bars}${values}${labels}</svg>`;
 }
 
 function renderTopProdutos(prods) {
