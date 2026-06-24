@@ -289,7 +289,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({
       orders,
-      total:   orders.length,
+      total:   raw.paging?.total || orders.length,
       page,
       hasNext: !!(raw.paging?.next),
     });
