@@ -212,42 +212,47 @@ module.exports = async function handler(req, res) {
 
   // ── GET — list orders ─────────────────────────────────────────────────────
   if (req.method === 'GET') {
-    const q          = req.query || {};
-    const page       = safeInt(q.page, 1, 1, 500);
-    const status     = safeStr(q.status, 30);
-    const search     = safeStr(q.search, 100);
-    const dateFrom   = safeStr(q.date_from, 30);
-    const dateTo     = safeStr(q.date_to, 30);
-    const methodF    = safeStr(q.method, 20);
-    const doExport   = q.export === 'csv';
+    const q        = req.query || {};
+    const page     = safeInt(q.page, 1, 1, 500);
+    const status   = safeStr(q.status, 30);
+    const search   = safeStr(q.search, 100);
+    const dateFrom = safeStr(q.date_from, 30);
+    const dateTo   = safeStr(q.date_to, 30);
+    const methodF  = safeStr(q.method, 20);
+    const doExport = q.export === 'csv';
+    const DISPLAY  = 25; // pedidos por pagina no admin
 
-    // Build Pagar.me params
-    const pm = new URLSearchParams({ size: 50, page });
+    // Build base Pagar.me params (sem paginacao, adicionada no loop)
+    const basePm = new URLSearchParams({ size: 50 });
     // BRT = UTC-3: meia-noite BRT = T03:00Z; fim do dia BRT = dia+1 T02:59:59Z
-    if (dateFrom) pm.set('created_since', new Date(dateFrom + 'T03:00:00.000Z').toISOString());
-    if (dateTo) { const u = new Date(dateTo + 'T03:00:00.000Z'); u.setUTCDate(u.getUTCDate() + 1); pm.set('created_until', u.toISOString()); }
+    if (dateFrom) basePm.set('created_since', new Date(dateFrom + 'T03:00:00.000Z').toISOString());
+    if (dateTo) { const u = new Date(dateTo + 'T03:00:00.000Z'); u.setUTCDate(u.getUTCDate() + 1); basePm.set('created_until', u.toISOString()); }
+    if (search && search.includes('@'))       basePm.set('customer_email', search);
+    else if (search && /^\d+$/.test(search)) basePm.set('customer_document', search);
 
-    // If searching by e-mail or CPF
-    if (search && search.includes('@'))       pm.set('customer_email', search);
-    else if (search && /^\d+$/.test(search)) pm.set('customer_document', search);
-
-    const raw = await pagarmeReq('GET', `/orders?${pm}`);
-
-    if (raw._http >= 400) {
-      return res.status(502).json({ error: 'Erro ao buscar pedidos no Pagar.me' });
+    // Varre todas as paginas do Pagar.me (max 1000 pedidos) para poder
+    // filtrar por metodo/status/nome corretamente e paginar os resultados filtrados.
+    let allOrders = [];
+    let pmPage = 1;
+    while (pmPage <= 20) {
+      basePm.set('page', pmPage);
+      const raw = await pagarmeReq('GET', `/orders?${basePm}`);
+      if (raw._http >= 400) {
+        return res.status(502).json({ error: 'Erro ao buscar pedidos no Pagar.me' });
+      }
+      const batch = (raw.data || [])
+        .filter(o => (o.metadata || {}).source === 'checkout_html')
+        .map(formatOrder);
+      allOrders.push(...batch);
+      if (!raw.paging?.next) break;
+      pmPage++;
     }
 
-    // Filtra apenas pedidos criados pelo site (exclui Yampi, Shopify, etc.)
-    let orders = (raw.data || [])
-      .filter(o => (o.metadata || {}).source === 'checkout_html')
-      .map(formatOrder);
-
-    // Mescla o status de fulfillment do Redis (fonte de verdade; metadata = legado).
-    // Em try/catch: se o Redis falhar, a lista continua funcionando com o status base.
-    if (orders.length) {
+    // Mescla status do Redis em lote
+    if (allOrders.length) {
       try {
-        const recs = await redis.pipeline(...orders.map(o => ['GET', 'ostatus:' + o.id]));
-        orders.forEach((o, i) => {
+        const recs = await redis.pipeline(...allOrders.map(o => ['GET', 'ostatus:' + o.id]));
+        allOrders.forEach((o, i) => {
           let rec = recs[i];
           if (rec && typeof rec === 'string') { try { rec = JSON.parse(rec); } catch { rec = null; } }
           if (rec && rec.status) {
@@ -261,37 +266,40 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    // Name search (client-side, Pagar.me doesn't support name search)
+    // Aplica filtros pos-busca
     if (search && !search.includes('@') && !/^\d+$/.test(search)) {
       const q2 = search.toLowerCase();
-      orders = orders.filter(o =>
+      allOrders = allOrders.filter(o =>
         o.customer.name.toLowerCase().includes(q2) ||
         o.code.toLowerCase().includes(q2)
       );
     }
-
-    // Status filter
     if (status && status !== 'todos') {
-      orders = orders.filter(o => o.status === status);
+      allOrders = allOrders.filter(o => o.status === status);
     }
-
-    // Payment method filter
     if (methodF && methodF !== 'todos') {
-      orders = orders.filter(o => o.method === methodF);
+      allOrders = allOrders.filter(o => o.method === methodF);
     }
 
-    // Export CSV
+    // Export CSV (todos os resultados filtrados)
     if (doExport) {
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');
       res.setHeader('Content-Disposition', `attachment; filename="pedidos-${Date.now()}.csv"`);
-      return res.status(200).send(buildCsv(orders));
+      return res.status(200).send(buildCsv(allOrders));
     }
+
+    // Pagina os resultados filtrados
+    const total      = allOrders.length;
+    const totalPages = Math.max(1, Math.ceil(total / DISPLAY));
+    const safePage   = Math.min(page, totalPages);
+    const orders     = allOrders.slice((safePage - 1) * DISPLAY, safePage * DISPLAY);
 
     return res.status(200).json({
       orders,
-      total:   raw.paging?.total || orders.length,
-      page,
-      hasNext: !!(raw.paging?.next),
+      total,
+      totalPages,
+      page: safePage,
+      hasNext: safePage < totalPages,
     });
   }
 

@@ -657,11 +657,12 @@ function toggleSubmenu(id) {
 }
 
 // ── State ────────────────────────────────────────────────────────────────────
-let _status  = 'todos';
-let _page    = 1;
-let _search  = '';
-let _total   = 0;
-let _hasNext = false;
+let _status     = 'todos';
+let _page       = 1;
+let _search     = '';
+let _total      = 0;
+let _totalPages = 1;
+let _hasNext    = false;
 let _orders  = [];
 let _sel     = new Set();           // selected order ids
 let _modalTarget = null;            // {orderId} or 'bulk'
@@ -721,9 +722,10 @@ async function loadOrders() {
     const d = await r.json();
     if (!r.ok) { showError(d.error || 'Erro ao carregar pedidos'); return; }
 
-    _orders  = d.orders || [];
-    _total   = d.total  || 0;
-    _hasNext = d.hasNext || false;
+    _orders     = d.orders     || [];
+    _total      = d.total      || 0;
+    _totalPages = d.totalPages || Math.max(1, Math.ceil(_total / 25));
+    _hasNext    = d.hasNext    || false;
     renderTable();
     renderPagination();
     document.getElementById('total-badge').textContent = _total + ' pedido' + (_total !== 1 ? 's' : '');
@@ -833,15 +835,14 @@ function updateSelBar() {
 }
 
 // ── Pagination ────────────────────────────────────────────────────────────────
-const PAGE_SIZE = 50;
 function renderPagination() {
   const el   = document.getElementById('pagination');
   const btns = document.getElementById('pag-btns');
   const info = document.getElementById('pag-info');
-  if (_orders.length === 0) { el.style.display = 'none'; return; }
+  if (_orders.length === 0 && _total === 0) { el.style.display = 'none'; return; }
   el.style.display = 'flex';
 
-  const totalPages = Math.max(_page, Math.ceil(_total / PAGE_SIZE));
+  const totalPages = _totalPages;
   info.textContent = `Página ${_page} de ${totalPages} · ${_total} pedido${_total!==1?'s':''}`;
 
   const start = Math.max(1, _page - 2);
