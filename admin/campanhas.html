@@ -221,7 +221,7 @@ function toggleSubmenu(id) { document.getElementById('nav-' + id).classList.togg
 let _dateFrom = '', _dateTo = '';
 
 function getRange(key) {
-  const now  = new Date();
+  const now  = new Date(Date.now() - 3 * 3600000);
   const yyyy = d => d.toISOString().slice(0, 10);
   if (key === 'hoje') {
     return { from: yyyy(now), to: yyyy(now) };

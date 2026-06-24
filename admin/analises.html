@@ -322,7 +322,7 @@ function setPeriod(p, btn) {
   btn.classList.add('active');
   document.getElementById('custom-range').style.display = p === 'custom' ? 'flex' : 'none';
 
-  const now   = new Date();
+  const now   = new Date(Date.now() - 3 * 3600000);
   const today = now.toISOString().slice(0, 10);
 
   if (p === 'hoje') {
@@ -571,7 +571,7 @@ function escH(s) {
   } catch { location.href = '/admin'; return; }
 
   // Default: last 30 days
-  const now   = new Date();
+  const now   = new Date(Date.now() - 3 * 3600000);
   const today = now.toISOString().slice(0, 10);
   const d30   = new Date(now); d30.setDate(d30.getDate() - 29);
   _dateFrom   = d30.toISOString().slice(0, 10);

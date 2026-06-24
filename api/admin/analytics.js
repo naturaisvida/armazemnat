@@ -26,8 +26,9 @@ async function fetchAll(dateFrom, dateTo) {
   let page = 1;
   while (page <= 20) {
     const pm = new URLSearchParams({ size: 50, page });
-    if (dateFrom) pm.set('created_since', new Date(dateFrom).toISOString());
-    if (dateTo)   pm.set('created_until', new Date(dateTo + 'T23:59:59').toISOString());
+    // BRT = UTC-3: meia-noite BRT = T03:00Z; fim do dia BRT = dia+1 T02:59:59Z
+    if (dateFrom) pm.set('created_since', new Date(dateFrom + 'T03:00:00.000Z').toISOString());
+    if (dateTo) { const u = new Date(dateTo + 'T03:00:00.000Z'); u.setUTCDate(u.getUTCDate() + 1); pm.set('created_until', u.toISOString()); }
     const r    = await fetch(`${PAGARME_URL}/orders?${pm}`, { headers });
     const _t   = await r.text();
     let data;
@@ -138,7 +139,7 @@ function processOrders(raws) {
   // Daily breakdown
   const dayMap = {};
   orders.forEach(o => {
-    const d = o.createdAt.slice(0, 10);
+    const d = o.createdAt ? new Date(new Date(o.createdAt).getTime() - 3 * 3600000).toISOString().slice(0, 10) : '';
     if (!d) return;
     if (!dayMap[d]) dayMap[d] = { date: d, amount: 0, count: 0, paidAmount: 0, paidCount: 0, canceledCount: 0 };
     dayMap[d].amount += o.amount;

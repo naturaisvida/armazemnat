@@ -256,7 +256,7 @@ function setPeriod(p, btn) {
   btn.classList.add('active');
   document.getElementById('custom-range').style.display = p === 'custom' ? 'flex' : 'none';
 
-  const now   = new Date();
+  const now   = new Date(Date.now() - 3 * 3600000);
   const today = now.toISOString().slice(0, 10);
 
   if (p === 'hoje') {
@@ -390,7 +390,7 @@ function exportCsv() {
     if (p.exp < Date.now() / 1000) { localStorage.removeItem('admin_token'); location.href = '/admin'; return; }
   } catch { location.href = '/admin'; return; }
 
-  const now   = new Date();
+  const now   = new Date(Date.now() - 3 * 3600000);
   const today = now.toISOString().slice(0, 10);
   const d30   = new Date(now); d30.setDate(d30.getDate() - 29);
   _dateFrom   = d30.toISOString().slice(0, 10);

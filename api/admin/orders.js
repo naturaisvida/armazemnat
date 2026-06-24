@@ -223,8 +223,9 @@ module.exports = async function handler(req, res) {
 
     // Build Pagar.me params
     const pm = new URLSearchParams({ size: 50, page });
-    if (dateFrom) pm.set('created_since', new Date(dateFrom).toISOString());
-    if (dateTo)   pm.set('created_until', new Date(dateTo + 'T23:59:59').toISOString());
+    // BRT = UTC-3: meia-noite BRT = T03:00Z; fim do dia BRT = dia+1 T02:59:59Z
+    if (dateFrom) pm.set('created_since', new Date(dateFrom + 'T03:00:00.000Z').toISOString());
+    if (dateTo) { const u = new Date(dateTo + 'T03:00:00.000Z'); u.setUTCDate(u.getUTCDate() + 1); pm.set('created_until', u.toISOString()); }
 
     // If searching by e-mail or CPF
     if (search && search.includes('@'))       pm.set('customer_email', search);
