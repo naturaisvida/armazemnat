@@ -220,7 +220,7 @@ module.exports = async function handler(req, res) {
     const dateTo   = safeStr(q.date_to, 30);
     const methodF  = safeStr(q.method, 20);
     const doExport = q.export === 'csv';
-    const DISPLAY  = 25; // pedidos por pagina no admin
+    const DISPLAY  = 30; // pedidos por pagina no admin
 
     // Build base Pagar.me params (sem paginacao, adicionada no loop)
     const basePm = new URLSearchParams({ size: 50 });
