@@ -88,8 +88,8 @@ module.exports = async function handler(req, res) {
 
   if (req.method !== 'POST') return res.status(405).end();
 
-  // Verifica Basic Auth (mesmo esquema do webhook.php)
   if (!checkBasicAuth(req.headers['authorization'] || '')) {
+    console.warn('[webhook] rejeitado por basicauth');
     return res.status(401).json({ error: 'Não autorizado' });
   }
 
@@ -97,42 +97,54 @@ module.exports = async function handler(req, res) {
   const eventType = event.type  || '';
   const data      = event.data  || {};
 
-  // Para order.* o ID está em data.id
-  // Para charge.* o ID do pedido está em data.order_id
   const orderId = eventType.startsWith('charge.')
-    ? (data.order_id || data.order?.id)
+    ? (data.order_id || data.order?.id || data.id)
     : data.id;
 
+  console.log('[webhook] recebido event=' + eventType + ' orderId=' + (orderId || 'N/A') + ' dataKeys=' + Object.keys(data).join(','));
+
   if (!orderId || (!eventType.startsWith('order.') && !eventType.startsWith('charge.'))) {
+    console.log('[webhook] ignorado: sem orderId ou tipo desconhecido');
     return res.status(200).json({ ok: true, skipped: true });
   }
-
-  console.log('[webhook] recebido event=' + eventType + ' orderId=' + orderId);
 
   try {
     if (eventType === 'order.paid' || eventType === 'charge.paid') {
       const raw = await fetchOrder(orderId);
-      if (!raw.id) { console.warn('[webhook] order nao encontrada na Pagar.me id=' + orderId); return res.status(200).json({ ok: true, skipped: true }); }
-      if ((raw.metadata || {}).source !== 'checkout_html') { console.warn('[webhook] ignorado source=' + (raw.metadata || {}).source + ' (esperado checkout_html)'); return res.status(200).json({ ok: true, skipped: 'not_checkout_html' }); }
+      if (!raw.id) {
+        console.warn('[webhook] order nao encontrada id=' + orderId + ' http=' + raw._http);
+        return res.status(200).json({ ok: true, skipped: 'not_found' });
+      }
+      const source = (raw.metadata || {}).source;
+      if (source !== 'checkout_html') {
+        console.warn('[webhook] ignorado source=' + source + ' orderId=' + orderId);
+        return res.status(200).json({ ok: true, skipped: 'not_checkout_html' });
+      }
       const mapped = mapOrder(raw);
-      // Dispara conversao Google Ads apenas para PIX e boleto confirmados
-      // (cartao ja e rastreado pelo frontend no sucesso.html)
+      console.log('[webhook] processando order=' + mapped.code + ' method=' + mapped.method + ' customer=' + mapped.customer.email);
+
       if (mapped.method === 'pix' || mapped.method === 'boleto') {
         const gclid = (raw.metadata || {}).gclid || '';
         await sendGoogleConversion(gclid, raw.amount || 0, raw.id);
       }
-      const emailId = await sendStatusEmail(mapped, 'faturado', '');
-      console.log('[webhook] email confirmacao enviado order=' + mapped.code + ' to=' + mapped.customer.email + ' resendId=' + emailId);
+
+      if (!mapped.customer.email) {
+        console.warn('[webhook] sem email do cliente order=' + mapped.code);
+      } else {
+        const emailId = await sendStatusEmail(mapped, 'faturado', '');
+        console.log('[webhook] email faturado enviado order=' + mapped.code + ' to=' + mapped.customer.email + ' resendId=' + emailId);
+      }
     }
 
     if (eventType === 'order.canceled' || eventType === 'charge.refunded') {
       const raw = await fetchOrder(orderId);
-      if (!raw.id) return res.status(200).json({ ok: true, skipped: true });
+      if (!raw.id) return res.status(200).json({ ok: true, skipped: 'not_found' });
       if ((raw.metadata || {}).source !== 'checkout_html') return res.status(200).json({ ok: true, skipped: 'not_checkout_html' });
-      await sendStatusEmail(mapOrder(raw), 'cancelado', '');
+      const mapped = mapOrder(raw);
+      if (mapped.customer.email) await sendStatusEmail(mapped, 'cancelado', '');
     }
   } catch (e) {
-    console.error('[webhook] FALHA ao processar/enviar email event=' + eventType + ' orderId=' + orderId + ':', e.message);
+    console.error('[webhook] FALHA event=' + eventType + ' orderId=' + orderId + ':', e.message, e.stack);
   }
 
   return res.status(200).json({ ok: true });

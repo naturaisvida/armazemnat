@@ -204,29 +204,29 @@ module.exports = async function handler(req, res) {
       method,
     };
 
+    // await garante que o email e enviado antes do Vercel congelar a funcao
     if (method === 'pix' && tx.qr_code) {
-      sendPixEmail(emailOrder, {
+      const emailId = await sendPixEmail(emailOrder, {
         pix_qr_code:         tx.qr_code,
         pix_expiration_date: tx.expires_at,
-      })
-        .then(id => console.log('[email] PIX gerado enviado order=' + emailOrder.code + ' to=' + emailOrder.customer.email + ' resendId=' + id))
-        .catch(e => console.error('[email] FALHA PIX gerado order=' + emailOrder.code + ':', e.message));
+      });
+      console.log('[email] PIX gerado enviado order=' + emailOrder.code + ' to=' + emailOrder.customer.email + ' resendId=' + emailId);
     } else if (method === 'boleto' && (tx.line || tx.pdf)) {
-      sendBoletoEmail(emailOrder, {
+      const emailId = await sendBoletoEmail(emailOrder, {
         line:   tx.line,
         pdf:    tx.pdf,
         url:    tx.url,
         due_at: tx.due_at,
-      })
-        .then(id => console.log('[email] Boleto enviado order=' + emailOrder.code + ' resendId=' + id))
-        .catch(e => console.error('[email] FALHA Boleto order=' + emailOrder.code + ':', e.message));
+      });
+      console.log('[email] Boleto enviado order=' + emailOrder.code + ' to=' + emailOrder.customer.email + ' resendId=' + emailId);
     } else if (method === 'cartao' && charge.status === 'paid') {
-      sendCartaoEmail(emailOrder)
-        .then(id => console.log('[email] Cartao confirmado enviado order=' + emailOrder.code + ' resendId=' + id))
-        .catch(e => console.error('[email] FALHA Cartao order=' + emailOrder.code + ':', e.message));
+      const emailId = await sendCartaoEmail(emailOrder);
+      console.log('[email] Cartao confirmado enviado order=' + emailOrder.code + ' to=' + emailOrder.customer.email + ' resendId=' + emailId);
+    } else {
+      console.log('[email] nenhum email: method=' + method + ' charge.status=' + (charge.status || '?') + ' tx.qr_code=' + !!tx.qr_code + ' tx.line=' + !!tx.line);
     }
   } catch (e) {
-    console.error('Email send error:', e.message);
+    console.error('[email] FALHA ao enviar email order=' + (result.id || '?') + ':', e.message);
   }
 
   return res.status(200).json(result);
