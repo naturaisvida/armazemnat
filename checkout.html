@@ -1071,6 +1071,8 @@ const _cartId = (function(){
           document.getElementById('sb-unit').textContent  = $$(P.preco);
           document.getElementById('sb-price').textContent = $$(tot);
           document.getElementById('sb-total').textContent = $$(tot);
+          const im = document.getElementById('sb-img');
+          if (im) { if (it.image) { P.img = it.image; im.src = it.image; im.style.display = ''; } else { im.style.display = 'none'; } }
           if (typeof updateSidebarTotal === 'function') { try { updateSidebarTotal(); } catch(e){} }
         }
       }).catch(() => {});
@@ -1098,7 +1100,7 @@ function _cartPayload(step) {
       phone:    (document.getElementById('fone')?.value  || ''),
       document: (document.getElementById('cpf')?.value   || ''),
     },
-    items: [{ description: P.nome + (P.variante ? ' - ' + P.variante : ''), quantity: P.qty, amount: P.preco }],
+    items: [{ description: P.nome + (P.variante ? ' - ' + P.variante : ''), quantity: P.qty, amount: P.preco, image: P.img }],
   };
   if (step !== 'dados_pessoais') {
     payload.address = {
