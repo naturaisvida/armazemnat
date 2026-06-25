@@ -531,10 +531,15 @@
     }
 
     /* RESPONSIVE */
+    .pix-howto { margin-top: 18px; background: var(--vn-sage); border: 1px solid var(--vn-pale); border-radius: var(--radius-sm); padding: 16px 18px; }
+    .pix-howto-title { font-weight: 700; color: var(--vn-text); font-size: 0.95rem; margin-bottom: 10px; }
+    .pix-howto-steps { margin: 0; padding-left: 20px; color: var(--vn-muted); font-size: 0.88rem; line-height: 1.7; }
+    .pix-howto-steps strong { color: var(--vn-text); }
+    .pix-howto-foot { margin-top: 10px; font-size: 0.8rem; color: var(--vn-muted); }
+
     @media (max-width: 720px) {
       header { padding: 16px 20px; }
       .pix-grid { grid-template-columns: 1fr; }
-      .qr-container { display: none; }
       .btn-copy-mobile { display: block; }
       .page-title h1 { font-size: 1.5rem; }
       .valor-destaque { font-size: 1.7rem; }
@@ -688,6 +693,17 @@
                 <button class="btn-copy-mobile" id="btnCopyMobile" onclick="copiarPix()">
                   Copiar Codigo PIX
                 </button>
+              </div>
+
+              <div class="pix-howto">
+                <div class="pix-howto-title">Como pagar com Pix Copia e Cola</div>
+                <ol class="pix-howto-steps">
+                  <li>Toque em <strong>Copiar Codigo PIX</strong> aqui em cima.</li>
+                  <li>Abra o <strong>app do seu banco</strong>.</li>
+                  <li>Escolha <strong>Pix</strong> e depois <strong>Pix Copia e Cola</strong> (ou Colar codigo).</li>
+                  <li>Cole o codigo, confira o valor e <strong>confirme o pagamento</strong>.</li>
+                </ol>
+                <div class="pix-howto-foot">Prefere o QR Code? Abra o app do banco, escolha Pix &gt; Ler QR Code e aponte a camera no codigo acima.</div>
               </div>
 
             </div>
