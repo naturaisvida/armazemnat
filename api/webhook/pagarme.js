@@ -1,4 +1,5 @@
 const { sendStatusEmail } = require('../_email/send');
+const { mapOrderToNotazz, emitNota } = require('../_lib/notazz');
 
 const PAGARME_URL           = 'https://api.pagar.me/core/v5';
 const GADS_CONVERSION_ID    = '18164681866';
@@ -85,6 +86,20 @@ function mapOrder(raw) {
 module.exports = async function handler(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Cache-Control', 'no-store');
+
+  // Preview Notazz (token, NAO emite) — GET ?notazz_preview=<orderId>&token=...
+  // Mostra exatamente o que seria enviado pro Notazz, pra conferir antes de emitir.
+  if (req.method === 'GET' && req.query && req.query.notazz_preview) {
+    if (!process.env.NOTAZZ_TOKEN || req.query.token !== process.env.NOTAZZ_TOKEN) {
+      return res.status(401).json({ error: 'token invalido' });
+    }
+    const oid = String(req.query.notazz_preview).replace(/[^a-zA-Z0-9_-]/g, '');
+    const raw = await fetchOrder(oid);
+    if (!raw.id) return res.status(404).json({ error: 'pedido nao encontrado', orderId: oid });
+    const params = mapOrderToNotazz(raw, { requestOrigin: (raw.metadata || {}).source || 'pagarme' });
+    const out = await emitNota(params, { mode: 'dryrun' });
+    return res.status(200).json({ orderId: oid, ...out });
+  }
 
   if (req.method !== 'POST') return res.status(405).end();
 
