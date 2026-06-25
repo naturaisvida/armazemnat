@@ -47,9 +47,27 @@ function mapOrderToNotazz(raw, { requestOrigin = 'pagarme' } = {}) {
   const taxType  = doc.length > 11 ? 'J' : 'F';
   const installments = tx.installments || charge.installments || parseInt(meta.installments, 10) || 1;
 
-  const a = parseAddress(meta.edit_shipping_line1 || addr.line_1);
-  const items = (raw.items || []);
-  const baseValue = items.reduce((s, i) => s + (i.amount || 0) * (i.quantity || 1), 0);
+  const a       = parseAddress(meta.edit_shipping_line1 || addr.line_1);
+  const items   = (raw.items || []);
+  const freight = ship.amount || 0;
+  const baseProducts = items.reduce((s, i) => s + (i.amount || 0) * (i.quantity || 1), 0);
+  const charged = parseInt(meta.amount_charged, 10) || charge.amount || raw.amount || 0;
+
+  // Regra fiscal — espelha as notas que a Yampi ja emitia:
+  //  - PIX: nota pelo valor PAGO (desconto embutido no produto, DESCONTO=0)
+  //  - Cartao: valor BASE dos produtos (juros NAO entra na nota)
+  //  - Boleto: valor base
+  //  - Frete sempre separado (por conta do emitente)
+  let notaProducts, notaFreight;
+  if (method === 'pix' && charged > 0 && charged < baseProducts + freight) {
+    const denom  = (baseProducts + freight) || 1;
+    notaFreight  = Math.round(charged * freight / denom);
+    notaProducts = charged - notaFreight;
+  } else {
+    notaProducts = baseProducts;
+    notaFreight  = freight;
+  }
+  const prodScale = baseProducts > 0 ? notaProducts / baseProducts : 1;
 
   const products = {};
   items.forEach((i, idx) => {
@@ -57,7 +75,7 @@ function mapOrderToNotazz(raw, { requestOrigin = 'pagarme' } = {}) {
       DOCUMENT_PRODUCT_COD:           i.code || ('SKU' + (idx + 1)),
       DOCUMENT_PRODUCT_NAME:          String(i.description || 'Produto').slice(0, 120),
       DOCUMENT_PRODUCT_QTD:           String(i.quantity || 1),
-      DOCUMENT_PRODUCT_UNITARY_VALUE: fmt2(i.amount),
+      DOCUMENT_PRODUCT_UNITARY_VALUE: fmt2((i.amount || 0) * prodScale),
     };
   });
 
@@ -71,7 +89,11 @@ function mapOrderToNotazz(raw, { requestOrigin = 'pagarme' } = {}) {
     DOCUMENT_NATURE_OPERATION: 'VENDA',
     DOCUMENT_PAYMENT_FORM:   PAYMENT_FORM[method] || '99',
     DOCUMENT_PAYMENT_FORM_INDICATOR: installments > 1 ? '1' : '0',
-    DOCUMENT_BASEVALUE:      fmt2(baseValue),        // SO produtos (sem frete), conforme doc
+    DOCUMENT_BASEVALUE:      fmt2(notaProducts),     // SO produtos (sem frete), conforme doc
+    DOCUMENT_FRETE: {                                // frete por conta do emitente (0)
+      DOCUMENT_FRETE_MOD:   '0',
+      DOCUMENT_FRETE_VALUE: fmt2(notaFreight),
+    },
     DESTINATION_NAME:        meta.edit_customer_name || cust.name || '',
     DESTINATION_TAXID:       doc,
     DESTINATION_TAXTYPE:     taxType,
@@ -86,7 +108,17 @@ function mapOrderToNotazz(raw, { requestOrigin = 'pagarme' } = {}) {
     DESTINATION_COUNTRY:     'BR',
     DOCUMENT_PRODUCT:        products,
     // meta p/ revisao no preview (NAO sao campos do Notazz):
-    _preview: { method, installments, source: meta.source || '', code: raw.code || raw.id },
+    _preview: {
+      method, installments, source: meta.source || '', code: raw.code || raw.id,
+      valores: {
+        produtos_base: fmt2(baseProducts),
+        frete:         fmt2(freight),
+        cobrado:       fmt2(charged),
+        nota_produtos: fmt2(notaProducts),
+        nota_frete:    fmt2(notaFreight),
+        nota_total:    fmt2(notaProducts + notaFreight),
+      },
+    },
   };
 }
 
