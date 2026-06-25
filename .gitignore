@@ -12,3 +12,41 @@ node_modules/
 # os
 .DS_Store
 Thumbs.db
+
+# editor
+.vscode/
+
+# scripts de scraping / analise (nao fazem parte do site)
+/scrape_*.py
+/extract_*.py
+/analyze_*.py
+/build_produtos.js
+/merge_copys.js
+/copys.js
+/copys_1_5.js
+/scripts/audit/
+/scripts/audit_mobile.py
+
+# paginas scrapeadas e capturas de tela
+/*_full.html
+/product_page.html
+/*_screenshot.png
+/*_full.png
+/checkout_screenshots/
+
+# dumps de dados
+/hemo_desc.json
+/hemo_result.json
+/naturion_data.json
+
+# arquivos de outra loja (Vida Natural tem repo proprio)
+/checkout-vidanatural.html
+/indexvidanatural.html
+/produto-vidanatural.html
+
+# ferramentas de uso pessoal (fora do site)
+/planilha-vendas.gs
+/planilha-vendas-SETUP.md
+
+# servidor de teste local
+/server.js
