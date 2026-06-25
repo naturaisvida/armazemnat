@@ -1,240 +1,897 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pagar com PIX — Armazém Natural</title>
-<link rel="icon" href="/img/faviconarmazem.png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Poppins',sans-serif;background:#f5f5f5;color:#212121;min-height:100vh;display:flex;flex-direction:column}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/img/faviconarmazem.png" />
+  <title>Pagamento PIX — Armazém Natural</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.hdr{background:#fff;border-bottom:1px solid #e5e5e5;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
-.hdr img{height:36px}
-.hdr-sec{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#356041;text-transform:uppercase;letter-spacing:.04em}
-.hdr-sec svg{width:15px;height:15px;flex-shrink:0}
+    :root {
+      --vn-dark:    #0a2e16;
+      --vn-dark2:   #13652a;
+      --vn-mid:     #15a731;
+      --vn-accent:  #38c558;
+      --vn-light:   #8ee6a0;
+      --vn-pale:    #d7f5de;
+      --vn-sage:    #eef9f1;
+      --vn-gold:    #C9A84C;
+      --vn-text:    #142e1d;
+      --vn-muted:   #557a62;
+      --vn-white:   #FFFFFF;
+      --font: 'Poppins', sans-serif;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 8px 40px rgba(13,40,24,0.12);
+      --shadow-lg: 0 20px 60px rgba(13,40,24,0.18);
+    }
 
-.page{max-width:880px;margin:40px auto;padding:0 16px;flex:1;width:100%}
+    html { scroll-behavior: smooth; }
 
-/* Layout desktop: 2 colunas */
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+    body {
+      font-family: var(--font);
+      background: var(--vn-sage);
+      color: var(--vn-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-/* Coluna esquerda */
-.col-left{background:#fff;border-radius:16px;padding:36px 32px;box-shadow:0 2px 16px rgba(0,0,0,.07)}
-.quase{font-size:28px;font-weight:800;color:#1a2e22;margin-bottom:20px}
-.timer-label{font-size:14px;color:#555;margin-bottom:6px}
-.timer-val{font-size:36px;font-weight:800;color:#1a2e22;margin-bottom:6px;letter-spacing:.02em}
-.timer-sub{font-size:13px;color:#666;margin-bottom:32px}
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 0%, rgba(46,139,111,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 90% 100%, rgba(82,196,160,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-.status-pill{display:inline-flex;align-items:center;gap:10px;background:#fffbea;border:1px solid #f0c040;border-radius:50px;padding:10px 20px;font-size:13px;font-weight:600;color:#7a5c00}
-.dots span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#f0c040;animation:pulse 1.2s ease-in-out infinite}
-.dots span:nth-child(2){animation-delay:.2s}
-.dots span:nth-child(3){animation-delay:.4s}
-@keyframes pulse{0%,80%,100%{opacity:.3}40%{opacity:1}}
+    /* HEADER */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(46,139,111,0.12);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+    }
 
-.paid-box{display:none;background:#e8f5e9;border:2px solid #15a731;border-radius:12px;padding:24px;text-align:center}
-.paid-box h2{font-size:20px;font-weight:800;color:#15a731;margin-bottom:6px}
-.paid-box p{font-size:13px;color:#356041}
+    .logo {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      text-decoration: none;
+    }
+    .logo-main {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--vn-dark2);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .logo-sub {
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--vn-mid);
+      text-transform: uppercase;
+    }
+    .logo-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--vn-accent);
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+    }
 
-/* Coluna direita */
-.col-right{background:#fff;border-radius:16px;padding:32px 28px;box-shadow:0 2px 16px rgba(0,0,0,.07)}
+    .header-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--vn-pale);
+      border: 1px solid rgba(46,139,111,0.2);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--vn-mid);
+    }
+    .header-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--vn-mid);
+      border-radius: 50%;
+      animation: pulse-dot 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
 
-/* QR code — desktop visivel, mobile oculto */
-.qr-section{text-align:center;margin-bottom:24px}
-.qr-section p{font-size:12px;color:#888;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:6px}
-.qr-section img{width:200px;height:200px;border-radius:10px;border:1px solid #e5e5e5}
-.qr-valor{font-size:14px;color:#444;margin-top:10px}
-.qr-valor strong{color:#15a731}
+    /* MAIN */
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+    }
 
-/* Divisor */
-.divider{border:none;border-top:1px solid #e5e5e5;margin:20px 0}
-.divider-label{text-align:center;font-size:11px;color:#aaa;margin:-10px 0 20px;background:#fff;display:inline-block;padding:0 10px;position:relative;left:50%;transform:translateX(-50%)}
+    .pix-wrapper {
+      width: 100%;
+      max-width: 980px;
+    }
 
-/* Copia e cola */
-.cpc-title{font-size:15px;font-weight:700;color:#1a2e22;margin-bottom:6px}
-.cpc-desc{font-size:12px;color:#666;margin-bottom:14px;line-height:1.5}
-.cpc-desc strong{color:#1a2e22}
-.cpc-aviso{font-size:11px;color:#888;background:#f9f9f9;border-radius:6px;padding:8px 10px;margin-bottom:14px;line-height:1.5}
+    .page-title {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeUp 0.5s ease both;
+    }
+    .page-title h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--vn-dark2);
+      letter-spacing: -0.03em;
+    }
+    .page-title p {
+      font-size: 0.9rem;
+      color: var(--vn-muted);
+      margin-top: 6px;
+    }
+    .valor-destaque {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--vn-mid), var(--vn-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 800;
+      font-size: 2.1rem;
+      margin-top: 8px;
+    }
 
-.copy-input{display:flex;gap:8px;margin-bottom:8px}
-.copy-input input{flex:1;padding:11px 13px;border:1px solid #d5d5d5;border-radius:8px;font-size:11px;font-family:'Poppins',sans-serif;color:#555;background:#f9f9f9;min-width:0}
-.copybtn{background:#15a731;color:#fff;border:none;border-radius:8px;padding:11px 18px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s}
-.copybtn:hover{background:#0e8a28}
-.copybtn.copied{background:#0e8a28}
+    .pix-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
 
-/* Botao copiar grande — mobile */
-.copybtn-big{display:none;width:100%;padding:15px;background:#15a731;color:#fff;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;margin-bottom:12px}
-.copybtn-big:hover{background:#0e8a28}
+    .card {
+      background: var(--vn-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(46,139,111,0.1);
+      overflow: hidden;
+    }
 
-.cpc-logo{text-align:center;margin-top:16px;font-size:11px;color:#bbb}
-.cpc-logo img{height:20px;vertical-align:middle;margin-left:4px;opacity:.5}
+    .card-header {
+      padding: 20px 28px 16px;
+      border-bottom: 1px solid rgba(46,139,111,0.08);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-header-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--vn-pale), rgba(82,196,160,0.2));
+    }
+    .card-header-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--vn-mid);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .card-header-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--vn-text);
+      letter-spacing: 0.01em;
+    }
+    .card-header-sub {
+      font-size: 0.72rem;
+      color: var(--vn-muted);
+      margin-top: 1px;
+    }
+    .card-body { padding: 28px; }
 
-.ftr{text-align:center;padding:24px;font-size:12px;color:#aaa}
+    /* CARD ESQUERDA */
+    .status-section { display: flex; flex-direction: column; gap: 24px; }
 
-/* MOBILE */
-@media(max-width:640px){
-  .cols{grid-template-columns:1fr}
-  .page{margin:20px auto}
-  .col-left{padding:24px 20px}
-  .col-right{padding:24px 20px}
-  .quase{font-size:22px}
-  .timer-val{font-size:28px}
-  /* No mobile: QR code fica abaixo, copia e cola em destaque */
-  .qr-section{order:2;display:none}
-  .copybtn-big{display:block}
-  .copy-input .copybtn{display:none}
-}
-</style>
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step { display: flex; gap: 14px; align-items: flex-start; }
+    .step-line { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+    .step-num.active {
+      background: linear-gradient(135deg, var(--vn-mid), var(--vn-accent));
+      color: white;
+    }
+    .step-num.done { background: var(--vn-accent); color: white; }
+    .step-num.pending {
+      background: var(--vn-pale);
+      color: var(--vn-muted);
+      border: 1.5px solid rgba(46,139,111,0.2);
+    }
+    .step-connector {
+      width: 2px;
+      height: 28px;
+      background: rgba(46,139,111,0.12);
+      margin: 2px 0;
+    }
+    .step-content { padding-bottom: 20px; }
+    .step-label { font-size: 0.82rem; font-weight: 600; color: var(--vn-text); }
+    .step-desc { font-size: 0.74rem; color: var(--vn-muted); margin-top: 2px; line-height: 1.5; }
+
+    .timer-block {
+      background: linear-gradient(135deg, var(--vn-dark) 0%, var(--vn-dark2) 100%);
+      border-radius: var(--radius-sm);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .timer-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+    .timer-display {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--vn-white);
+      letter-spacing: 0.05em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .timer-display.urgent {
+      color: #FF6B6B;
+      animation: timer-pulse 0.8s ease-in-out infinite;
+    }
+    @keyframes timer-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .timer-ring { width: 52px; height: 52px; position: relative; }
+    .timer-ring svg { transform: rotate(-90deg); }
+    .timer-ring-bg { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 3; }
+    .timer-ring-fill {
+      fill: none;
+      stroke: var(--vn-accent);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 138.2;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+    }
+    .timer-ring-fill.urgent { stroke: #FF6B6B; }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      background: var(--vn-sage);
+      border: 1.5px solid rgba(46,139,111,0.15);
+    }
+    .status-spinner {
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid rgba(46,139,111,0.2);
+      border-top-color: var(--vn-mid);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .status-text { font-size: 0.8rem; font-weight: 500; color: var(--vn-muted); }
+    .status-text strong { display: block; font-size: 0.84rem; color: var(--vn-text); font-weight: 600; }
+
+    /* CARD DIREITA */
+    .qr-section { display: flex; flex-direction: column; gap: 20px; }
+
+    .qr-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: var(--vn-sage);
+      border-radius: var(--radius-sm);
+      border: 1.5px solid rgba(46,139,111,0.12);
+    }
+    .qr-image {
+      width: 180px;
+      height: 180px;
+      border-radius: 10px;
+      image-rendering: pixelated;
+      display: block;
+    }
+    .qr-placeholder {
+      width: 180px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--vn-pale);
+      border-radius: 10px;
+      color: var(--vn-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .copy-block { display: flex; flex-direction: column; gap: 10px; }
+    .copy-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--vn-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .copy-field { display: flex; gap: 10px; align-items: stretch; }
+    .copy-code {
+      flex: 1;
+      font-size: 0.72rem;
+      font-family: 'Courier New', monospace;
+      color: var(--vn-text);
+      background: var(--vn-sage);
+      border: 1.5px solid rgba(46,139,111,0.15);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      word-break: break-all;
+      line-height: 1.5;
+      max-height: 68px;
+      overflow: hidden;
+      position: relative;
+    }
+    .copy-code::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 24px;
+      background: linear-gradient(transparent, var(--vn-sage));
+    }
+    .btn-copy {
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--vn-mid), var(--vn-accent));
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0 18px;
+      font-family: var(--font);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-copy:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(46,139,111,0.35); }
+    .btn-copy:active { transform: translateY(0); }
+    .btn-copy.copied { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+    .btn-copy svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+    .pix-logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      background: var(--vn-pale);
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(46,139,111,0.12);
+      text-align: center;
+    }
+    .pix-logo-text { font-size: 1rem; font-weight: 800; color: var(--vn-mid); letter-spacing: 0.08em; }
+    .pix-logo-sub { font-size: 0.65rem; color: var(--vn-muted); font-weight: 500; }
+
+    /* CONFIRMED OVERLAY */
+    .confirmed-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13,40,24,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .confirmed-overlay.visible { display: flex; animation: fadeIn 0.4s ease; }
+    .confirmed-box {
+      background: white;
+      border-radius: 24px;
+      padding: 52px 48px;
+      text-align: center;
+      max-width: 440px;
+      width: 90%;
+      box-shadow: var(--shadow-lg);
+      animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .confirmed-check {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--vn-mid), var(--vn-accent));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .confirmed-check svg {
+      width: 40px;
+      height: 40px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .confirmed-title { font-size: 1.6rem; font-weight: 800; color: var(--vn-dark2); margin-bottom: 8px; }
+    .confirmed-sub { font-size: 0.88rem; color: var(--vn-muted); line-height: 1.6; }
+    .confirmed-redirect { margin-top: 24px; font-size: 0.78rem; color: var(--vn-muted); }
+    .confirmed-redirect span { font-weight: 700; color: var(--vn-mid); }
+
+    /* EXPIRADO */
+    .expired-banner {
+      display: none;
+      background: linear-gradient(135deg, #fff5f5, #ffe8e8);
+      border: 1.5px solid #fca5a5;
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .expired-banner.visible { display: block; }
+    .expired-banner p { font-size: 0.85rem; color: #b91c1c; font-weight: 600; }
+
+    /* MOBILE COPY BUTTON */
+    .btn-copy-mobile {
+      display: none;
+      width: 100%;
+      background: linear-gradient(135deg, var(--vn-mid), var(--vn-accent));
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 4px;
+      letter-spacing: 0.02em;
+      transition: all 0.2s;
+    }
+    .btn-copy-mobile:active { opacity: 0.85; }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.73rem;
+      color: var(--vn-muted);
+      border-top: 1px solid rgba(46,139,111,0.1);
+      background: rgba(255,255,255,0.5);
+    }
+    footer a { color: var(--vn-mid); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 720px) {
+      header { padding: 16px 20px; }
+      .pix-grid { grid-template-columns: 1fr; }
+      .qr-container { display: none; }
+      .btn-copy-mobile { display: block; }
+      .page-title h1 { font-size: 1.5rem; }
+      .valor-destaque { font-size: 1.7rem; }
+      .card-body { padding: 20px; }
+    }
+    @media (max-width: 400px) {
+      main { padding: 24px 12px; }
+    }
+  </style>
 </head>
 <body>
 
-<header class="hdr">
-  <img src="/img/logoarmazem.png" alt="Armazem Natural">
-  <div class="hdr-sec">
-    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-    PAGAMENTO SEGURO
+  <header>
+    <a href="/" class="logo">
+      <span class="logo-main">Armazém Natural<span class="logo-dot"></span></span>
+      <span class="logo-sub">Saude &amp; Bem-estar</span>
+    </a>
+    <div class="header-badge">Aguardando Pagamento</div>
+  </header>
+
+  <div class="confirmed-overlay" id="confirmedOverlay">
+    <div class="confirmed-box">
+      <div class="confirmed-check">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <div class="confirmed-title">Pagamento Confirmado!</div>
+      <p class="confirmed-sub">Seu pagamento foi recebido com sucesso. Estamos preparando o seu pedido.</p>
+      <p class="confirmed-redirect">Redirecionando em <span id="redirectCount">3</span> segundos...</p>
+    </div>
   </div>
-</header>
 
-<div class="page">
-  <div class="cols">
+  <main>
+    <div class="pix-wrapper">
 
-    <!-- Coluna esquerda: status e timer -->
-    <div class="col-left">
-      <div id="waiting-area">
-        <div class="quase">Quase la...</div>
-        <div class="timer-label">Pague seu PIX dentro de</div>
-        <div class="timer-val" id="timer">30:00</div>
-        <div class="timer-sub">para garantir sua compra.</div>
-        <div class="status-pill">
-          Aguardando pagamento
-          <span class="dots"><span></span><span></span><span></span></span>
+      <div class="page-title">
+        <h1>Finalize seu pagamento via PIX</h1>
+        <p>Valor total do pedido</p>
+        <div class="valor-destaque" id="valorDisplay">R$ --,--</div>
+      </div>
+
+      <div class="expired-banner" id="expiredBanner">
+        <p>O tempo para pagamento expirou. Volte ao carrinho e tente novamente.</p>
+      </div>
+
+      <div class="pix-grid">
+
+        <!-- COLUNA ESQUERDA: STATUS + TIMER -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div>
+              <div class="card-header-title">Status do Pagamento</div>
+              <div class="card-header-sub">Atualizando automaticamente</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="status-section">
+
+              <div class="timer-block">
+                <div>
+                  <div class="timer-label">Tempo restante</div>
+                  <div class="timer-display" id="timerDisplay">--:--</div>
+                </div>
+                <div class="timer-ring">
+                  <svg viewBox="0 0 46 46" width="52" height="52">
+                    <circle class="timer-ring-bg" cx="23" cy="23" r="22" />
+                    <circle class="timer-ring-fill" id="timerRing" cx="23" cy="23" r="22" />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="steps">
+                <div class="step">
+                  <div class="step-line">
+                    <div class="step-num done" id="step1">1</div>
+                    <div class="step-connector"></div>
+                  </div>
+                  <div class="step-content">
+                    <div class="step-label">Pedido gerado</div>
+                    <div class="step-desc">Seu pedido foi criado com sucesso.</div>
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-line">
+                    <div class="step-num active" id="step2">2</div>
+                    <div class="step-connector"></div>
+                  </div>
+                  <div class="step-content">
+                    <div class="step-label">Aguardando pagamento</div>
+                    <div class="step-desc">Copie o codigo ou escaneie o QR para pagar.</div>
+                  </div>
+                </div>
+                <div class="step">
+                  <div class="step-line">
+                    <div class="step-num pending" id="step3">3</div>
+                  </div>
+                  <div class="step-content">
+                    <div class="step-label">Confirmacao</div>
+                    <div class="step-desc">O pagamento sera confirmado em instantes.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="status-indicator" id="statusIndicator">
+                <div class="status-spinner"></div>
+                <div class="status-text">
+                  <strong>Verificando pagamento</strong>
+                  Aguardando confirmacao do banco...
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="paid-box" id="paid-box">
-        <h2>Pagamento Confirmado!</h2>
-        <p>Seu pedido foi processado com sucesso.<br>Redirecionando...</p>
+
+        <!-- COLUNA DIREITA: QR CODE + COPIA E COLA -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+                <rect x="14" y="14" width="4" height="4"></rect>
+              </svg>
+            </div>
+            <div>
+              <div class="card-header-title">QR Code PIX</div>
+              <div class="card-header-sub">Abra o app do seu banco e escaneie</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="qr-section">
+
+              <div class="qr-container">
+                <img class="qr-image" id="qrImage" src="" alt="QR Code PIX" style="display:none;" />
+                <div class="qr-placeholder" id="qrPlaceholder">Carregando QR Code...</div>
+              </div>
+
+              <div class="copy-block">
+                <div class="copy-label">Pix Copia e Cola</div>
+                <div class="copy-field">
+                  <div class="copy-code" id="qrCodeDisplay">Carregando...</div>
+                  <button class="btn-copy" id="btnCopy" onclick="copiarPix()">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copiar
+                  </button>
+                </div>
+                <button class="btn-copy-mobile" id="btnCopyMobile" onclick="copiarPix()">
+                  Copiar Codigo PIX
+                </button>
+              </div>
+
+              <div class="pix-logo-row">
+                <div>
+                  <div class="pix-logo-text">PIX</div>
+                  <div class="pix-logo-sub">Banco Central do Brasil</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+  </main>
 
-    <!-- Coluna direita: QR + copia e cola -->
-    <div class="col-right">
+  <footer>
+    Precisa de ajuda? <a href="https://wa.me/5511970111782">WhatsApp (11) 97011-1782</a> ou <a href="mailto:atendimento@armazemnatural.shop">atendimento@armazemnatural.shop</a>
+  </footer>
 
-      <!-- QR Code (desktop) -->
-      <div class="qr-section" id="qr-section">
-        <p>
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="15" y="2" width="7" height="7" rx="1"/><rect x="2" y="15" width="7" height="7" rx="1"/><path d="M15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"/></svg>
-          Abra seu app do banco, escolha Pagar com PIX e leia o QR Code
-        </p>
-        <img id="qr-img" src="" alt="QR Code PIX">
-        <div class="qr-valor">Valor do PIX: <strong id="qr-valor-txt">--</strong></div>
-      </div>
+  <script>
+    var pixData = null;
+    var timerInterval = null;
+    var pollInterval = null;
+    var totalSeconds = 0;
+    var remainingSeconds = 0;
+    var confirmed = false;
+    var redirectInterval = null;
 
-      <!-- Copia e Cola -->
-      <p class="cpc-title">Pague com PIX Copia e Cola</p>
-      <p class="cpc-desc">
-        No seu app do banco, escolha <strong>Pagar com PIX</strong> e depois a opcao
-        <strong>Copia e Cola</strong> (ou "PIX Copia e Cola"). Cole o codigo abaixo.
-      </p>
-      <p class="cpc-aviso">
-        Este nao e uma chave PIX para transferencia. E um codigo de pagamento especifico para este pedido — use sempre a opcao "Copia e Cola" ou "PIX" dentro do seu app bancario.
-      </p>
-
-      <!-- Botao grande (mobile) -->
-      <button class="copybtn-big" id="copybtn-big" onclick="copiarCodigo()">Copiar codigo PIX</button>
-
-      <!-- Input + botao (desktop) -->
-      <div class="copy-input">
-        <input type="text" id="pix-code" readonly placeholder="Carregando codigo PIX...">
-        <button class="copybtn" onclick="copiarCodigo()">Copiar</button>
-      </div>
-
-      <div class="cpc-logo">Pix processado por pagar.me</div>
-    </div>
-
-  </div>
-</div>
-
-<div class="ftr">Armazem Natural &mdash; Pagamento 100% seguro</div>
-
-<script>
-const data = JSON.parse(sessionStorage.getItem('armazem_pix') || 'null');
-
-if (!data || !data.qrCode) {
-  document.querySelector('.page').innerHTML =
-    '<div style="background:#fff;border-radius:16px;padding:48px;text-align:center;max-width:400px;margin:0 auto;box-shadow:0 2px 16px rgba(0,0,0,.07)">' +
-    '<p style="color:#666;font-size:14px">Nenhuma cobranca PIX ativa.<br><a href="/" style="color:#15a731;font-weight:600">Voltar a loja</a></p>' +
-    '</div>';
-} else {
-  const imgEl   = document.getElementById('qr-img');
-  const codeEl  = document.getElementById('pix-code');
-  const valorEl = document.getElementById('qr-valor-txt');
-
-  if (data.qrImg) imgEl.src = data.qrImg;
-  else document.getElementById('qr-section').style.display = 'none';
-
-  codeEl.value = data.qrCode;
-
-  if (data.valor) {
-    valorEl.textContent = 'R$ ' + (data.valor / 100).toFixed(2).replace('.', ',');
-  }
-
-  startTimer(data.expira || 1800);
-  if (data.orderId) pollOrder(data.orderId);
-}
-
-function copiarCodigo() {
-  const code = document.getElementById('pix-code').value;
-  if (!code) return;
-  navigator.clipboard?.writeText(code).catch(() => {
-    const el = document.getElementById('pix-code');
-    el.select();
-    document.execCommand('copy');
-  });
-  const btn1 = document.querySelector('.copybtn');
-  const btn2 = document.getElementById('copybtn-big');
-  if (btn1) { btn1.textContent = 'Copiado!'; btn1.classList.add('copied'); setTimeout(() => { btn1.textContent = 'Copiar'; btn1.classList.remove('copied'); }, 2500); }
-  if (btn2) { btn2.textContent = 'Codigo copiado!'; setTimeout(() => { btn2.textContent = 'Copiar codigo PIX'; }, 2500); }
-}
-
-let _timer;
-function startTimer(secs) {
-  clearInterval(_timer);
-  let t = secs;
-  function tick() {
-    const el = document.getElementById('timer');
-    if (!el) return;
-    const m = Math.floor(t / 60);
-    const s = t % 60;
-    el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-    if (t <= 0) { el.textContent = 'Expirado'; return; }
-    t--;
-    _timer = setTimeout(tick, 1000);
-  }
-  tick();
-}
-
-let _poll;
-function pollOrder(orderId) {
-  clearInterval(_poll);
-  _poll = setInterval(async () => {
-    try {
-      const r = await fetch('/api/order?status=' + encodeURIComponent(orderId));
-      const d = await r.json();
-      if (d.status === 'paid') {
-        clearInterval(_poll);
-        clearTimeout(_timer);
-        sessionStorage.removeItem('armazem_pix');
-        document.getElementById('waiting-area').style.display = 'none';
-        document.getElementById('paid-box').style.display = 'block';
-        setTimeout(() => {
-          location.href = '/sucesso.html?pedido=' + encodeURIComponent(orderId);
-        }, 2000);
+    (function init() {
+      try {
+        var raw = sessionStorage.getItem('armazem_pix');
+        if (!raw) {
+          pixData = {
+            qrCode: 'DEMO_PIX_CODE_00020126580014br.gov.bcb.pix0136demo-uuid-codigo-real-pix-aqui5204000053039865406100.005802BR5913Armazém Natural6009Sao Paulo62140510DEMO12345630498F2',
+            qrImg: '',
+            valor: '149.90',
+            expira: 900,
+            orderId: 'DEMO-001'
+          };
+        } else {
+          pixData = JSON.parse(raw);
+        }
+      } catch(e) {
+        pixData = { qrCode: '', qrImg: '', valor: '0.00', expira: 900, orderId: 'N/A' };
       }
-    } catch(e) {}
-  }, 5000);
-}
-</script>
+
+      renderPix();
+      startTimer();
+      startPolling();
+    })();
+
+    function renderPix() {
+      var v = parseFloat(pixData.valor || 0);
+      document.getElementById('valorDisplay').textContent =
+        'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      if (pixData.qrImg) {
+        var img = document.getElementById('qrImage');
+        img.src = pixData.qrImg;
+        img.style.display = 'block';
+        document.getElementById('qrPlaceholder').style.display = 'none';
+      }
+
+      var code = pixData.qrCode || '';
+      document.getElementById('qrCodeDisplay').textContent = code || 'Codigo indisponivel';
+
+      totalSeconds = parseInt(pixData.expira) || 900;
+      remainingSeconds = totalSeconds;
+    }
+
+    function startTimer() {
+      updateTimerUI();
+      timerInterval = setInterval(function() {
+        if (confirmed) return;
+        remainingSeconds--;
+        if (remainingSeconds <= 0) {
+          remainingSeconds = 0;
+          clearInterval(timerInterval);
+          clearInterval(pollInterval);
+          onExpired();
+        }
+        updateTimerUI();
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      var m = Math.floor(remainingSeconds / 60);
+      var s = remainingSeconds % 60;
+      var display = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      var el = document.getElementById('timerDisplay');
+      el.textContent = display;
+
+      var urgent = remainingSeconds <= 60 && remainingSeconds > 0;
+      el.classList.toggle('urgent', urgent);
+
+      var circ = 2 * Math.PI * 22;
+      var progress = totalSeconds > 0 ? remainingSeconds / totalSeconds : 0;
+      var offset = circ * (1 - progress);
+      var ring = document.getElementById('timerRing');
+      ring.style.strokeDashoffset = offset;
+      ring.classList.toggle('urgent', urgent);
+    }
+
+    function onExpired() {
+      document.getElementById('expiredBanner').classList.add('visible');
+      document.getElementById('timerDisplay').textContent = '00:00';
+      document.getElementById('statusIndicator').innerHTML =
+        '<div style="color:#b91c1c;font-size:.82rem;font-weight:600;padding:2px 0;">Tempo expirado. Gere um novo codigo PIX para continuar.</div>';
+    }
+
+    function startPolling() {
+      pollInterval = setInterval(checkPayment, 5000);
+    }
+
+    function checkPayment() {
+      if (confirmed || remainingSeconds <= 0) return;
+      var orderId = pixData.orderId || pixData.order_id || '';
+      if (!orderId) return;
+
+      fetch('/api/order?status=' + encodeURIComponent(orderId))
+        .then(function(res) {
+          if (!res.ok) return null;
+          return res.json();
+        })
+        .then(function(data) {
+          if (!data) return;
+          var status = (data.status || '').toLowerCase();
+          if (status === 'paid' || status === 'approved' || status === 'captured' || status === 'pago') {
+            onPaid();
+          }
+        })
+        .catch(function() {});
+    }
+
+    function onPaid() {
+      if (confirmed) return;
+      confirmed = true;
+      clearInterval(timerInterval);
+      clearInterval(pollInterval);
+
+      document.getElementById('step2').className = 'step-num done';
+      document.getElementById('step3').className = 'step-num done';
+
+      var overlay = document.getElementById('confirmedOverlay');
+      overlay.classList.add('visible');
+
+      var count = 3;
+      redirectInterval = setInterval(function() {
+        count--;
+        document.getElementById('redirectCount').textContent = count;
+        if (count <= 0) {
+          clearInterval(redirectInterval);
+          window.location.href = '/sucesso.html?pedido=' + encodeURIComponent(pixData.orderId || '');
+        }
+      }, 1000);
+    }
+
+    function copiarPix() {
+      var code = pixData.qrCode || '';
+      if (!code) return;
+
+      var btn = document.getElementById('btnCopy');
+      var btnM = document.getElementById('btnCopyMobile');
+
+      function setCopiado() {
+        btn.textContent = 'Copiado!';
+        btn.classList.add('copied');
+        btnM.textContent = 'Codigo Copiado!';
+        setTimeout(function() {
+          btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>Copiar';
+          btn.classList.remove('copied');
+          btnM.textContent = 'Copiar Codigo PIX';
+        }, 2500);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(setCopiado).catch(function() {
+          fallbackCopy(code);
+          setCopiado();
+        });
+      } else {
+        fallbackCopy(code);
+        setCopiado();
+      }
+    }
+
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+  </script>
 </body>
 </html>

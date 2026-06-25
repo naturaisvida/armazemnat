@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pedido Confirmado — Armazém Natural</title>
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18164681866"></script>
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
@@ -12,76 +9,576 @@ gtag('js',new Date());gtag('config','AW-18164681866');
 gtag('event','conversion',{send_to:'AW-18164681866/9Wc0CM6w3LAcEIqZzNVD',value:d.valor||0,currency:'BRL',transaction_id:d.orderId||''});
 sessionStorage.removeItem('armazem_conversion');})();
 </script>
-<link rel="icon" href="/img/faviconarmazem.png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Poppins',sans-serif;background:#f5f5f5;color:#212121;min-height:100vh;display:flex;flex-direction:column}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/img/faviconarmazem.png" />
+  <title>Pedido Confirmado — Armazém Natural</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.hdr{background:#fff;border-bottom:1px solid #e5e5e5;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
-.hdr img{height:36px}
-.hdr-sec{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#356041;text-transform:uppercase;letter-spacing:.04em}
-.hdr-sec svg{width:15px;height:15px;flex-shrink:0}
+    :root {
+      --vn-dark:    #0a2e16;
+      --vn-dark2:   #13652a;
+      --vn-mid:     #15a731;
+      --vn-accent:  #38c558;
+      --vn-light:   #8ee6a0;
+      --vn-pale:    #d7f5de;
+      --vn-sage:    #eef9f1;
+      --vn-gold:    #C9A84C;
+      --vn-text:    #142e1d;
+      --vn-muted:   #557a62;
+      --vn-white:   #FFFFFF;
+      --font: 'Poppins', sans-serif;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --shadow: 0 8px 40px rgba(13,40,24,0.10);
+      --shadow-lg: 0 24px 64px rgba(13,40,24,0.14);
+    }
 
-.page{max-width:520px;margin:60px auto;padding:0 16px;flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    html { scroll-behavior: smooth; }
 
-.card{background:#fff;border-radius:16px;padding:48px 40px;box-shadow:0 2px 16px rgba(0,0,0,.07);text-align:center;width:100%}
+    body {
+      font-family: var(--font);
+      background: var(--vn-sage);
+      color: var(--vn-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-.check-wrap{margin-bottom:24px}
-.check-circle{width:72px;height:72px;background:#e8f5e9;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;border:3px solid #15a731}
-.check-circle svg{width:36px;height:36px;color:#15a731}
+    /* BACKGROUND */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 100% 60% at 50% -10%, rgba(46,139,111,0.10) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 60% at 10% 90%, rgba(82,196,160,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 90% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-.card h1{font-size:26px;font-weight:800;color:#1a2e22;margin-bottom:10px}
-.card .sub{font-size:14px;color:#555;line-height:1.65;margin-bottom:28px}
-.card .sub strong{color:#1a2e22}
+    /* HEADER */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid rgba(46,139,111,0.12);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+    }
 
-.pedido-id{background:#f5f5f5;border-radius:8px;padding:10px 18px;font-size:12px;color:#888;margin-bottom:28px;display:inline-block}
-.pedido-id strong{color:#1a2e22;font-size:13px}
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-decoration: none;
+    }
+    .logo-main {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--vn-dark2);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .logo-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--vn-accent);
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+    }
+    .logo-sub {
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--vn-mid);
+      text-transform: uppercase;
+    }
 
-.btn-loja{display:inline-block;background:#15a731;color:#fff;text-decoration:none;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:700;transition:background .15s}
-.btn-loja:hover{background:#0e8a28}
+    /* MAIN */
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
 
-.ftr{text-align:center;padding:24px;font-size:12px;color:#aaa}
-</style>
+    .success-wrapper {
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* CHECK ANIMATION */
+    .check-container {
+      position: relative;
+      margin-bottom: 36px;
+      animation: popIn 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+
+    .check-ring-outer {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: var(--vn-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .check-ring-outer::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: conic-gradient(var(--vn-accent) 0deg, var(--vn-mid) 120deg, var(--vn-accent) 240deg, transparent 360deg);
+      animation: spin-ring 3s linear infinite;
+      z-index: -1;
+    }
+    .check-ring-outer::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: var(--vn-sage);
+      z-index: -1;
+    }
+    @keyframes spin-ring {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .check-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--vn-mid) 0%, var(--vn-accent) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 36px rgba(46,139,111,0.40);
+    }
+    .check-circle svg {
+      width: 44px;
+      height: 44px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: drawCheck 0.5s 0.4s ease forwards;
+    }
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* CARD */
+    .success-card {
+      background: var(--vn-white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(46,139,111,0.1);
+      width: 100%;
+      overflow: hidden;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    .card-top {
+      padding: 40px 48px 36px;
+      text-align: center;
+      border-bottom: 1px solid rgba(46,139,111,0.08);
+    }
+
+    .success-title {
+      font-size: 1.95rem;
+      font-weight: 800;
+      color: var(--vn-dark2);
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .success-message {
+      font-size: 0.92rem;
+      color: var(--vn-muted);
+      line-height: 1.65;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+
+    .order-id-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--vn-pale);
+      border: 1px solid rgba(46,139,111,0.18);
+      border-radius: 100px;
+      padding: 8px 20px;
+      margin-top: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--vn-mid);
+      letter-spacing: 0.04em;
+    }
+    .order-id-badge span {
+      color: var(--vn-text);
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+
+    /* INFO ITEMS */
+    .info-list {
+      padding: 28px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(46,139,111,0.07);
+      animation: fadeUp 0.5s ease both;
+    }
+    .info-item:last-child { border-bottom: none; }
+    .info-item:nth-child(1) { animation-delay: 0.3s; }
+    .info-item:nth-child(2) { animation-delay: 0.4s; }
+    .info-item:nth-child(3) { animation-delay: 0.5s; }
+
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--vn-pale), rgba(82,196,160,0.15));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-icon svg {
+      width: 19px;
+      height: 19px;
+      stroke: var(--vn-mid);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .info-content {}
+    .info-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--vn-text);
+      line-height: 1.3;
+    }
+    .info-desc {
+      font-size: 0.77rem;
+      color: var(--vn-muted);
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+
+    /* CTA */
+    .card-bottom {
+      padding: 24px 48px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      animation: fadeUp 0.5s 0.55s ease both;
+    }
+
+    .btn-continue {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 360px;
+      background: linear-gradient(135deg, var(--vn-mid) 0%, var(--vn-accent) 100%);
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 16px 32px;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.2,0,0,1);
+      box-shadow: 0 8px 28px rgba(46,139,111,0.30);
+    }
+    .btn-continue:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(46,139,111,0.40);
+    }
+    .btn-continue:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 16px rgba(46,139,111,0.25);
+    }
+    .btn-continue svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.2s;
+    }
+    .btn-continue:hover svg { transform: translateX(3px); }
+
+    .help-text {
+      font-size: 0.76rem;
+      color: var(--vn-muted);
+      text-align: center;
+    }
+    .help-text a { color: var(--vn-mid); text-decoration: none; font-weight: 500; }
+    .help-text a:hover { text-decoration: underline; }
+
+    /* DECORATIVE ELEMENTS */
+    .decor-strip {
+      height: 4px;
+      background: linear-gradient(90deg, var(--vn-mid), var(--vn-accent), var(--vn-light), var(--vn-gold));
+      width: 100%;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.73rem;
+      color: var(--vn-muted);
+      border-top: 1px solid rgba(46,139,111,0.1);
+      background: rgba(255,255,255,0.5);
+    }
+    footer a { color: var(--vn-mid); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* CONFETTI (CSS-only particles) */
+    .confetti-area {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      top: -10px;
+      width: 8px;
+      height: 8px;
+      opacity: 0;
+      animation: confetti-fall linear both;
+    }
+    .confetti-piece:nth-child(1)  { left: 8%;  background: var(--vn-accent); animation-duration: 2.8s; animation-delay: 0.1s; border-radius: 50%; }
+    .confetti-piece:nth-child(2)  { left: 16%; background: var(--vn-gold);   animation-duration: 3.2s; animation-delay: 0.3s; transform: rotate(45deg); }
+    .confetti-piece:nth-child(3)  { left: 24%; background: var(--vn-light);  animation-duration: 2.6s; animation-delay: 0.5s; border-radius: 2px; }
+    .confetti-piece:nth-child(4)  { left: 32%; background: var(--vn-mid);    animation-duration: 3.5s; animation-delay: 0.2s; border-radius: 50%; }
+    .confetti-piece:nth-child(5)  { left: 40%; background: var(--vn-gold);   animation-duration: 2.9s; animation-delay: 0.6s; transform: rotate(30deg); }
+    .confetti-piece:nth-child(6)  { left: 50%; background: var(--vn-accent); animation-duration: 3.1s; animation-delay: 0.0s; border-radius: 50%; }
+    .confetti-piece:nth-child(7)  { left: 58%; background: var(--vn-light);  animation-duration: 2.7s; animation-delay: 0.4s; transform: rotate(60deg); }
+    .confetti-piece:nth-child(8)  { left: 66%; background: var(--vn-mid);    animation-duration: 3.3s; animation-delay: 0.15s; border-radius: 2px; }
+    .confetti-piece:nth-child(9)  { left: 74%; background: var(--vn-gold);   animation-duration: 2.5s; animation-delay: 0.7s; border-radius: 50%; }
+    .confetti-piece:nth-child(10) { left: 82%; background: var(--vn-accent); animation-duration: 3.0s; animation-delay: 0.25s; transform: rotate(45deg); }
+    .confetti-piece:nth-child(11) { left: 90%; background: var(--vn-light);  animation-duration: 2.8s; animation-delay: 0.5s; border-radius: 50%; }
+    .confetti-piece:nth-child(12) { left: 96%; background: var(--vn-mid);    animation-duration: 3.4s; animation-delay: 0.1s; transform: rotate(20deg); }
+
+    @keyframes confetti-fall {
+      0%   { opacity: 0; transform: translateY(0) rotate(0deg); }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.8; }
+      100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .card-top { padding: 28px 24px 24px; }
+      .info-list { padding: 16px 24px; }
+      .card-bottom { padding: 20px 24px 28px; }
+      .success-title { font-size: 1.5rem; }
+      header { padding: 16px 20px; }
+    }
+    @media (max-width: 400px) {
+      main { padding: 36px 12px; }
+      .check-ring-outer { width: 90px; height: 90px; }
+      .check-circle { width: 74px; height: 74px; }
+    }
+  </style>
 </head>
 <body>
 
-<header class="hdr">
-  <img src="/img/logoarmazem.png" alt="Armazem Natural">
-  <div class="hdr-sec">
-    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-    PAGAMENTO SEGURO
+  <!-- CONFETTI -->
+  <div class="confetti-area" aria-hidden="true">
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
   </div>
-</header>
 
-<div class="page">
-  <div class="card">
-    <div class="check-wrap">
-      <div class="check-circle">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+  <!-- HEADER -->
+  <header>
+    <a href="/" class="logo">
+      <span class="logo-main">Armazém Natural<span class="logo-dot"></span></span>
+      <span class="logo-sub">Saude &amp; Bem-estar</span>
+    </a>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="success-wrapper">
+
+      <!-- CHECK ICON -->
+      <div class="check-container">
+        <div class="check-ring-outer">
+          <div class="check-circle">
+            <svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+        </div>
       </div>
-    </div>
-    <h1>Pagamento aprovado!</h1>
-    <p class="sub">
-      Obrigado pela sua compra.<br>
-      Em breve voce receberá um e-mail com todos os detalhes do pedido e o prazo de entrega.
-    </p>
-    <div class="pedido-id" id="pedido-id" style="display:none">
-      Pedido: <strong id="pedido-num"></strong>
-    </div>
-    <a href="/" class="btn-loja">Voltar a loja</a>
-  </div>
-</div>
 
-<div class="ftr">Armazem Natural — Pagamento 100% seguro</div>
+      <!-- CARD -->
+      <div class="success-card">
+        <div class="decor-strip"></div>
 
-<script>
-const params  = new URLSearchParams(location.search);
-const pedido  = params.get('pedido');
-if (pedido) {
-  document.getElementById('pedido-num').textContent = '#' + pedido;
-  document.getElementById('pedido-id').style.display = 'inline-block';
-}
-</script>
+        <div class="card-top">
+          <h1 class="success-title">Pedido Confirmado!</h1>
+          <p class="success-message">
+            Obrigado pela sua compra. Seu pedido foi aprovado e ja entrou em preparacao pela nossa equipe.
+          </p>
+          <div class="order-id-badge">
+            Pedido: <span id="orderIdDisplay">#...</span>
+          </div>
+        </div>
+
+        <div class="info-list">
+
+          <div class="info-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <div class="info-content">
+              <div class="info-title">Confirmacao por e-mail</div>
+              <div class="info-desc">Voce recebera um e-mail de confirmacao com os detalhes do seu pedido em breve.</div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="1" y="3" width="15" height="13" rx="1"></rect>
+                <path d="M16 8h4l3 5v3h-7V8z"></path>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+            </div>
+            <div class="info-content">
+              <div class="info-title">Envio em ate 24 horas</div>
+              <div class="info-desc">Seu pedido sera separado e enviado no proximo dia util apos a confirmacao do pagamento.</div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+            <div class="info-content">
+              <div class="info-title">Rastreio por e-mail</div>
+              <div class="info-desc">Assim que seu pedido for despachado, voce recebera o codigo de rastreamento no e-mail cadastrado.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-bottom">
+          <a href="/" class="btn-continue">
+            Continuar Comprando
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <p class="help-text">
+            Duvidas? <a href="https://wa.me/5511970111782">WhatsApp (11) 97011-1782</a> ou <a href="mailto:atendimento@armazemnatural.shop">atendimento@armazemnatural.shop</a>
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; <span id="anoAtual"></span> Armazém Natural. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    // Ano atual no footer
+    document.getElementById('anoAtual').textContent = new Date().getFullYear();
+
+    // Le o ID do pedido da URL
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var pedido = params.get('pedido') || '';
+      var el = document.getElementById('orderIdDisplay');
+      if (pedido && pedido !== 'N/A') {
+        el.textContent = '#' + pedido;
+      } else {
+        el.textContent = 'Confirmado';
+      }
+    })();
+  </script>
 </body>
 </html>
