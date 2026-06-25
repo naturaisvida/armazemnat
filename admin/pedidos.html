@@ -1137,15 +1137,17 @@ function openDetail(orderId) {
 
   // Total
   const itemsSum = o.items.reduce((s,i) => s + (i.amount||0)*(i.quantity||1), 0);
-  // o.amount = principal (itens + frete, sem juros) | paid = valor cobrado (com juros)
+  // o.amount = preco cheio (itens + frete, sem desconto/juros) | paid = valor cobrado
+  // paid > amount -> juros (cartao parcelado) | paid < amount -> desconto (Pix)
   const interest = Math.max(0, paid - o.amount);
+  const discount = Math.max(0, o.amount - paid);
   const shippingVal = Math.max(0, o.amount - itemsSum);
   document.getElementById('d-total-main').textContent = fmtBRL(paid);
   const tRows = [
     ['Produtos', fmtBRL(itemsSum)],
-    ...(interest > 0 ? [['Juros', fmtBRL(interest)]] : []),
-    ['Desconto', '- R$ 0,00'],
     ['Frete', shippingVal > 0 ? fmtBRL(shippingVal) : 'Grátis'],
+    ...(discount > 0 ? [['Desconto', '- ' + fmtBRL(discount)]] : []),
+    ...(interest > 0 ? [['Juros', '+ ' + fmtBRL(interest)]] : []),
   ];
   document.getElementById('d-total-rows').innerHTML = tRows
     .map(([k,v]) => `<div class="dtr"><span class="dtr-k">${k}</span><span class="dtr-v">${v}</span></div>`)
