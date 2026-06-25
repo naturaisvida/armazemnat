@@ -66,6 +66,7 @@ function processOrders(raws) {
 
     return {
       amount:       raw.amount || 0,
+      amountPaid:   (() => { const c = parseInt(meta.amount_charged, 10); return (Number.isFinite(c) && c > 0) ? c : (charge.amount || raw.amount || 0); })(),
       status, isPaid, isCanceled,
       method,
       installments: tx.installments || 1,
@@ -85,8 +86,8 @@ function processOrders(raws) {
   const canceled = orders.filter(o => o.isCanceled);
   const active   = orders.filter(o => !o.isCanceled);
 
-  const vendasAmt  = active.reduce((s, o) => s + o.amount, 0);
-  const receitaAmt = paid.reduce((s, o) => s + o.amount, 0);
+  const vendasAmt  = active.reduce((s, o) => s + o.amountPaid, 0);
+  const receitaAmt = paid.reduce((s, o) => s + o.amountPaid, 0);
   const ticketMed  = paid.length ? Math.round(receitaAmt / paid.length) : 0;
 
   // PIX / Boleto conversion
@@ -101,7 +102,7 @@ function processOrders(raws) {
 
   // Per method (paid)
   const porMetodo = { pix:{count:0,amount:0}, boleto:{count:0,amount:0}, cartao:{count:0,amount:0}, outro:{count:0,amount:0} };
-  paid.forEach(o => { const m = porMetodo[o.method] || porMetodo.outro; m.count++; m.amount += o.amount; });
+  paid.forEach(o => { const m = porMetodo[o.method] || porMetodo.outro; m.count++; m.amount += o.amountPaid; });
 
   // Installments (cartao paid)
   const parcelamentos = {};
@@ -129,7 +130,7 @@ function processOrders(raws) {
     const s = o.state || 'N/A';
     if (!stateMap[s]) stateMap[s] = { state: s, count: 0, amount: 0 };
     stateMap[s].count++;
-    stateMap[s].amount += o.amount;
+    stateMap[s].amount += o.amountPaid;
   });
   const topEstados = Object.values(stateMap)
     .sort((a, b) => b.count - a.count)
@@ -142,9 +143,9 @@ function processOrders(raws) {
     const d = o.createdAt ? new Date(new Date(o.createdAt).getTime() - 3 * 3600000).toISOString().slice(0, 10) : '';
     if (!d) return;
     if (!dayMap[d]) dayMap[d] = { date: d, amount: 0, count: 0, paidAmount: 0, paidCount: 0, canceledCount: 0 };
-    dayMap[d].amount += o.amount;
+    dayMap[d].amount += o.amountPaid;
     dayMap[d].count++;
-    if (o.isPaid)     { dayMap[d].paidAmount += o.amount; dayMap[d].paidCount++; }
+    if (o.isPaid)     { dayMap[d].paidAmount += o.amountPaid; dayMap[d].paidCount++; }
     if (o.isCanceled) { dayMap[d].canceledCount++; }
   });
   const porDia = Object.values(dayMap).sort((a, b) => a.date.localeCompare(b.date));
