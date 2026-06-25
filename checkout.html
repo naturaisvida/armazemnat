@@ -1056,6 +1056,23 @@ const _cartId = (function(){
             ? p.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
             : p.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
         }
+        // Restaura o PRODUTO do carrinho (senao o resumo fica em R$ 0,00)
+        const it = (cart.items || [])[0];
+        if (it) {
+          P.nome     = it.description || P.nome;
+          P.variante = '';
+          P.preco    = parseInt(it.amount)   || P.preco;
+          P.qty      = parseInt(it.quantity) || P.qty;
+          const tot = P.preco * P.qty;
+          document.getElementById('sb-name').textContent  = P.nome;
+          document.getElementById('sb-var').textContent   = '';
+          document.getElementById('sb-qty').textContent   = P.qty;
+          document.getElementById('sb-lbl').textContent   = `Produto (${P.qty})`;
+          document.getElementById('sb-unit').textContent  = $$(P.preco);
+          document.getElementById('sb-price').textContent = $$(tot);
+          document.getElementById('sb-total').textContent = $$(tot);
+          if (typeof updateSidebarTotal === 'function') { try { updateSidebarTotal(); } catch(e){} }
+        }
       }).catch(() => {});
     return fromUrl;
   }
