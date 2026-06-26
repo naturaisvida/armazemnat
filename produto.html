@@ -301,11 +301,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
       </div>
     </div>
     <div class="rev-bars">
-      <div class="rev-bar-row">5★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:81%"></div></div> 81%</div>
-      <div class="rev-bar-row">4★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:13%"></div></div> 13%</div>
-      <div class="rev-bar-row">3★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:4%"></div></div> 4%</div>
-      <div class="rev-bar-row">2★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:1%"></div></div> 1%</div>
-      <div class="rev-bar-row">1★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:1%"></div></div> 1%</div>
+      <div class="rev-bar-row">5★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:95%"></div></div> 95%</div>
+      <div class="rev-bar-row">4★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:4%"></div></div> 4%</div>
+      <div class="rev-bar-row">3★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:1%"></div></div> 1%</div>
+      <div class="rev-bar-row">2★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:0%"></div></div> 0%</div>
+      <div class="rev-bar-row">1★ <div class="rev-bar-track"><div class="rev-bar-fill" style="width:0%"></div></div> 0%</div>
     </div>
   </div>
   <div class="rev-grid" id="rev-grid"></div>
@@ -505,7 +505,7 @@ const REVIEWS = {
 };
 
 function gerarAvaliacoes(prod) {
-  const lista = REVIEWS[prod.tipo] || REVIEWS.geral;
+  const lista = (REVIEWS[prod.slug] || REVIEWS[prod.tipo] || REVIEWS.geral).filter(r => r.stars >= 4);
   const grid  = document.getElementById('rev-grid');
   lista.forEach((r, i) => {
     const cor = CORES_AVATAR[i % CORES_AVATAR.length];
