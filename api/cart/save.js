@@ -43,10 +43,13 @@ module.exports = async function handler(req, res) {
       converted: false,
       cardFailed: false,
       source: 'checkout_html',
+      ip: '',
     };
   }
 
   cart.updatedAt = now;
+  const clientIp = (req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || '').split(',')[0].trim().slice(0, 45);
+  if (clientIp) cart.ip = clientIp;
   if (step)       cart.step        = san(step, 30);
   if (totalAmount !== undefined) cart.totalAmount = Math.max(0, parseInt(totalAmount) || 0);
   if (checkoutUrl) cart.checkoutUrl = san(checkoutUrl, 500);

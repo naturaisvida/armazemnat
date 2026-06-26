@@ -155,6 +155,8 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: true, message: 'Método de pagamento inválido' });
   }
 
+  const clientIp = (req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || '').split(',')[0].trim().slice(0, 45);
+
   const orderData = {
     items:    orderItems,
     customer: cust,
@@ -177,6 +179,7 @@ module.exports = async function handler(req, res) {
       utm_content:  String(utm.content  || '').slice(0, 100),
       utm_term:     String(utm.term     || '').slice(0, 100),
       gclid:        String(gclid        || '').slice(0, 200),
+      client_ip:    clientIp,
     },
     closed: true,
   };

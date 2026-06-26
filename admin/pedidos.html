@@ -1296,7 +1296,8 @@ function fillCustomerView(o) {
     `<div class="di-name">${escH(o.customer.name)}</div>` +
     `<div class="di-line">${escH(o.customer.email)}</div>` +
     (phone && waNum ? `<div class="di-line"><a href="https://wa.me/${waNum}" target="_blank" style="color:var(--green);text-decoration:none">${escH(phone)}</a></div>` : '') +
-    (cpf ? `<div class="di-muted">CPF: ${escH(cpf)}</div>` : '');
+    (cpf ? `<div class="di-muted">CPF: ${escH(cpf)}</div>` : '') +
+    (o.ip ? `<div class="di-muted">IP: ${escH(o.ip)}</div>` : '');
 }
 
 function fillShippingView(o) {

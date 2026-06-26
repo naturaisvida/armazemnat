@@ -496,7 +496,7 @@ function fillDrawer(cart) {
   // Customer
   document.getElementById('dr-name').textContent  = cart.customer?.name  || '—';
   document.getElementById('dr-email').textContent  = cart.customer?.email || '';
-  document.getElementById('dr-phone').textContent  = cart.customer?.phone || '';
+  document.getElementById('dr-phone').textContent  = [cart.customer?.phone || '', cart.ip ? 'IP: ' + cart.ip : ''].filter(Boolean).join('   •   ');
   document.getElementById('dr-total').textContent  = fmtBRL(cart.totalAmount);
 
   // Step flow

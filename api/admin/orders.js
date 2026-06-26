@@ -111,6 +111,7 @@ function formatOrder(raw) {
   return {
     id:         raw.id,
     code:       raw.code || raw.id,
+    ip:         meta.client_ip || '',
     customer: {
       name:     meta.edit_customer_name     || cust.name     || '',
       email:    meta.edit_customer_email    || cust.email    || '',
