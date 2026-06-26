@@ -652,9 +652,14 @@ prod.imagens.forEach((url, i) => {
   t.className = 'thumb' + (i === 0 ? ' on' : '');
   t.innerHTML = `<img src="${url}" alt="${prod.nome} ${i+1}" loading="lazy">`;
   t.onclick = () => {
-    mainPhoto.src = url;
-    document.querySelectorAll('.thumb').forEach(el => el.classList.remove('on'));
-    t.classList.add('on');
+    if (i < prod.variantes.length) {
+      // imagem de um kit -> seleciona o kit (atualiza preco e destaque)
+      selecionarVariante(i);
+    } else {
+      mainPhoto.src = url;
+      document.querySelectorAll('.thumb').forEach(el => el.classList.remove('on'));
+      t.classList.add('on');
+    }
   };
   thumbsEl.appendChild(t);
 });
