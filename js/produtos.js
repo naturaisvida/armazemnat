@@ -123,13 +123,15 @@ const PRODUTOS = [
     titulo:"Rosa Oriental",
     subtitulo:"Beleza e bem-estar feminino com ervas do Oriente",
     badge:"OFERTA DO DIA", badgeColor:"#e91e8c",
-    variantes:_STD(),
+    variantes:[
+      { titulo:"COMPRE 1 LEVE 2",  preco:18990, comparar:37990,  desconto:50 },
+      { titulo:"COMPRE 2 LEVE 4",  preco:31990, comparar:75990,  desconto:58 },
+      { titulo:"COMPRE 3 LEVE 6",  preco:41990, comparar:113990, desconto:63, popular:true },
+    ],
     imagens:[
       "/img/produtos/rosa-oriental/1.png",
       "/img/produtos/rosa-oriental/2.png",
       "/img/produtos/rosa-oriental/3.png",
-      "/img/produtos/rosa-oriental/4.png",
-      "/img/produtos/rosa-oriental/5.png",
     ],
   },
   {
