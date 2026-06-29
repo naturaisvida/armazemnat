@@ -391,7 +391,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"artivita", nome:"Artivita", tipo:"geral",
+    slug:"artivita", nome:"Artivita", tipo:"geral", semCopy:true,
     titulo:"Artivita",
     subtitulo:"Suporte natural para articulações e mobilidade",
     badge:"LANÇAMENTO", badgeColor:"#c0392b",
@@ -404,7 +404,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"lipojaro", nome:"Lipojaro", tipo:"geral",
+    slug:"lipojaro", nome:"Lipojaro", tipo:"geral", semCopy:true,
     titulo:"Lipojaro",
     subtitulo:"Suporte natural ao emagrecimento e ao metabolismo",
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
@@ -419,7 +419,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"znorex", nome:"Znorex", tipo:"geral",
+    slug:"znorex", nome:"Znorex", tipo:"geral", semCopy:true,
     titulo:"Znorex",
     subtitulo:"Suplemento natural",
     badge:"LANÇAMENTO", badgeColor:"#c0392b",
