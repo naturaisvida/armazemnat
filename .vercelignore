@@ -1,0 +1,23 @@
+# Nao subir pro deploy (mantidos no repo, mas fora do ar)
+
+# Arquivos da Vida Natural que NAO podem ser servidos no dominio do Armazem
+/*vidanatural*.html
+
+# Artefatos de scrape/analise (contem tags e dominio da Vida Natural / Shopify)
+/*_full.html
+/product_page.html
+/checkout_screenshots/
+/*_screenshot.png
+/*_full.png
+/naturion_data.json
+/hemo_desc.json
+/hemo_result.json
+
+# Scripts de build / dev (nao precisam no runtime)
+/build_produtos.js
+/merge_copys.js
+/dev-server.js
+/server.js
+/copys.js
+/copys_1_5.js
+*.py
