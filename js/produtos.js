@@ -397,10 +397,10 @@ const PRODUTOS = [
     badge:"LANÇAMENTO", badgeColor:"#c0392b",
     variantes:_OFERTA_VX(),
     imagens:[
-      "/img/produtos/artivita/artivita1.png",
       "/img/produtos/artivita/artivita3.png",
       "/img/produtos/artivita/artivita5.png",
       "/img/produtos/artivita/artivita10.png",
+      "/img/produtos/artivita/artivita1.png",
     ],
   },
   {
@@ -410,7 +410,6 @@ const PRODUTOS = [
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
     variantes:_STD(),
     imagens:[
-      "/img/produtos/lipojaro/lipojaro1.png",
       "/img/produtos/lipojaro/lipojaro2.png",
       "/img/produtos/lipojaro/lipojaro4.png",
       "/img/produtos/lipojaro/lipojaro6.png",
@@ -421,7 +420,7 @@ const PRODUTOS = [
   {
     slug:"znorex", nome:"Znorex", tipo:"geral", semCopy:true,
     titulo:"Znorex",
-    subtitulo:"Suplemento natural",
+    subtitulo:"Protetor bucal anti-ronco",
     badge:"LANÇAMENTO", badgeColor:"#c0392b",
     variantes:[
       { titulo:"1 UNIDADE",       preco:14990, comparar:29990, desconto:50 },
