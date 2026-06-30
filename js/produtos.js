@@ -391,7 +391,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"artivita", nome:"Artivita", tipo:"geral", semCopy:true,
+    slug:"artivita", nome:"Artivita", tipo:"geral",
     titulo:"Artivita",
     subtitulo:"Suporte natural para articulações e mobilidade",
     badge:"LANÇAMENTO", badgeColor:"#c0392b",
@@ -404,7 +404,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"lipojaro", nome:"Lipojaro", tipo:"geral", semCopy:true,
+    slug:"lipojaro", nome:"Lipojaro", tipo:"geral",
     titulo:"Lipojaro",
     subtitulo:"Suporte natural ao emagrecimento e ao metabolismo",
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
