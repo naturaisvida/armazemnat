@@ -6,8 +6,8 @@ const jwt         = require('jsonwebtoken');
 const redis       = require('../_lib/redis');
 const { sendRaw } = require('../_email/send');
 
-const STORE_URL   = process.env.STORE_URL  || 'https://armazemnatural.online';
-const STORE_EMAIL = process.env.RESEND_FROM_EMAIL || 'Armazém Natural <sac@armazemnatural.online>';
+const STORE_URL   = process.env.STORE_URL  || 'https://armazemnatural.shop';
+const STORE_EMAIL = process.env.RESEND_FROM_EMAIL || 'Armazém Natural <atendimento@armazemnatural.shop>';
 
 // Gaps AFTER each email before next email
 const GAPS = [
@@ -112,7 +112,7 @@ function buildEmail(cart, emailNum) {
 
 <tr><td style="padding:20px 40px;border-top:2px solid #f0f0f0;text-align:center">
   <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a2e22;font-family:Arial,sans-serif">Armazem Natural</p>
-  <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif">Duvidas? <a href="mailto:sac@armazemnatural.online" style="color:#15a731;text-decoration:none">sac@armazemnatural.online</a></p>
+  <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif">Duvidas? <a href="mailto:atendimento@armazemnatural.shop" style="color:#15a731;text-decoration:none">atendimento@armazemnatural.shop</a></p>
   <p style="margin:8px 0 0;font-size:11px;color:#bbb;font-family:Arial,sans-serif">Para nao receber mais estes e-mails, <a href="${STORE_URL}/unsubscribe?email=${encodeURIComponent(cart.customer.email || '')}" style="color:#bbb">clique aqui</a>.</p>
 </td></tr>
 

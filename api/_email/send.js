@@ -57,7 +57,7 @@ function buildStatusHtml(order, statusKey, trackingCode) {
   const cfg = STATUS_CONFIG[statusKey];
   if (!cfg) return null;
 
-  const storeUrl  = process.env.STORE_URL || 'https://armazemnatural.online';
+  const storeUrl  = process.env.STORE_URL || 'https://armazemnatural.shop';
   const firstName = escH((order.customer.name || 'Cliente').split(' ')[0]);
   const code      = escH(order.code || order.id || '');
   const a         = order.shipping?.address || {};
@@ -274,12 +274,12 @@ function wrapEmail(title, body) {
 <tr><td align="center" style="padding:32px 16px">
   <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#fff;border-radius:14px;overflow:hidden">
     <tr><td style="padding:20px 40px 18px;text-align:center;border-bottom:2px solid #f0f0f0">
-      <img src="${process.env.STORE_URL || 'https://armazemnatural.online'}/img/logoarmazem.png" alt="Armazem Natural" width="140" style="height:auto;display:block;margin:0 auto">
+      <img src="${process.env.STORE_URL || 'https://armazemnatural.shop'}/img/logoarmazem.png" alt="Armazem Natural" width="140" style="height:auto;display:block;margin:0 auto">
     </td></tr>
     <tr><td style="padding:28px 40px 24px">${body}</td></tr>
     <tr><td style="padding:20px 40px;border-top:2px solid #f0f0f0;text-align:center">
       <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#1a2e22;font-family:Arial,sans-serif">Armazem Natural</p>
-      <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif">Duvidas? <a href="mailto:sac@armazemnatural.online" style="color:#15a731;text-decoration:none">sac@armazemnatural.online</a></p>
+      <p style="margin:0;font-size:13px;color:#888;font-family:Arial,sans-serif">Duvidas? <a href="mailto:atendimento@armazemnatural.shop" style="color:#15a731;text-decoration:none">atendimento@armazemnatural.shop</a></p>
     </td></tr>
   </table>
 </td></tr>
@@ -292,7 +292,7 @@ function wrapEmail(title, body) {
 async function sendRaw(to, subject, html) {
   const key  = process.env.RESEND_API_KEY;
   if (!key) throw new Error('RESEND_API_KEY não configurado');
-  const from = process.env.RESEND_FROM_EMAIL || 'Armazém Natural <sac@armazemnatural.online>';
+  const from = process.env.RESEND_FROM_EMAIL || 'Armazém Natural <atendimento@armazemnatural.shop>';
   const r = await fetch(RESEND_API, {
     method:  'POST',
     headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
