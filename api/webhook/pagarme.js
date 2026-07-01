@@ -1,11 +1,25 @@
 const { sendStatusEmail } = require('../_email/send');
 const { mapOrderToNotazz, emitNota } = require('../_lib/notazz');
 
-const PAGARME_URL = 'https://api.pagar.me/core/v5';
+const PAGARME_URL           = 'https://api.pagar.me/core/v5';
+const GADS_CONVERSION_ID    = '18288020037';
+const GADS_CONVERSION_LABEL = '4F-8CIjrgMkcEMWUtJBE';
 
-// Conversao do Google Ads removida na migracao de conta.
-// Readicionar com o ID/label novos depois de criar a conta nova.
-async function sendGoogleConversion() { return; }
+async function sendGoogleConversion(gclid, amountCents, orderId) {
+  if (!gclid) return;
+  const value = (amountCents / 100).toFixed(2);
+  const url = 'https://www.googleadservices.com/pagead/conversion/' + GADS_CONVERSION_ID + '/'
+    + '?gclid=' + encodeURIComponent(gclid)
+    + '&value=' + value + '&currency_code=BRL'
+    + '&label=' + GADS_CONVERSION_LABEL
+    + '&guid=ON&script=0';
+  try {
+    await fetch(url);
+    console.log('[gads] conversion sent orderId=' + orderId + ' gclid=' + gclid.slice(0,8) + '... value=R$' + value);
+  } catch (e) {
+    console.error('[gads] error:', e.message);
+  }
+}
 
 function pagarmeAuth() {
   const s = process.env.PAGARME_SECRET;
