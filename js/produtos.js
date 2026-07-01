@@ -239,7 +239,7 @@ const PRODUTOS = [
     ],
   },
   {
-    slug:"neurovex", nome:"Neurovex", tipo:"geral",
+    slug:"neurovex", nome:"Neurovex", tipo:"geral", semCopy:true, semAvaliacoes:true,
     titulo:"Neurovex",
     subtitulo:"Suporte cognitivo e neurológico com nootrópicos naturais",
     badge:"LANÇAMENTO", badgeColor:"#8e44ad",
