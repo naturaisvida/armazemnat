@@ -7,7 +7,7 @@ function base() {
   return _base;
 }
 
-const ORIGIN = 'https://armazemnatural.shop';
+const ORIGIN = 'https://armazemnatural.online';
 
 const META = [
   { slug:'glicofit',          titulo:'Glicofit',                         desc:'Suplemento natural em gotas para equilibrio glicemico',               img:'/img/produtos/glicofit/1.png',           preco:'189.90' },
