@@ -871,9 +871,7 @@ function fireAndNavigate(orderId, url) {
   }));
   let done = false;
   function go() { if (!done) { done = true; location.href = url; } }
-  setTimeout(go, 400); else {
-    go();
-  }
+  go();
 }
 
 function handleResult(method, data, btn, amount) {
