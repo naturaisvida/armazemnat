@@ -352,6 +352,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
         <img src="/img/pagamentos/card-discover.svg" alt="Discover">
       </div>
       <p class="ftr-copy" style="max-width:820px;line-height:1.6"><strong>Aviso:</strong> Os produtos comercializados no nosso site oficial sao suplementos alimentares. Nao sao medicamentos e nao se destinam a diagnosticar, tratar, curar ou prevenir doencas. Consulte um profissional de saude antes de iniciar qualquer suplementacao.</p>
+      <p class="ftr-copy" style="max-width:820px;line-height:1.6"><strong>Empresa:</strong> SISTECNICA INFORMATICA E SERVICOS LTDA · CNPJ 53.249.470/0001-50 · R. Coronel Frias, 240, Galpao Posterior, Vila Monumento, Sao Paulo/SP, CEP 01552-010 · sac@armazemnatural.online</p>
       <p class="ftr-copy">© 2025 Armazém Natural · Todos os direitos reservados.</p>
     </div>
   </div>
@@ -601,6 +602,11 @@ const REVIEWS = {
 };
 
 function gerarAvaliacoes(prod) {
+  if (prod.semAvaliacoes) {
+    const rs = document.querySelector('.rev-section');
+    if (rs) rs.style.display = 'none';
+    return;
+  }
   const lista = (REVIEWS[prod.slug] || REVIEWS[prod.tipo] || REVIEWS.geral).filter(r => r.stars >= 4);
   const grid  = document.getElementById('rev-grid');
   lista.forEach((r, i) => {
@@ -916,7 +922,7 @@ const POLITICAS = {
     <p>Os resultados podem variar de pessoa para pessoa. As descricoes dos produtos sao baseadas nos beneficios dos ingredientes e nao constituem alegacao de cura, prevencao ou tratamento de doencas.</p>
     <p>Consulte sempre um medico ou nutricionista antes de iniciar o uso de qualquer suplemento, especialmente se voce tiver condicoes de saude preexistentes, estiver gravida, amamentando ou em uso de medicamentos.</p>
     <p>O Armazem Natural cumpre integralmente as normas da ANVISA para comercializacao de suplementos alimentares no Brasil.</p>
-    <p><strong>CNPJ:</strong> a ser inserido &nbsp;|&nbsp; <strong>Contato:</strong> sac@armazemnatural.online</p>`
+    <p><strong>Razao Social:</strong> SISTECNICA INFORMATICA E SERVICOS LTDA<br><strong>CNPJ:</strong> 53.249.470/0001-50 &nbsp;|&nbsp; <strong>Contato:</strong> sac@armazemnatural.online<br><strong>Endereco:</strong> R. Coronel Frias, 240, Galpao Posterior, Vila Monumento, Sao Paulo/SP, CEP 01552-010</p>`
   }
 };
 
